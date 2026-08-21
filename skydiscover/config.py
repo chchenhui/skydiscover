@@ -12,6 +12,11 @@ from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Union
 
 import yaml
+from dotenv import load_dotenv
+
+# Load repository/user .env values before resolving provider credentials.
+# python-dotenv does not override variables already exported by the caller.
+load_dotenv()
 
 logger = logging.getLogger(__name__)
 
