@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 from skydiscover.llm.openai import is_openai_reasoning_model
+from skydiscover.llm.pricing import record_response
 from skydiscover.llm.responses_utils import (
     convert_messages_to_responses_input,
     extract_responses_output,
@@ -208,6 +209,7 @@ class AgenticGenerator:
             resp = await loop.run_in_executor(
                 None, lambda: model.client.chat.completions.create(**params)
             )
+            record_response(params["model"], resp, api_base=getattr(model, "api_base", None))
         except Exception as exc:
             if "unsupported" not in str(exc).lower() and "not found" not in str(exc).lower():
                 raise
@@ -261,6 +263,7 @@ class AgenticGenerator:
         resp = await loop.run_in_executor(
             None, lambda: model.client.responses.create(**resp_params)
         )
+        record_response(resp_params["model"], resp, api_base=getattr(model, "api_base", None))
 
         text, _, tool_calls = extract_responses_output(resp)
         out: Dict[str, Any] = {"role": "assistant", "content": text}

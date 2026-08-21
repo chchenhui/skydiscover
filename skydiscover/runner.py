@@ -8,6 +8,7 @@ import uuid
 from typing import Optional
 
 from skydiscover.config import Config, build_output_dir, load_config
+from skydiscover.llm.pricing import get_cost_tracker
 from skydiscover.search.base_database import Program
 from skydiscover.search.default_discovery_controller import (
     DiscoveryController,
@@ -119,6 +120,9 @@ class Runner:
             Best Program found, or None if no valid programs were produced.
         """
         max_iterations = iterations if iterations is not None else self.config.max_iterations
+        # Mark the tracker so the cost report covers this run only, not any
+        # earlier run sharing the process.
+        usage_baseline = get_cost_tracker().snapshot()
 
         start_iteration = 0
         if checkpoint_path and os.path.exists(checkpoint_path):
@@ -218,6 +222,8 @@ class Runner:
                     monitor_server.stop()
                 except Exception:
                     logger.debug("Failed to stop monitor server", exc_info=True)
+
+            self._report_llm_usage(usage_baseline)
 
         # Get the best program
         best_program = self._get_best_program()
@@ -457,6 +463,27 @@ class Runner:
             if prog:
                 return prog
         return self.database.get_best_program()
+
+    def _report_llm_usage(self, baseline) -> None:
+        """Log this run's token usage and cost, and persist it as JSON.
+
+        Only covers calls made through SkyDiscover's own LLM layer; external
+        backends (openevolve, gepa, shinkaevolve) drive their own clients and
+        are not counted here. Calls that time out are also missed: the
+        response never comes back, so there is nothing to read usage from.
+        """
+        tracker = get_cost_tracker().since(baseline)
+        if tracker.total_usage.calls == 0:
+            return
+        for line in tracker.format_summary().splitlines():
+            logger.info(line)
+        try:
+            os.makedirs(self.output_dir, exist_ok=True)
+            path = os.path.join(self.output_dir, "llm_usage.json")
+            with open(path, "w") as f:
+                json.dump(tracker.to_dict(), f, indent=2)
+        except Exception:
+            logger.debug("Failed to write llm_usage.json", exc_info=True)
 
     def _save_best_program(self, program: Program) -> None:
         best_dir = os.path.join(self.output_dir, "best")

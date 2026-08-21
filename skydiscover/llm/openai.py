@@ -13,6 +13,7 @@ import openai
 
 from skydiscover.config import LLMModelConfig
 from skydiscover.llm.base import LLMInterface, LLMResponse
+from skydiscover.llm.pricing import collect_usage, record_response, sum_usage
 from skydiscover.llm.responses_utils import (
     convert_messages_to_responses_input,
     extract_responses_output,
@@ -113,10 +114,14 @@ class OpenAILLM(LLMInterface):
         self, system_message: str, messages: List[Dict[str, Any]], **kwargs
     ) -> LLMResponse:
         """Generate a response. Pass image_output=True for image generation."""
-        if kwargs.get("image_output"):
-            return await self._generate_with_image(system_message, messages, **kwargs)
-        text = await self._generate_text(system_message, messages, **kwargs)
-        return LLMResponse(text=text)
+        with collect_usage() as recorded:
+            if kwargs.get("image_output"):
+                response = await self._generate_with_image(system_message, messages, **kwargs)
+            else:
+                text = await self._generate_text(system_message, messages, **kwargs)
+                response = LLMResponse(text=text)
+        response.usage = sum_usage(recorded)
+        return response
 
     # ------------------------------------------------------------------
     # Text generation (Chat Completions API)
@@ -233,6 +238,7 @@ class OpenAILLM(LLMInterface):
             response = await loop.run_in_executor(
                 None, lambda: self.client.chat.completions.create(**params)
             )
+            self._record_usage(response)
             return response.choices[0].message.content
         except (openai.BadRequestError, openai.APIStatusError) as exc:
             # Some Azure deployments only expose the Responses API.
@@ -269,8 +275,13 @@ class OpenAILLM(LLMInterface):
         response = await loop.run_in_executor(
             None, lambda: self.client.responses.create(**resp_params)
         )
+        self._record_usage(response)
         text, _ = self._extract_responses_output(response)
         return text or ""
+
+    def _record_usage(self, response: Any) -> None:
+        """Report this response's token usage to the global cost tracker."""
+        record_response(self.model, response, api_base=self.api_base)
 
     def _resolve_retry_options(self, **kwargs) -> Tuple[int, int, int]:
         """Resolve retry/timeout options from kwargs, falling back to instance defaults."""
@@ -325,6 +336,7 @@ class OpenAILLM(LLMInterface):
         for attempt in range(retries + 1):
             try:
                 response = await asyncio.wait_for(self._call_responses_api(params), timeout=timeout)
+                self._record_usage(response)
                 text, image_b64, _ = extract_responses_output(response)
 
                 image_path = None

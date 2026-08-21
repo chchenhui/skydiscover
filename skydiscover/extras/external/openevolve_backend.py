@@ -17,6 +17,38 @@ logger = logging.getLogger(__name__)
 
 
 # ------------------------------------------------------------------
+# LLM usage bridge
+# ------------------------------------------------------------------
+
+
+def _init_tracked_openevolve_llm(model_cfg):
+    """Build OpenEvolve's client and report every raw response to our tracker.
+
+    OpenEvolve discards the SDK response after extracting its text. Wrapping
+    ``create`` is the narrowest point where the provider's usage block is
+    still available, and the top-level factory remains safe to pass to
+    OpenEvolve's worker processes via ``LLMModelConfig.init_client``.
+    """
+    from openevolve.llm.openai import OpenAILLM
+
+    from skydiscover.llm.pricing import record_response
+
+    model = OpenAILLM(model_cfg)
+    if model.client is None:  # OpenEvolve manual mode has no API response.
+        return model
+
+    create = model.client.chat.completions.create
+
+    def create_with_usage(*args, **kwargs):
+        response = create(*args, **kwargs)
+        record_response(model.model, response, api_base=model.api_base)
+        return response
+
+    model.client.chat.completions.create = create_with_usage
+    return model
+
+
+# ------------------------------------------------------------------
 # Config mapping
 # ------------------------------------------------------------------
 
@@ -68,6 +100,7 @@ def _map_config(config: Config, iterations: Optional[int], output_dir: str):
                 temperature=getattr(m, "temperature", oe.llm.temperature),
                 api_key=getattr(m, "api_key", None),
                 api_base=resolved_api_base,
+                init_client=_init_tracked_openevolve_llm,
             )
             for m in config.llm.models
         ]
