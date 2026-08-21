@@ -6,19 +6,103 @@ picked up automatically.
 """
 
 import asyncio
+import json
 import logging
 import os
-from typing import Optional
+from typing import Dict, Optional, Tuple
 
 from skydiscover.api import DiscoveryResult
 from skydiscover.config import Config
 
 logger = logging.getLogger(__name__)
 
+_USAGE_EVENT_PATH_ENV = "SKYDISCOVER_LLM_USAGE_EVENT_PATH"
+_USAGE_FIELDS = (
+    "input_tokens",
+    "output_tokens",
+    "cache_read_tokens",
+    "cache_write_tokens",
+    "cache_write_1h_tokens",
+    "reasoning_tokens",
+    "calls",
+)
+
 
 # ------------------------------------------------------------------
 # LLM usage bridge
 # ------------------------------------------------------------------
+
+
+def _append_usage_event(model: str, api_base: Optional[str], usage) -> None:
+    """Append one worker response's usage with a single atomic OS write."""
+    path = os.environ.get(_USAGE_EVENT_PATH_ENV)
+    if not path:
+        return
+
+    from skydiscover.llm.pricing import provider_from_api_base
+
+    payload = {
+        "model": model,
+        "provider": provider_from_api_base(api_base),
+        "usage": {field: getattr(usage, field) for field in _USAGE_FIELDS},
+    }
+    encoded = (json.dumps(payload, separators=(",", ":")) + "\n").encode("utf-8")
+    fd = os.open(path, os.O_APPEND | os.O_CREAT | os.O_WRONLY, 0o600)
+    try:
+        os.write(fd, encoded)
+    finally:
+        os.close(fd)
+
+
+def _prepare_usage_events(output_dir: str) -> str:
+    """Create an empty per-response event file and return its absolute path."""
+    os.makedirs(output_dir, exist_ok=True)
+    path = os.path.abspath(os.path.join(output_dir, "llm_usage_events.jsonl"))
+    fd = os.open(path, os.O_CREAT | os.O_TRUNC | os.O_WRONLY, 0o600)
+    os.close(fd)
+    return path
+
+
+def _report_usage_events(event_path: str, output_dir: str):
+    """Aggregate worker JSONL events in the main process and persist a summary."""
+    from skydiscover.llm.pricing import CostTracker, Usage
+
+    grouped: Dict[Tuple[Optional[str], str], Usage] = {}
+    malformed = 0
+    try:
+        with open(event_path, encoding="utf-8") as events:
+            for line in events:
+                if not line.strip():
+                    continue
+                try:
+                    event = json.loads(line)
+                    raw_usage = event["usage"]
+                    usage = Usage(**{field: raw_usage.get(field, 0) for field in _USAGE_FIELDS})
+                    key = (event.get("provider"), str(event.get("model") or "<unknown>"))
+                    grouped[key] = grouped.get(key, Usage()) + usage
+                except (KeyError, TypeError, ValueError, json.JSONDecodeError):
+                    malformed += 1
+    except FileNotFoundError:
+        logger.warning("OpenEvolve LLM usage event file is missing: %s", event_path)
+        return None
+
+    tracker = CostTracker()
+    for (provider, model), usage in grouped.items():
+        tracker.record(model, usage, provider=provider)
+
+    if tracker.total_usage.calls:
+        for line in tracker.format_summary().splitlines():
+            logger.info(line)
+        summary_path = os.path.join(output_dir, "llm_usage.json")
+        with open(summary_path, "w", encoding="utf-8") as summary_file:
+            json.dump(tracker.to_dict(), summary_file, indent=2)
+        logger.info("Saved OpenEvolve LLM usage summary to %s", summary_path)
+    else:
+        logger.warning("OpenEvolve returned no trackable LLM usage")
+
+    if malformed:
+        logger.warning("Ignored %d malformed LLM usage event(s)", malformed)
+    return tracker
 
 
 def _init_tracked_openevolve_llm(model_cfg):
@@ -41,7 +125,14 @@ def _init_tracked_openevolve_llm(model_cfg):
 
     def create_with_usage(*args, **kwargs):
         response = create(*args, **kwargs)
-        record_response(model.model, response, api_base=model.api_base)
+        usage = record_response(model.model, response, api_base=model.api_base)
+        if usage is not None:
+            try:
+                _append_usage_event(model.model, model.api_base, usage)
+            except Exception:
+                # Accounting must never turn a successful generation into a
+                # failed OpenEvolve iteration.
+                logger.debug("Failed to append OpenEvolve LLM usage", exc_info=True)
         return response
 
     model.client.chat.completions.create = create_with_usage
@@ -290,7 +381,17 @@ async def run(
 
         poll_task = asyncio.create_task(_poll_programs())
 
-    best = await controller.run(iterations=iterations)
+    usage_event_path = _prepare_usage_events(output_dir)
+    previous_usage_path = os.environ.get(_USAGE_EVENT_PATH_ENV)
+    os.environ[_USAGE_EVENT_PATH_ENV] = usage_event_path
+    try:
+        best = await controller.run(iterations=iterations)
+    finally:
+        if previous_usage_path is None:
+            os.environ.pop(_USAGE_EVENT_PATH_ENV, None)
+        else:
+            os.environ[_USAGE_EVENT_PATH_ENV] = previous_usage_path
+        _report_usage_events(usage_event_path, output_dir)
 
     if poll_task:
         poll_task.cancel()
