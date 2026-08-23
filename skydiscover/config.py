@@ -343,6 +343,8 @@ class DatabaseConfig:
 
     db_path: Optional[str] = None
     log_prompts: bool = True
+    # Shared so external backends can run reproducible multi-seed comparisons.
+    random_seed: Optional[int] = 42
 
 
 @dataclass
@@ -479,6 +481,89 @@ class OpenEvolveNativeDatabaseConfig(DatabaseConfig):
 
 
 @dataclass
+class EfficientEvolveDatabaseConfig(OpenEvolveNativeDatabaseConfig):
+    """EfficientEvolve configuration with a fixed BA-AUC cost window.
+
+    See ``skydiscover/search/efficientevolve/README.md`` for the metric
+    definition and how each knob below maps onto it.
+    """
+
+    budget_usd: Optional[float] = None
+    budget_unit: str = "usd"
+
+    target_score: Optional[float] = None
+    target_score_tolerance: float = 1e-9
+
+    two_tier: bool = True
+
+    opening_cascade: bool = True
+    opening_cheap_candidates: int = 1
+    opening_guide_reasoning_effort: Optional[str] = "low"
+
+    opening_guide_defer_target_ratio: float = 0.9
+    strategy_when: str = "reuse_on_improvement"
+    implementations_per_strategy: int = 3
+    strategies_per_guide_call: int = 3
+    initial_strategies_per_guide_call: int = 1
+    strategy_reference_candidate: bool = True
+    adaptive_implementation_racing: bool = True
+    adaptive_unguided_racing: bool = True
+
+    pilot_candidates: int = 2
+    pilot_score_ratio: float = 1.0
+
+    stop_racing_on_improvement: bool = True
+
+    adaptive_pilot_sizing: bool = True
+    reliable_pilot_min_attempts: int = 4
+    reliable_pilot_usable_ratio: float = 0.75
+
+    repair_failed_pilots: bool = False
+    strategy_patience: int = 1
+    improvement_epsilon: float = 1e-9
+    initial_strategy_reasoning_effort: Optional[str] = None
+    strategy_reasoning_effort: Optional[str] = "low"
+
+    strategy_escalation_reasoning_effort: Optional[str] = "high"
+    strategy_escalation_patience: int = 32
+    strategy_escalation_interval: int = 32
+    strategy_escalation_backoff: float = 2.0
+
+    guide_implementation_on_escalation: bool = True
+    guide_implementation_reasoning_effort: Optional[str] = "medium"
+    guide_implementation_after_productive_stall: bool = False
+  
+    target_aware_guide_promotion_ratio: Optional[float] = 0.98
+    unguided_guide_hedge_interval: int = 3
+    unguided_guide_hedge_warmup_calls: int = 2
+    min_guide_amortization_iterations: int = 2
+
+    long_horizon_scheduler: bool = True
+    strategy_replays_per_portfolio: int = 1
+    strategy_replay_min_productive_rounds: int = 2
+    strategy_replay_cooldown: int = 2
+    strategy_replay_ucb_exploration: float = 0.15
+    strategy_history_size: int = 8
+
+    long_horizon_exploration_interval: int = 12
+    long_horizon_exploration_candidates: int = 1
+
+    schedule: str = "fixed"
+
+    candidates_per_iteration: Optional[int] = None
+    candidates_first: int = 3
+    candidates_last: int = 1
+
+    ambitious_first_call: bool = False
+    recover_unusable_diffs: bool = False
+
+    reasoning_effort: Optional[str] = "low"
+    stagnation_patience: int = 2
+    novelty_memory: int = 24
+    stalled_exploration_ratio: Optional[float] = 0.6
+
+
+@dataclass
 class ClaudeCodeConfig(DatabaseConfig):
     """Configuration for the Claude Code baseline.
 
@@ -520,6 +605,7 @@ _DB_CONFIG_BY_TYPE: Dict[str, type] = {
     "topk": DatabaseConfig,
     "adaevolve": AdaEvolveDatabaseConfig,
     "openevolve_native": OpenEvolveNativeDatabaseConfig,
+    "efficientevolve": EfficientEvolveDatabaseConfig,
     "gepa_native": GEPANativeDatabaseConfig,
     "claude_code": ClaudeCodeConfig,
 }

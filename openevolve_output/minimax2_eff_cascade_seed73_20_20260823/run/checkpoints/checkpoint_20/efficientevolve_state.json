@@ -1,0 +1,237 @@
+{
+  "version": 8,
+  "curve": {
+    "unit": "usd",
+    "budget": 100.0,
+    "spent": 0.11599192,
+    "final_incumbent": 1.0000028088804436,
+    "ba_auc": 99.97947643875551,
+    "ba_auc_normalized": 0.9997947643875551,
+    "num_points": 7,
+    "points": [
+      {
+        "cost": 0.0,
+        "score": 0.01979112384555867,
+        "incumbent": 0.01979112384555867,
+        "iteration": 0,
+        "candidates": 0
+      },
+      {
+        "cost": 0.0015804,
+        "score": 0.4905684810159334,
+        "incumbent": 0.4905684810159334,
+        "iteration": 1,
+        "candidates": 1
+      },
+      {
+        "cost": 0.037626400000000004,
+        "score": 0.8649358815497027,
+        "incumbent": 0.8649358815497027,
+        "iteration": 2,
+        "candidates": 1
+      },
+      {
+        "cost": 0.04251196,
+        "score": 0.9913378120131868,
+        "incumbent": 0.9913378120131868,
+        "iteration": 3,
+        "candidates": 3
+      },
+      {
+        "cost": 0.04719346,
+        "score": 0.9972148075314928,
+        "incumbent": 0.9972148075314928,
+        "iteration": 4,
+        "candidates": 3
+      },
+      {
+        "cost": 0.052319920000000006,
+        "score": 0.9972148075314928,
+        "incumbent": 0.9972148075314928,
+        "iteration": 5,
+        "candidates": 3
+      },
+      {
+        "cost": 0.11599192,
+        "score": 1.0000028088804436,
+        "incumbent": 1.0000028088804436,
+        "iteration": 6,
+        "candidates": 1
+      }
+    ]
+  },
+  "strategies": [
+    {
+      "index": 1,
+      "title": "Epigraph SQP polishing from the incumbent",
+      "plan": "Replace the final exact-objective random phase with deterministic sequential constrained solves of the epigraph formulation: maximize scalar \\(t\\) subject to every squared pair distance being at least \\(t\\) and at most 1, after diameter normalization. This removes the nonsmooth min/max objective: the optimizer sees 120 smooth lower-distance inequalities and 120 smooth diameter inequalities, with analytic Jacobians \\(2(p_i-p_j)\\) and \\(-2(p_i-p_j)\\). Start from the existing best configuration and three fixed, normalized perturbations, run SLSQP when SciPy is present, and retain only candidates whose exact NumPy score exceeds the current best; the original stochastic result is the valid fallback. The construction is always valid because the returned array is finite, shape `(16, 2)`, and renormalized by its actual maximum pair distance. Expected-gain check: the exact candidate-selection test accepts only a strict increase from raw `min_max_ratio=0.0773678500286`, and the constrained-contact polish is predicted to reach raw 0.077584, giving `0.077584/(1/12.889266112)=1.000002` combined_score, strictly above 0.997214807531.",
+      "cost": 0.021223999999999996,
+      "best_score": 1.0000028088804436,
+      "baseline_score": 0.9972148075314928,
+      "improvement_epsilon": 1e-09,
+      "rounds": 1,
+      "attempts": 1,
+      "implementations": 1,
+      "guide_implementation_attempts": 0,
+      "source_strategy_index": null,
+      "cumulative_gain": 0.0027880013489507416,
+      "cumulative_relative_gain": 0.0027879935178102724,
+      "productive_rounds": 1,
+      "barren_rounds": 0,
+      "implementation_spend": 0.0,
+      "last_used_iteration": 6,
+      "failure_feedback": []
+    },
+    {
+      "index": 2,
+      "title": "Active-contact block refinement",
+      "plan": "Use the incumbent\u2019s contact graph as a mesoscopic subsystem instead of continuing independent one-point mutations. At each outer iteration, collect all pairs within `1+2e-3` times the current minimum squared distance and all pairs within `1-2e-3` of the diameter; form their first-order inequality rows, then solve a regularized least-squares max-margin displacement for all 32 coordinates simultaneously, with translation removed. Perform a deterministic backtracking line search, accept only exact-score improvements after diameter normalization, and periodically rebuild the active graph; include a fixed sequence of two-point and four-point contact-neighborhood blocks when the full system has no improving first-order direction. This explicitly coordinates the several points sharing a limiting contact, which the present single-point annealing often cannot move without temporarily reducing the minimum distance. Every trial remains a 16-by-2 finite array and exact normalization preserves the evaluator\u2019s diameter factor. Expected-gain check: retain the incumbent unless a backtracked active-set displacement strictly raises the exact raw objective, and the expected raw 0.07748 converts to `0.07748/(1/12.889266112)=0.99866` combined_score, strictly above 0.997214807531.",
+      "cost": 0.021223999999999996,
+      "best_score": null,
+      "baseline_score": null,
+      "improvement_epsilon": 1e-09,
+      "rounds": 0,
+      "attempts": 0,
+      "implementations": 0,
+      "guide_implementation_attempts": 0,
+      "source_strategy_index": null,
+      "cumulative_gain": 0.0,
+      "cumulative_relative_gain": 0.0,
+      "productive_rounds": 0,
+      "barren_rounds": 0,
+      "implementation_spend": 0.0,
+      "last_used_iteration": -1,
+      "failure_feedback": []
+    },
+    {
+      "index": 3,
+      "title": "Triangular-lattice topology exploration",
+      "plan": "Add a genuinely different structural seed family based on clipped triangular lattices rather than concentric rings: create five staggered horizontal rows with counts `3, 4, 2, 4, 3`, use row spacing `sqrt(3)/2`, alternate half-unit offsets, and apply independent deterministic horizontal offsets to the five rows plus independent vertical spacings between adjacent rows. Normalize each such seed and run the same epigraph constrained polish, including reflected and 90-degree rotated versions only as deterministic equivalent starts. Also include the complementary `4, 3, 2, 3, 4` row topology, because its boundary contacts differ from all of the current ring seeds and can escape a ring-contact local ceiling. Search the stated row parameters on a fixed coarse grid first, retain the best few exact configurations, then use the smooth inequality optimizer; no external packing data are needed. All generated candidates have exactly sixteen points, and normalization plus exact best-candidate selection preserves validity. Expected-gain check: the grid-and-polish route keeps the existing raw 0.0773678500286 fallback unless an exact candidate is strictly higher, and its high-upside triangular-contact prediction of raw 0.07760 gives `0.07760/(1/12.889266112)=1.00021` combined_score, strictly above 0.997214807531.",
+      "cost": 0.021223999999999996,
+      "best_score": null,
+      "baseline_score": null,
+      "improvement_epsilon": 1e-09,
+      "rounds": 0,
+      "attempts": 0,
+      "implementations": 0,
+      "guide_implementation_attempts": 0,
+      "source_strategy_index": null,
+      "cumulative_gain": 0.0,
+      "cumulative_relative_gain": 0.0,
+      "productive_rounds": 0,
+      "barren_rounds": 0,
+      "implementation_spend": 0.0,
+      "last_used_iteration": -1,
+      "failure_feedback": []
+    }
+  ],
+  "active_strategy": 1,
+  "strategy_queue": [
+    2,
+    3
+  ],
+  "strategy_costs": [
+    0.06367199999999999
+  ],
+  "implementation_costs": [
+    0.0015804,
+    0.001628519999999999,
+    0.0015604999999999994,
+    0.0017088200000000022
+  ],
+  "guide_implementation_costs": [
+    0.036046
+  ],
+  "guide_implementation_due": false,
+  "guide_implementation_due_reason": null,
+  "guide_implementation_unguided": false,
+  "strategy_call_count": 1,
+  "strategy_replays_by_guide_call": {},
+  "anchor_next_cheap_to_incumbent": false,
+  "opening_cheap_probe_done": true,
+  "opening_guide_hedge_done": true,
+  "barren_rounds": 0,
+  "stagnation": 0,
+  "next_strategy_escalation": 32,
+  "strategy_escalation_gap": 32,
+  "next_long_horizon_exploration": 12,
+  "seen_solutions": [
+    "12fdc0612143bd7efe97e1d6530738ad3b624470",
+    "3d8fba2d753f52c58116973dc839790d5dc6c968",
+    "4b9cfa13d68f08f8de3bf6af0dd7dfd28d336c7f",
+    "6a6dcea741972e65ee9d338dfbb2e545dd951b7b",
+    "6af2763ac816561fd521066dd6fde08fdd7daca9",
+    "85310b88856fc69ba0ba65bedea93cd021e44498",
+    "ad3eb8b00ec6f05e478e103f766b6fc97114834c",
+    "be7efe1c3aa0c835a3e1999e34d5656992da4de0",
+    "dd8a431b5f467e6148aa6f77212eac01b01ec30d",
+    "eb4f58a2e34f1aca7f2b67648a29f9a885d19f36",
+    "ecf9aade6d09389881e49e900b939566f63fabae",
+    "f34d45a9aaeb5a7832c5cc636fe4d17d792b0353"
+  ],
+  "score_ledger": [
+    [
+      0.490568481,
+      1
+    ],
+    [
+      0.864935882,
+      1
+    ],
+    [
+      0.988761499,
+      1
+    ],
+    [
+      0.923328212,
+      1
+    ],
+    [
+      0.989918327,
+      1
+    ],
+    [
+      0.991337812,
+      2
+    ],
+    [
+      0.991024673,
+      1
+    ],
+    [
+      0.997214808,
+      3
+    ],
+    [
+      1.000002809,
+      1
+    ]
+  ],
+  "cost_samples": [
+    [
+      1,
+      0.0015804
+    ],
+    [
+      1,
+      0.036046
+    ],
+    [
+      3,
+      0.004885559999999997
+    ],
+    [
+      3,
+      0.004681499999999998
+    ],
+    [
+      3,
+      0.005126460000000006
+    ],
+    [
+      1,
+      0.06367199999999999
+    ]
+  ],
+  "exploring": false
+}

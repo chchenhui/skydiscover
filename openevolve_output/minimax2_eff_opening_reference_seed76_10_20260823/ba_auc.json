@@ -1,0 +1,88 @@
+{
+  "unit": "usd",
+  "budget": 100.0,
+  "spent": 0.220287,
+  "final_incumbent": 0.9943746882947991,
+  "ba_auc": 99.37253502947995,
+  "ba_auc_normalized": 0.9937253502947995,
+  "num_points": 11,
+  "points": [
+    {
+      "cost": 0.0,
+      "score": 0.01979112384555867,
+      "incumbent": 0.01979112384555867,
+      "iteration": 0,
+      "candidates": 0
+    },
+    {
+      "cost": 0.0665522,
+      "score": 0.9914820086153843,
+      "incumbent": 0.9914820086153843,
+      "iteration": 1,
+      "candidates": 4
+    },
+    {
+      "cost": 0.07550180000000001,
+      "score": 0.9939684508550217,
+      "incumbent": 0.9939684508550217,
+      "iteration": 2,
+      "candidates": 3
+    },
+    {
+      "cost": 0.0817878,
+      "score": 0.9931169647452459,
+      "incumbent": 0.9939684508550217,
+      "iteration": 3,
+      "candidates": 2
+    },
+    {
+      "cost": 0.0854726,
+      "score": 0.9914820086153843,
+      "incumbent": 0.9939684508550217,
+      "iteration": 4,
+      "candidates": 2
+    },
+    {
+      "cost": 0.090693,
+      "score": 0.9914820086153843,
+      "incumbent": 0.9939684508550217,
+      "iteration": 5,
+      "candidates": 2
+    },
+    {
+      "cost": 0.1916726,
+      "score": 0.9943674689020284,
+      "incumbent": 0.9943674689020284,
+      "iteration": 6,
+      "candidates": 3
+    },
+    {
+      "cost": 0.19699819999999998,
+      "score": 0.9943746882947991,
+      "incumbent": 0.9943746882947991,
+      "iteration": 7,
+      "candidates": 3
+    },
+    {
+      "cost": 0.2068004,
+      "score": 0.9943746882947991,
+      "incumbent": 0.9943746882947991,
+      "iteration": 8,
+      "candidates": 3
+    },
+    {
+      "cost": 0.2126616,
+      "score": 0.9943209075285163,
+      "incumbent": 0.9943746882947991,
+      "iteration": 9,
+      "candidates": 2
+    },
+    {
+      "cost": 0.220287,
+      "score": 0.9943746882947991,
+      "incumbent": 0.9943746882947991,
+      "iteration": 10,
+      "candidates": 3
+    }
+  ]
+}

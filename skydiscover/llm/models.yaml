@@ -13,6 +13,11 @@ openai:
     output_per_million: 1.20
     cache_read_per_million: 0.02
     cache_write_per_million: 0.25
+  - name: gpt-5.6-terra
+    input_per_million: 2.00
+    output_per_million: 12.00
+    cache_read_per_million: 0.20
+    cache_write_per_million: 2.50
 
 # Claude cache tiers, as multiples of the input price: reads 0.1x, 5m writes
 # 1.25x, 1h writes 2x. AnthropicLLM picks the write price matching `cache_ttl`

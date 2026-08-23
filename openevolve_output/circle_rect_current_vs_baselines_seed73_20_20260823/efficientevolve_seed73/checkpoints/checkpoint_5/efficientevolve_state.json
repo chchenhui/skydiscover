@@ -1,0 +1,217 @@
+{
+  "version": 8,
+  "curve": {
+    "unit": "usd",
+    "budget": 100.0,
+    "spent": 0.16465432,
+    "final_incumbent": 0.9993304670450703,
+    "ba_auc": 99.92459015553735,
+    "ba_auc_normalized": 0.9992459015553734,
+    "num_points": 6,
+    "points": [
+      {
+        "cost": 0.0,
+        "score": 0.0,
+        "incumbent": 0.0,
+        "iteration": 0,
+        "candidates": 0
+      },
+      {
+        "cost": 0.0022811999999999997,
+        "score": 0.8876369241663091,
+        "incumbent": 0.8876369241663091,
+        "iteration": 1,
+        "candidates": 1
+      },
+      {
+        "cost": 0.057583199999999994,
+        "score": 0.9993304670450703,
+        "incumbent": 0.9993304670450703,
+        "iteration": 2,
+        "candidates": 1
+      },
+      {
+        "cost": 0.06212172,
+        "score": 0.9976252010743654,
+        "incumbent": 0.9993304670450703,
+        "iteration": 3,
+        "candidates": 3
+      },
+      {
+        "cost": 0.15466792,
+        "score": 0.9993304670439654,
+        "incumbent": 0.9993304670450703,
+        "iteration": 4,
+        "candidates": 4
+      },
+      {
+        "cost": 0.16465432,
+        "score": 0.9993304670450703,
+        "incumbent": 0.9993304670450703,
+        "iteration": 5,
+        "candidates": 3
+      }
+    ]
+  },
+  "strategies": [
+    {
+      "index": 1,
+      "title": "LP-polished adaptive basin search",
+      "plan": "Retain the current variable-width SQP model, but add an exact linear-program radius polish for every candidate center set: with centers and width fixed, maximize \\(\\sum r_i\\) subject to wall bounds and \\(r_i+r_j\\le d_{ij}\\). This replaces potentially suboptimal SQP radii by the globally optimal radii for those centers, then uses that polished point as the next analytic-Jacobian SLSQP start. After the existing topology starts, take the best polished packing and make deterministic small, medium, and anisotropic center perturbations around it; initialize each perturbation by a conservative distance-and-wall radius construction, polish it by LP, and rerun SQP. The LP has only 21 variables and directly enforces unsquared Euclidean separation inequalities, while the final common radius shrink supplies a numerical safety margin for both wall containment and pairwise non-overlap. This is a local exploitation route with an incumbent fallback: retain the prior best whenever no polished/reoptimized candidate improves it. Expected raw radii sum is 2.36610, versus the incumbent 2.36424813084; \\(2.36610/2.3658321334167627=1.0001133>0.999330467045\\), so the predicted combined_score is 1.0001133.",
+      "cost": 0.027153333333333335,
+      "best_score": 0.9993304670439654,
+      "baseline_score": 0.9993304670450703,
+      "improvement_epsilon": 1e-09,
+      "rounds": 1,
+      "attempts": 4,
+      "implementations": 4,
+      "guide_implementation_attempts": 0,
+      "source_strategy_index": null,
+      "cumulative_gain": 0.0,
+      "cumulative_relative_gain": 0.0,
+      "productive_rounds": 0,
+      "barren_rounds": 1,
+      "implementation_spend": 0.01108619999999999,
+      "last_used_iteration": 4,
+      "failure_feedback": []
+    },
+    {
+      "index": 2,
+      "title": "Alternating boundary-interior subsystem solve",
+      "plan": "Use the best full SQP result as an initial packing, classify circles deterministically after each full solve into boundary circles (within \\(3\\times10^{-5}\\) of any wall constraint) and interior circles, and perform alternating subsystem SLSQP solves. In a boundary pass, optimize only boundary centers, their radii, and box width while treating all interior circles as fixed obstacles; in an interior pass, optimize only interior centers and radii while boundary circles and width are fixed. Each subsystem retains all relevant wall and pairwise inequalities, including inequalities against frozen circles, and uses the same analytic derivatives restricted to its variables. Follow every pass by the exact fixed-center radius LP, accept only a strictly larger feasible radius sum, and run a final full-variable SQP solve; this reduces the ill-conditioning created when a large wall-supported circle and several small interior circles move simultaneously. If a subsystem solve fails or does not improve, preserve the incoming feasible packing unchanged, and apply the final global radius safety scaling before return. Expected raw radii sum is 2.36595, versus the incumbent 2.36424813084; \\(2.36595/2.3658321334167627=1.0000498>0.999330467045\\), so the predicted combined_score is 1.0000498.",
+      "cost": 0.027153333333333335,
+      "best_score": 0.9993304670450703,
+      "baseline_score": 0.9993304670450703,
+      "improvement_epsilon": 1e-09,
+      "rounds": 1,
+      "attempts": 3,
+      "implementations": 3,
+      "guide_implementation_attempts": 0,
+      "source_strategy_index": null,
+      "cumulative_gain": 0.0,
+      "cumulative_relative_gain": 0.0,
+      "productive_rounds": 0,
+      "barren_rounds": 1,
+      "implementation_spend": 0.009986400000000006,
+      "last_used_iteration": 5,
+      "failure_feedback": []
+    },
+    {
+      "index": 3,
+      "title": "Six-row contact-topology exploration",
+      "plan": "Add a structurally distinct start library rather than merely adding noise to the existing five-row patterns: construct normalized staggered row layouts with row counts `(3,4,4,3,4,3)`, `(3,4,3,4,4,3)`, `(4,3,4,3,4,3)`, and their vertical reflections, placing each row uniformly over `[0.10,0.90]` with alternating half-gap horizontal offsets and vertical coordinates `(0.08,0.24,0.40,0.60,0.76,0.92)`. For each layout, evaluate widths `(0.88,0.94,1.00,1.06,1.12)` and deterministic Sobol or Halton displacements of amplitude `0.025` and `0.055` in normalized coordinates, clipping centers into `[0.02,0.98]^2`; construct conservative feasible radii, then run the existing full analytic-Jacobian SQP and fixed-center LP polish. This explicitly explores a six-layer contact graph that the present five-row and corner-deleted-grid starts cannot reach easily, allowing different numbers of wall contacts and a different allocation of large boundary circles. Every raw start is made feasible by globally scaling radii against walls and Euclidean pair distances; retain the incumbent if no topology beats it, and use the same final safety shrink. Expected raw radii sum is 2.36602, versus the incumbent 2.36424813084; \\(2.36602/2.3658321334167627=1.0000794>0.999330467045\\), so the predicted combined_score is 1.0000794.",
+      "cost": 0.027153333333333335,
+      "best_score": null,
+      "baseline_score": null,
+      "improvement_epsilon": 1e-09,
+      "rounds": 0,
+      "attempts": 0,
+      "implementations": 0,
+      "guide_implementation_attempts": 0,
+      "source_strategy_index": null,
+      "cumulative_gain": 0.0,
+      "cumulative_relative_gain": 0.0,
+      "productive_rounds": 0,
+      "barren_rounds": 0,
+      "implementation_spend": 0.0,
+      "last_used_iteration": -1,
+      "failure_feedback": []
+    }
+  ],
+  "active_strategy": 2,
+  "strategy_queue": [
+    3
+  ],
+  "strategy_costs": [
+    0.08146
+  ],
+  "implementation_costs": [
+    0.0022811999999999997,
+    0.0015128400000000014,
+    0.0036953999999999967,
+    0.003328800000000002
+  ],
+  "guide_implementation_costs": [
+    0.055302
+  ],
+  "guide_implementation_due": false,
+  "guide_implementation_due_reason": null,
+  "guide_implementation_unguided": false,
+  "strategy_call_count": 1,
+  "strategy_replays_by_guide_call": {},
+  "anchor_next_cheap_to_incumbent": false,
+  "opening_cheap_probe_done": true,
+  "opening_guide_hedge_done": true,
+  "barren_rounds": 1,
+  "stagnation": 3,
+  "next_strategy_escalation": 32,
+  "strategy_escalation_gap": 32,
+  "next_long_horizon_exploration": 12,
+  "seen_solutions": [
+    "28b5b55665191f2810c908c61d73da6489efa6c4",
+    "31ccff42525c20e8a9634b9d298576edf7073f18",
+    "3d6e8a549c75815f5533a0d19047e7c8856e9789",
+    "57106e05d568f0eda796d7f8dc5418c8f8b61981",
+    "5e22eb7a12800f3ba80010308e72c29d061de671",
+    "6d6ea4951844f951cfd332d7c8e6b3bb4e1373f1",
+    "7a0b36a6c5091cddf2b81734e9c9b5d254ff2f3c",
+    "8c4e12f0cf983250faa47cfa3d2473a355e5f3e6",
+    "bec92049bffadeed3caf0f399fafede924e28c89",
+    "c2e52546cd0fabd380870fe721921e4b3a0b57d8",
+    "ec71e2db6c8e1ebe3b3f0cf3b9088cf058e31401",
+    "f98aba5be4bdfd8b850e12a56a58b1e284bc2ad2"
+  ],
+  "score_ledger": [
+    [
+      0.887636924,
+      1
+    ],
+    [
+      0.997625201,
+      1
+    ],
+    [
+      0.995799938,
+      1
+    ],
+    [
+      0.994214137,
+      1
+    ],
+    [
+      0.99740419,
+      1
+    ],
+    [
+      0.996204578,
+      2
+    ],
+    [
+      0.999330467,
+      5
+    ]
+  ],
+  "cost_samples": [
+    [
+      1,
+      0.0022811999999999997
+    ],
+    [
+      1,
+      0.055302
+    ],
+    [
+      3,
+      0.004538520000000004
+    ],
+    [
+      3,
+      0.0925462
+    ],
+    [
+      3,
+      0.009986400000000006
+    ]
+  ],
+  "exploring": true
+}

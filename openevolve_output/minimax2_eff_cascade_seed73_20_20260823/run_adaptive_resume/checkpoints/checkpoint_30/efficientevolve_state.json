@@ -1,0 +1,934 @@
+{
+  "version": 8,
+  "curve": {
+    "unit": "usd",
+    "budget": 100.0,
+    "spent": 0.5636511200000001,
+    "final_incumbent": 0.9957073772264913,
+    "ba_auc": 99.54701500290354,
+    "ba_auc_normalized": 0.9954701500290354,
+    "num_points": 31,
+    "points": [
+      {
+        "cost": 0.0,
+        "score": 0.01979112384555867,
+        "incumbent": 0.01979112384555867,
+        "iteration": 0,
+        "candidates": 0
+      },
+      {
+        "cost": 0.0016331999999999998,
+        "score": 0.7160703395555557,
+        "incumbent": 0.7160703395555557,
+        "iteration": 1,
+        "candidates": 1
+      },
+      {
+        "cost": 0.0402112,
+        "score": 0.8906263838370891,
+        "incumbent": 0.8906263838370891,
+        "iteration": 2,
+        "candidates": 1
+      },
+      {
+        "cost": 0.048185320000000004,
+        "score": 0.8906263838370891,
+        "incumbent": 0.8906263838370891,
+        "iteration": 3,
+        "candidates": 3
+      },
+      {
+        "cost": 0.11566892000000001,
+        "score": 0.9446482325048313,
+        "incumbent": 0.9446482325048313,
+        "iteration": 4,
+        "candidates": 3
+      },
+      {
+        "cost": 0.12231692,
+        "score": 0.8906263838370891,
+        "incumbent": 0.9446482325048313,
+        "iteration": 5,
+        "candidates": 2
+      },
+      {
+        "cost": 0.12927892,
+        "score": 0.8906263838370891,
+        "incumbent": 0.9446482325048313,
+        "iteration": 6,
+        "candidates": 2
+      },
+      {
+        "cost": 0.13538692,
+        "score": 0.9778584994951233,
+        "incumbent": 0.9778584994951233,
+        "iteration": 7,
+        "candidates": 2
+      },
+      {
+        "cost": 0.14207332,
+        "score": 0.9821111653643217,
+        "incumbent": 0.9821111653643217,
+        "iteration": 8,
+        "candidates": 2
+      },
+      {
+        "cost": 0.14345172,
+        "score": 0.9763723958941384,
+        "incumbent": 0.9821111653643217,
+        "iteration": 9,
+        "candidates": 1
+      },
+      {
+        "cost": 0.25619692,
+        "score": 0.9877608486594851,
+        "incumbent": 0.9877608486594851,
+        "iteration": 10,
+        "candidates": 3
+      },
+      {
+        "cost": 0.26247412,
+        "score": 0.9881850699857587,
+        "incumbent": 0.9881850699857587,
+        "iteration": 11,
+        "candidates": 2
+      },
+      {
+        "cost": 0.26419292,
+        "score": 0.9886234714368264,
+        "incumbent": 0.9886234714368264,
+        "iteration": 12,
+        "candidates": 1
+      },
+      {
+        "cost": 0.26592731999999997,
+        "score": 0.9887095402771541,
+        "incumbent": 0.9887095402771541,
+        "iteration": 13,
+        "candidates": 1
+      },
+      {
+        "cost": 0.26987711999999997,
+        "score": 0.9869644762331249,
+        "incumbent": 0.9887095402771541,
+        "iteration": 14,
+        "candidates": 1
+      },
+      {
+        "cost": 0.27543671999999997,
+        "score": 0.988236094148905,
+        "incumbent": 0.9887095402771541,
+        "iteration": 15,
+        "candidates": 2
+      },
+      {
+        "cost": 0.28262191999999997,
+        "score": 0.8906263838370891,
+        "incumbent": 0.9887095402771541,
+        "iteration": 16,
+        "candidates": 2
+      },
+      {
+        "cost": 0.28445772,
+        "score": 0.9895159247256881,
+        "incumbent": 0.9895159247256881,
+        "iteration": 17,
+        "candidates": 1
+      },
+      {
+        "cost": 0.28622132,
+        "score": 0.9876633796918384,
+        "incumbent": 0.9895159247256881,
+        "iteration": 18,
+        "candidates": 1
+      },
+      {
+        "cost": 0.34123732,
+        "score": 0.9904803653467001,
+        "incumbent": 0.9904803653467001,
+        "iteration": 19,
+        "candidates": 1
+      },
+      {
+        "cost": 0.34547052,
+        "score": 0.9919618926127022,
+        "incumbent": 0.9919618926127022,
+        "iteration": 20,
+        "candidates": 2
+      },
+      {
+        "cost": 0.35334732,
+        "score": 0.9913298227236707,
+        "incumbent": 0.9919618926127022,
+        "iteration": 21,
+        "candidates": 2
+      },
+      {
+        "cost": 0.38701932,
+        "score": 0.9957073772264913,
+        "incumbent": 0.9957073772264913,
+        "iteration": 22,
+        "candidates": 1
+      },
+      {
+        "cost": 0.38881852,
+        "score": 0.9957031014997184,
+        "incumbent": 0.9957073772264913,
+        "iteration": 23,
+        "candidates": 1
+      },
+      {
+        "cost": 0.39939232,
+        "score": 0.9957073772264913,
+        "incumbent": 0.9957073772264913,
+        "iteration": 24,
+        "candidates": 3
+      },
+      {
+        "cost": 0.40307412,
+        "score": 0.9944903321239423,
+        "incumbent": 0.9957073772264913,
+        "iteration": 25,
+        "candidates": 1
+      },
+      {
+        "cost": 0.47283772,
+        "score": 0.9951493080395453,
+        "incumbent": 0.9957073772264913,
+        "iteration": 26,
+        "candidates": 3
+      },
+      {
+        "cost": 0.48347092,
+        "score": 0.9885114427518525,
+        "incumbent": 0.9957073772264913,
+        "iteration": 27,
+        "candidates": 2
+      },
+      {
+        "cost": 0.49365652,
+        "score": 0.9952593092887447,
+        "incumbent": 0.9957073772264913,
+        "iteration": 28,
+        "candidates": 2
+      },
+      {
+        "cost": 0.49642672,
+        "score": 0.987993596138814,
+        "incumbent": 0.9957073772264913,
+        "iteration": 29,
+        "candidates": 1
+      },
+      {
+        "cost": 0.5636511200000001,
+        "score": 0.9957073772264913,
+        "incumbent": 0.9957073772264913,
+        "iteration": 30,
+        "candidates": 3
+      }
+    ]
+  },
+  "strategies": [
+    {
+      "index": 1,
+      "title": "Active-contact smooth multistart refinement",
+      "plan": "Use the current center\u2013pentagon\u2013decagon coordinates as one seed, plus deterministic asymmetric perturbations of that seed, and optimize all 32 coordinate variables jointly.  Introduce an epigraph variable \\(t\\) for the squared minimum separation and normalize each iterate to squared diameter one, so the desired constraints are \\(||p_i-p_j||^2\\ge t\\); use a differentiable log-sum-exp approximation to the minimum pair distance during continuation from broad to sharply active contacts.  Its analytic gradient is the weighted sum of pair-difference gradients, while the corresponding soft maximum diameter term prevents irrelevant expansion and makes the update scale-invariant.  At every continuation stage evaluate the exact squared ratio over all 120 pairs, retain only strict exact improvements, and retain the analytic parent construction as fallback; centering and diameter normalization preserve the shape, finiteness, and exact 16-by-2 constraint.  The expected-gain check is: return a refined candidate only when its directly recomputed raw `min_max_ratio` is greater than 0.0690983005625, which makes its predicted `combined_score = min_max_ratio / (1/12.889266112) > 0.890626383837`.",
+      "cost": 0.020931333333333333,
+      "best_score": 0.9446482325048313,
+      "baseline_score": 0.8906263838370891,
+      "improvement_epsilon": 1e-09,
+      "rounds": 2,
+      "attempts": 5,
+      "implementations": 5,
+      "guide_implementation_attempts": 0,
+      "source_strategy_index": null,
+      "cumulative_gain": 0.05402184866774218,
+      "cumulative_relative_gain": 0.05718726485572066,
+      "productive_rounds": 1,
+      "barren_rounds": 1,
+      "implementation_spend": 0.01133759999999999,
+      "last_used_iteration": 5,
+      "failure_feedback": []
+    },
+    {
+      "index": 2,
+      "title": "Decagon shell with free six-point core",
+      "plan": "Replace the parent\u2019s rigid center-plus-pentagon subsystem by a six-point free core while initially retaining the regular decagon shell, then optimize the 12 core coordinates and the ten shell radii/angles under reflection-symmetric-breaking deterministic seeds.  Initialize the core from the parent center and pentagon, but give the five former pentagon vertices alternating tangential offsets and split the center into a close radial pair before the constrained continuation; this explicitly permits the central contact graph to change from the parent\u2019s fivefold star.  Parameterize shell points by independent radial displacement and angular displacement from the decagon angles, with zero-mean angular displacement, so this is a mesoscopic shell/core replacement rather than a generic coordinate jitter.  Maximize epigraph \\(t\\) subject to every squared distance being at least \\(t\\) after diameter normalization, using active-pair analytic gradients and exact pairwise rescoring after every accepted parameter update.  Keep the original parent array as a fallback, so every returned array remains a deterministic finite `(16, 2)` NumPy array and cannot lose score.  The expected-gain check is: accept this altered core/shell topology only after exact rescoring verifies `min_max_ratio > 0.0690983005625`, yielding predicted `combined_score = min_max_ratio / (1/12.889266112) > 0.890626383837`.",
+      "cost": 0.020931333333333333,
+      "best_score": 0.8906263838370891,
+      "baseline_score": 0.9446482325048313,
+      "improvement_epsilon": 1e-09,
+      "rounds": 1,
+      "attempts": 2,
+      "implementations": 1,
+      "guide_implementation_attempts": 0,
+      "source_strategy_index": null,
+      "cumulative_gain": 0.0,
+      "cumulative_relative_gain": 0.0,
+      "productive_rounds": 0,
+      "barren_rounds": 1,
+      "implementation_spend": 0.006961999999999996,
+      "last_used_iteration": 6,
+      "failure_feedback": [
+        "operands could not be broadcast together with shapes (4,2) (5,2) (4,2)"
+      ]
+    },
+    {
+      "index": 3,
+      "title": "Topology-diverse free packing search",
+      "plan": "Use several deterministic full-packing seeds that do not inherit the parent\u2019s central-star topology: an 8-plus-8 staggered double ring, a 7-plus-9 staggered double ring, and a golden-angle disk spiral with radii proportional to square roots of rank.  Normalize each seed to unit diameter and solve the same epigraph form, \\(||p_i-p_j||^2\\ge t\\), by deterministic smooth active-contact continuation with analytic pair-constraint derivatives, then select the exact best candidate across all seeds and the incumbent.  This is the high-upside structural route because it can discover a contact graph with no center point and no forced regular decagon diameter pair.  Use fixed seed order, fixed perturbation signs, and exact 120-pair squared-distance evaluation rather than random acceptance, making it reproducible and ensuring a valid finite 16-point result.  The expected-gain check is: select a non-parent topology only if its exact recomputed `min_max_ratio` exceeds 0.0690983005625, so its predicted `combined_score = min_max_ratio / (1/12.889266112) > 0.890626383837`.",
+      "cost": 0.020931333333333333,
+      "best_score": 0.9821111653643217,
+      "baseline_score": 0.9446482325048313,
+      "improvement_epsilon": 1e-09,
+      "rounds": 3,
+      "attempts": 5,
+      "implementations": 5,
+      "guide_implementation_attempts": 0,
+      "source_strategy_index": null,
+      "cumulative_gain": 0.03746293285949043,
+      "cumulative_relative_gain": 0.03829236877974534,
+      "productive_rounds": 2,
+      "barren_rounds": 1,
+      "implementation_spend": 0.014172800000000013,
+      "last_used_iteration": 9,
+      "failure_feedback": []
+    },
+    {
+      "index": 4,
+      "title": "Exact active-contact polling",
+      "plan": "Keep the present multistart continuation output, then apply a deterministic nonsmooth local search using the exact squared ratio rather than its soft surrogate.  At each decreasing displacement scale, poll both signs of every centered coordinate direction and also poll the normalized active-contact direction that pushes all pairs within 1% of the current minimum apart while pulling all pairs within 1% of the current maximum together.  Normalize every trial by its actual diameter and accept only a trial whose directly recomputed `min(d2)/max(d2)` is larger, so translation, scaling, cardinality, finiteness, and the 16-by-2 constraint are preserved at every accepted iterate.  This supplements the smooth continuation precisely where its soft-min/soft-max approximation may stop short of an exact-contact improvement, while retaining the current incumbent as a fallback.  The checkable gain mechanism is exact strict acceptance: any accepted candidate has raw `min_max_ratio > 0.0761960500179`, hence predicted `combined_score = min_max_ratio/(1/12.889266112) > 0.982111165364`.",
+      "cost": 0.019485333333333337,
+      "best_score": 0.9887095402771541,
+      "baseline_score": 0.9821111653643217,
+      "improvement_epsilon": 1e-09,
+      "rounds": 5,
+      "attempts": 7,
+      "implementations": 7,
+      "guide_implementation_attempts": 0,
+      "source_strategy_index": null,
+      "cumulative_gain": 0.006598374912832328,
+      "cumulative_relative_gain": 0.00667947883766984,
+      "productive_rounds": 4,
+      "barren_rounds": 1,
+      "implementation_spend": 0.01710139999999999,
+      "last_used_iteration": 14,
+      "failure_feedback": []
+    },
+    {
+      "index": 5,
+      "title": "Frozen shell, six-point core repair",
+      "plan": "Use the best current configuration, identify its ten largest-radius points after centering, and treat them as a mesoscopic shell while replacing the remaining six points by a deterministic core repair.  Initialize those six positions from the current core, then repeatedly update only core coordinates using the exact active-pair direction: core--core close contacts repel, core--shell close contacts repel, and any farthest pair involving a core point attracts; normalize globally after each proposal.  Alternate 40 core-only active-contact updates with one shell tangential relaxation sweep, where each shell point may move only in its local tangential direction before global normalization, so the outer diameter-controlling structure remains stable but can remove shell-core bottlenecks.  Test several deterministic core initializations: current core, a center-plus-pentagon with radius equal to the current median core radius, and the same pentagon rotated by half a fifth-turn.  All candidates are evaluated by the exact pairwise squared ratio and the untouched original configuration is retained if none improves.  The checkable gain mechanism is that replacement is committed only after an exact raw score comparison, so any committed result has `min_max_ratio > 0.0761960500179` and therefore predicted `combined_score > 0.982111165364`.",
+      "cost": 0.019485333333333337,
+      "best_score": 0.988236094148905,
+      "baseline_score": 0.9887095402771541,
+      "improvement_epsilon": 1e-09,
+      "rounds": 1,
+      "attempts": 2,
+      "implementations": 2,
+      "guide_implementation_attempts": 0,
+      "source_strategy_index": null,
+      "cumulative_gain": 0.0,
+      "cumulative_relative_gain": 0.0,
+      "productive_rounds": 0,
+      "barren_rounds": 1,
+      "implementation_spend": 0.005559599999999998,
+      "last_used_iteration": 15,
+      "failure_feedback": []
+    },
+    {
+      "index": 6,
+      "title": "Diameter-feasibility constrained multistart",
+      "plan": "Formulate a structurally different optimization with auxiliary variable \\(t\\): maximize \\(t\\) subject to \\(d_{ij}^2-t\\ge0\\) and \\(1-d_{ij}^2\\ge0\\) for every pair, with centered coordinates and a final diameter normalization.  Use a deterministic augmented-Lagrangian or squared-hinge feasibility sequence over these smooth inequalities, with analytic pair derivatives \\(2(x_i-x_j)\\) and \\(-2(x_i-x_j)\\), increasing the feasibility penalty while updating \\(t\\) only when all current lower-distance violations decrease.  Start from the incumbent, 8+8 staggered rings, 7+9 staggered rings, the golden-angle spiral, and two explicitly defined clipped triangular-lattice starts; these are genuinely distinct diameter-bound contact topologies rather than perturbations of one ring construction.  At each penalty stage, retain the best feasible exact-ratio point, and after the final stage perform a direct exact score comparison against the incumbent before returning anything.  The auxiliary variable removes the min/max quotient from the optimization landscape while the all-pairs upper constraints explicitly control the diameter, and every iterate remains a finite 16-by-2 array.  The checkable gain mechanism is the final exact incumbent comparison: a returned nonfallback candidate satisfies `min_max_ratio > 0.0761960500179`, hence predicted `combined_score > 0.982111165364`.",
+      "cost": 0.019485333333333337,
+      "best_score": 0.8906263838370891,
+      "baseline_score": 0.9887095402771541,
+      "improvement_epsilon": 1e-09,
+      "rounds": 1,
+      "attempts": 2,
+      "implementations": 2,
+      "guide_implementation_attempts": 0,
+      "source_strategy_index": null,
+      "cumulative_gain": 0.0,
+      "cumulative_relative_gain": 0.0,
+      "productive_rounds": 0,
+      "barren_rounds": 1,
+      "implementation_spend": 0.007185200000000003,
+      "last_used_iteration": 16,
+      "failure_feedback": []
+    },
+    {
+      "index": 7,
+      "title": "replay Topology-diverse free packing search",
+      "plan": "Use several deterministic full-packing seeds that do not inherit the parent\u2019s central-star topology: an 8-plus-8 staggered double ring, a 7-plus-9 staggered double ring, and a golden-angle disk spiral with radii proportional to square roots of rank.  Normalize each seed to unit diameter and solve the same epigraph form, \\(||p_i-p_j||^2\\ge t\\), by deterministic smooth active-contact continuation with analytic pair-constraint derivatives, then select the exact best candidate across all seeds and the incumbent.  This is the high-upside structural route because it can discover a contact graph with no center point and no forced regular decagon diameter pair.  Use fixed seed order, fixed perturbation signs, and exact 120-pair squared-distance evaluation rather than random acceptance, making it reproducible and ensuring a valid finite 16-point result.  The expected-gain check is: select a non-parent topology only if its exact recomputed `min_max_ratio` exceeds 0.0690983005625, so its predicted `combined_score = min_max_ratio / (1/12.889266112) > 0.890626383837`.",
+      "cost": 0.0,
+      "best_score": 0.9895159247256881,
+      "baseline_score": 0.9887095402771541,
+      "improvement_epsilon": 1e-09,
+      "rounds": 2,
+      "attempts": 2,
+      "implementations": 2,
+      "guide_implementation_attempts": 0,
+      "source_strategy_index": 3,
+      "cumulative_gain": 0.0008063844485339811,
+      "cumulative_relative_gain": 0.0008149282173073926,
+      "productive_rounds": 1,
+      "barren_rounds": 1,
+      "implementation_spend": 0.0035994000000000304,
+      "last_used_iteration": 18,
+      "failure_feedback": []
+    },
+    {
+      "index": 8,
+      "title": "Bundle-feasible contact polishing",
+      "plan": "Replace the final coordinate-only poll with a deterministic active-contact bundle step that treats the current normalized configuration as the diameter-constrained problem \\(\\max t\\) subject to every squared pair distance \\(d_{ij}\\ge t\\) and \\(d_{ij}\\le1\\).  At each poll scale, form gradients \\(+2(x_i-x_j)\\) for pairs in a tight minimum band and \\(-2(x_i-x_j)\\) for pairs in a tight diameter band, then use cyclic half-space projections to construct a displacement having nonnegative directional derivative for every currently active inequality; retain coordinate and aggregate-gradient directions as fallback directions.  Test both signs only for directions not constructed as feasible, normalize every trial by its exact diameter, and accept only strict exact `min_max_ratio` improvements, so translation, scale, point count, and finite-coordinate validity remain preserved.  This differs from averaging active gradients because mutually conflicting contacts are handled as separate linearized inequalities rather than being allowed to cancel in one aggregate vector.  Expected-gain check: every accepted bundle trial is explicitly checked by the same exact squared ratio used by `combined_score`, while the unchanged incumbent is returned if none passes, so any accepted result strictly exceeds raw `min_max_ratio=0.076770540396` and therefore strictly exceeds `combined_score=0.989515924726`.",
+      "cost": 0.027508000000000005,
+      "best_score": 0.9957073772264913,
+      "baseline_score": 0.9895159247256881,
+      "improvement_epsilon": 1e-09,
+      "rounds": 5,
+      "attempts": 7,
+      "implementations": 7,
+      "guide_implementation_attempts": 1,
+      "source_strategy_index": null,
+      "cumulative_gain": 0.006191452500803218,
+      "cumulative_relative_gain": 0.0062288743049281415,
+      "productive_rounds": 3,
+      "barren_rounds": 2,
+      "implementation_spend": 0.04758119999999999,
+      "last_used_iteration": 23,
+      "failure_feedback": []
+    },
+    {
+      "index": 9,
+      "title": "Hexagonal-lattice topology escape",
+      "plan": "Add a structurally distinct deterministic seed family based on the sixteen sites of a four-row staggered triangular lattice: for row \\(r=0,1,2,3\\) and column \\(c=0,1,2,3\\), use \\((c+\\tfrac12(r\\bmod2),\\tfrac{\\sqrt3}{2}r)\\), center it, normalize its diameter, and include its reflected and low-amplitude sinusoidally warped copies.  Run the existing smooth continuation from these seeds, but follow it with the epigraph-style active-contact bundle feasibility polish rather than relying only on ring and spiral contact graphs.  The construction has a dense triangular-neighbor graph before relaxation, whereas the present candidates are radial shells or a golden-angle ordering, so it can cross into configurations with different interior degree distribution and different diameter-pair choices.  All generated coordinates are finite deterministic NumPy values, and exact diameter normalization preserves sixteen points and makes the upper-distance constraint \\(d_{ij}\\le1\\) exact after every accepted step.  Expected-gain check: the implementation compares each relaxed lattice candidate against the retained raw `min_max_ratio=0.076770540396` and returns it only on a strict exact increase, otherwise returning the incumbent, so any accepted candidate has `combined_score>0.989515924726`.",
+      "cost": 0.027508000000000005,
+      "best_score": 0.9957073772264913,
+      "baseline_score": 0.9957073772264913,
+      "improvement_epsilon": 1e-09,
+      "rounds": 1,
+      "attempts": 3,
+      "implementations": 3,
+      "guide_implementation_attempts": 0,
+      "source_strategy_index": null,
+      "cumulative_gain": 0.0,
+      "cumulative_relative_gain": 0.0,
+      "productive_rounds": 0,
+      "barren_rounds": 1,
+      "implementation_spend": 0.010573800000000022,
+      "last_used_iteration": 24,
+      "failure_feedback": []
+    },
+    {
+      "index": 10,
+      "title": "replay Topology-diverse free packing search",
+      "plan": "Use several deterministic full-packing seeds that do not inherit the parent\u2019s central-star topology: an 8-plus-8 staggered double ring, a 7-plus-9 staggered double ring, and a golden-angle disk spiral with radii proportional to square roots of rank.  Normalize each seed to unit diameter and solve the same epigraph form, \\(||p_i-p_j||^2\\ge t\\), by deterministic smooth active-contact continuation with analytic pair-constraint derivatives, then select the exact best candidate across all seeds and the incumbent.  This is the high-upside structural route because it can discover a contact graph with no center point and no forced regular decagon diameter pair.  Use fixed seed order, fixed perturbation signs, and exact 120-pair squared-distance evaluation rather than random acceptance, making it reproducible and ensuring a valid finite 16-point result.  The expected-gain check is: select a non-parent topology only if its exact recomputed `min_max_ratio` exceeds 0.0690983005625, so its predicted `combined_score = min_max_ratio / (1/12.889266112) > 0.890626383837`.",
+      "cost": 0.0,
+      "best_score": 0.9944903321239423,
+      "baseline_score": 0.9957073772264913,
+      "improvement_epsilon": 1e-09,
+      "rounds": 1,
+      "attempts": 1,
+      "implementations": 1,
+      "guide_implementation_attempts": 0,
+      "source_strategy_index": 3,
+      "cumulative_gain": 0.0,
+      "cumulative_relative_gain": 0.0,
+      "productive_rounds": 0,
+      "barren_rounds": 1,
+      "implementation_spend": 0.0036817999999999573,
+      "last_used_iteration": 25,
+      "failure_feedback": []
+    },
+    {
+      "index": 11,
+      "title": "Epigraph-SQP contact polish",
+      "plan": "Replace the final bundle-only stage by a deterministic trust-region SQP on the explicit epigraph formulation: maximize \\(t\\) subject to every squared pair distance \\(d_{ij}\\ge t\\), every \\(d_{ij}\\le1\\), centering constraints, and one fixed rotational gauge coordinate.  At each iterate, form analytic gradients of the active lower constraints \\(d_{ij}-t\\) and upper constraints \\(1-d_{ij}\\), use cyclic half-space projection to obtain a feasible primal direction with positive \\(t\\)-component, then backtrack and accept only if the exact raw ratio increases after diameter normalization.  Start this stage from the existing best continuation result and retain the unmodified incumbent whenever no trial is strictly better, so shape, finiteness, and all 16-point constraints are preserved.  This differs from the current contact poll because the scalar epigraph variable explicitly balances all competing minimum contacts against all diameter contacts rather than relying on a summed displacement gradient.  The checkable gain mechanism is that an accepted SQP/backtracking step is retained only when `exact(trial) > exact(best)`, otherwise the current valid incumbent is returned, predicting `combined_score > 0.995707377226`.",
+      "cost": 0.02056533333333334,
+      "best_score": 0.9951493080395453,
+      "baseline_score": 0.9957073772264913,
+      "improvement_epsilon": 1e-09,
+      "rounds": 1,
+      "attempts": 3,
+      "implementations": 3,
+      "guide_implementation_attempts": 0,
+      "source_strategy_index": null,
+      "cumulative_gain": 0.0,
+      "cumulative_relative_gain": 0.0,
+      "productive_rounds": 0,
+      "barren_rounds": 1,
+      "implementation_spend": 0.008067600000000008,
+      "last_used_iteration": 26,
+      "failure_feedback": []
+    },
+    {
+      "index": 12,
+      "title": "Six-point core shell replacement",
+      "plan": "Use the current best configuration as a shell/core decomposition: classify the ten points with largest radius from the centroid as shell points and the remaining six as a subsystem.  Freeze the shell temporarily, then solve the six core coordinates and epigraph variable using the same deterministic inequality-SQP formulation, including all core-core and core-shell constraints while retaining shell-shell constraints as fixed bounds; follow this with a second pass allowing the shell points to move only tangentially and radially by a small trust region.  Alternate core and shell passes on a fixed decreasing trust-radius schedule, accepting a pass only by the exact all-pair objective and preserving the original configuration as fallback.  This is a mesoscopic replacement rather than a whole-configuration perturbation: it specifically repairs the overconstrained center/inner-ring contact graph while preventing loss of the diameter scaffold.  The checkable gain mechanism is exact acceptance of a completed core-or-shell pass only when its full 120-pair ratio is larger than the incumbent, with fallback otherwise, predicting `combined_score > 0.995707377226`.",
+      "cost": 0.02056533333333334,
+      "best_score": 0.9885114427518525,
+      "baseline_score": 0.9957073772264913,
+      "improvement_epsilon": 1e-09,
+      "rounds": 1,
+      "attempts": 2,
+      "implementations": 2,
+      "guide_implementation_attempts": 0,
+      "source_strategy_index": null,
+      "cumulative_gain": 0.0,
+      "cumulative_relative_gain": 0.0,
+      "productive_rounds": 0,
+      "barren_rounds": 1,
+      "implementation_spend": 0.01063320000000001,
+      "last_used_iteration": 27,
+      "failure_feedback": []
+    },
+    {
+      "index": 13,
+      "title": "Curved triangular-row escape",
+      "plan": "Add a genuinely different structural seed family built from triangular rows of lengths 3, 4, 5, 4: initialize row \\(r\\) at \\(y=(r-1.5)\\sqrt{3}/2\\), center each row horizontally, stagger adjacent rows by one half spacing, and then apply the deterministic radial bending map \\((x,y)\\mapsto(x(1+0.10y^2),\\,y(1-0.05x^2))\\) before normalization.  Include its reflection and the opposite bending signs as independent starts, then optimize the explicit epigraph constraints with analytic distance derivatives and deterministic trust-region continuation rather than the smooth log-sum-exp surrogate alone.  This seed has a triangular contact topology in the interior but a deliberately nonrectangular boundary, allowing the optimizer to discover a diameter graph unlike the present ten-shell/five-inner-shell family.  Every candidate is centered, diameter-normalized, checked over every pair, and discarded unless its exact ratio exceeds the best retained result.  The checkable gain mechanism is the exact all-pair acceptance test with the current best as valid fallback, predicting `combined_score > 0.995707377226`.",
+      "cost": 0.02056533333333334,
+      "best_score": 0.9952593092887447,
+      "baseline_score": 0.9957073772264913,
+      "improvement_epsilon": 1e-09,
+      "rounds": 1,
+      "attempts": 2,
+      "implementations": 1,
+      "guide_implementation_attempts": 0,
+      "source_strategy_index": null,
+      "cumulative_gain": 0.0,
+      "cumulative_relative_gain": 0.0,
+      "productive_rounds": 0,
+      "barren_rounds": 1,
+      "implementation_spend": 0.010185599999999961,
+      "last_used_iteration": 28,
+      "failure_feedback": [
+        "name 'curved_triangular_rows' is not defined"
+      ]
+    },
+    {
+      "index": 14,
+      "title": "replay Exact active-contact polling",
+      "plan": "Keep the present multistart continuation output, then apply a deterministic nonsmooth local search using the exact squared ratio rather than its soft surrogate.  At each decreasing displacement scale, poll both signs of every centered coordinate direction and also poll the normalized active-contact direction that pushes all pairs within 1% of the current minimum apart while pulling all pairs within 1% of the current maximum together.  Normalize every trial by its actual diameter and accept only a trial whose directly recomputed `min(d2)/max(d2)` is larger, so translation, scaling, cardinality, finiteness, and the 16-by-2 constraint are preserved at every accepted iterate.  This supplements the smooth continuation precisely where its soft-min/soft-max approximation may stop short of an exact-contact improvement, while retaining the current incumbent as a fallback.  The checkable gain mechanism is exact strict acceptance: any accepted candidate has raw `min_max_ratio > 0.0761960500179`, hence predicted `combined_score = min_max_ratio/(1/12.889266112) > 0.982111165364`.",
+      "cost": 0.0,
+      "best_score": 0.987993596138814,
+      "baseline_score": 0.9957073772264913,
+      "improvement_epsilon": 1e-09,
+      "rounds": 1,
+      "attempts": 1,
+      "implementations": 1,
+      "guide_implementation_attempts": 0,
+      "source_strategy_index": 4,
+      "cumulative_gain": 0.0,
+      "cumulative_relative_gain": 0.0,
+      "productive_rounds": 0,
+      "barren_rounds": 1,
+      "implementation_spend": 0.0027702000000000004,
+      "last_used_iteration": 29,
+      "failure_feedback": []
+    },
+    {
+      "index": 15,
+      "title": "replay Hexagonal-lattice topology escape",
+      "plan": "Add a structurally distinct deterministic seed family based on the sixteen sites of a four-row staggered triangular lattice: for row \\(r=0,1,2,3\\) and column \\(c=0,1,2,3\\), use \\((c+\\tfrac12(r\\bmod2),\\tfrac{\\sqrt3}{2}r)\\), center it, normalize its diameter, and include its reflected and low-amplitude sinusoidally warped copies.  Run the existing smooth continuation from these seeds, but follow it with the epigraph-style active-contact bundle feasibility polish rather than relying only on ring and spiral contact graphs.  The construction has a dense triangular-neighbor graph before relaxation, whereas the present candidates are radial shells or a golden-angle ordering, so it can cross into configurations with different interior degree distribution and different diameter-pair choices.  All generated coordinates are finite deterministic NumPy values, and exact diameter normalization preserves sixteen points and makes the upper-distance constraint \\(d_{ij}\\le1\\) exact after every accepted step.  Expected-gain check: the implementation compares each relaxed lattice candidate against the retained raw `min_max_ratio=0.076770540396` and returns it only on a strict exact increase, otherwise returning the incumbent, so any accepted candidate has `combined_score>0.989515924726`.",
+      "cost": 0.0,
+      "best_score": 0.9957073772264913,
+      "baseline_score": 0.9957073772264913,
+      "improvement_epsilon": 1e-09,
+      "rounds": 1,
+      "attempts": 2,
+      "implementations": 2,
+      "guide_implementation_attempts": 0,
+      "source_strategy_index": 9,
+      "cumulative_gain": 0.0,
+      "cumulative_relative_gain": 0.0,
+      "productive_rounds": 0,
+      "barren_rounds": 1,
+      "implementation_spend": 0.008232400000000029,
+      "last_used_iteration": 30,
+      "failure_feedback": []
+    }
+  ],
+  "active_strategy": 15,
+  "strategy_queue": [],
+  "strategy_costs": [
+    0.062794,
+    0.05845600000000001,
+    0.05501600000000001,
+    0.06169600000000003
+  ],
+  "implementation_costs": [
+    0.0016331999999999998,
+    0.0026580400000000004,
+    0.002344800000000001,
+    0.0033239999999999936,
+    0.003480999999999998,
+    0.003054000000000001,
+    0.0033432000000000045,
+    0.0013784000000000018,
+    0.0017106000000000066,
+    0.0031385999999999914,
+    0.0017188000000000203,
+    0.0017343999999999693,
+    0.003949800000000003,
+    0.002779799999999999,
+    0.0035926000000000013,
+    0.001835800000000054,
+    0.0017635999999999763,
+    0.0021165999999999963,
+    0.0039384000000000086,
+    0.0017992000000000008,
+    0.0035246000000000075,
+    0.0036817999999999573,
+    0.004033800000000004,
+    0.005316600000000005,
+    0.005092799999999981,
+    0.0027702000000000004,
+    0.004116200000000014
+  ],
+  "guide_implementation_costs": [
+    0.038578,
+    0.05086799999999997,
+    0.03367199999999998,
+    0.058992000000000044
+  ],
+  "guide_implementation_due": false,
+  "guide_implementation_due_reason": null,
+  "guide_implementation_unguided": false,
+  "strategy_call_count": 4,
+  "strategy_replays_by_guide_call": {
+    "2": 1,
+    "3": 1,
+    "4": 1
+  },
+  "anchor_next_cheap_to_incumbent": false,
+  "opening_cheap_probe_done": true,
+  "opening_guide_hedge_done": true,
+  "barren_rounds": 1,
+  "stagnation": 8,
+  "next_strategy_escalation": 32,
+  "strategy_escalation_gap": 32,
+  "next_long_horizon_exploration": 12,
+  "seen_solutions": [
+    "016ef81ea14425aba2c261f9f0e79807b53560a3",
+    "01cdfac2acdee9930e5a6656b5f58b6a38a66ab0",
+    "041337e203b2aac671d1ad1f7a193325dd79f595",
+    "0519fd3060d42142922d1331846f012f2cf65c77",
+    "0c7b7729937d7445aa25ca89db38566364e6e83e",
+    "1032de828efc228f43b43902960323f72b436377",
+    "1494bd19c9ee961cad34da6f4c2d6dc6a4a35d7f",
+    "1f1c626bf5203f0c0db4887d2dfb6ebefa50d589",
+    "224223b31c0d4f6d065b382d88e1d5a1aa1ab673",
+    "2512b9cd609127adde3e11c5b1885c1d73f88d97",
+    "34aaf7172e1492109605480ac1d32872a5d072a2",
+    "394626e521f5a150ac6f9c1acabbf758a01ac5a9",
+    "3f7074a3682621f9fd7e7fd78f26381ca5b3b0c4",
+    "3f98773ae088e2024acbc666d9657f81f57c8283",
+    "40ff3cb6c622b5d2538ef1669b94af466f64e820",
+    "4cdc7d8a39e96f8e4414e21633a64cf529b94d8e",
+    "4f86a241e6414d11e2a525ee38fae76b6f8a1e51",
+    "5385b9ec10fc8c35b71393ce89f68024c50df40c",
+    "5a8b9fc711d446d0912cf72acebb00fa34b90793",
+    "5ed3ab76705d2c47e6af8013173cfc6786756914",
+    "636abfdb02a92b117baa97e5492d00488733cbce",
+    "6468134c02356e4edb27c812e4d67d969f55802b",
+    "66e1b2a9cd20b99706dde3665efbec3dbf96ea6b",
+    "671557e3caed7777d0e9a5428c773e79a98518ff",
+    "683bda2478dc817a1f1418de824d9c572df76c9b",
+    "6a049371a7a54e3c34ac77df4272d71517b92fff",
+    "6e30d4623dcf99879f27ba15a50d2167b9b1f266",
+    "6fe0e9c2bc622349700233e52c49986586cb4f0d",
+    "7d4da91cc44f6795265feb25d965371ca946470b",
+    "87697ff24d1c8dfe32cc1f9aeff6c36193584585",
+    "8819e4df8e0c8c6d7cb3b35a55aefe490223a04f",
+    "9188188d309e52aa5fe4a8225eda5f39b21aa79d",
+    "94e530c18e689ae84d0d910b285b79b94767b43d",
+    "98964da91c8e76712ac03720441433ff26e2c175",
+    "99ac28cbf1f3e7d115f1bfda22f57f775306f7d1",
+    "99c9597e720112c07eb28fb0ae4881fa3f9b28fc",
+    "9d55c4ca4354ed1efb8c495d61e81a72958ebc05",
+    "a11d34490432639e4d38f0cdb0af2200a86a783e",
+    "a30c43559b1a2931f7b83f8d515fdf6ec39defe5",
+    "ba9a1f9f47587853b8e6ef4daabf63515d302ecd",
+    "bfa9c1b2e9460d2e5543074104845be0b8748070",
+    "c3827192d9d7aee21db71ee813d2927b612e9d7b",
+    "cd830b1d34134348ad942da482d246aed77634a3",
+    "d0108817ba0ff9b94757507746f76cd37b5d6557",
+    "df9449de979f2c0438222d3758e74837157d8cf2",
+    "e65ce74c7598680206b7ce7d8369a0b4d5a7fe21",
+    "ed9a9b3656ad9a2e900673c059e3f77d68808f05",
+    "ee44978d790e265630308f6d52ed28a337dbbb04",
+    "ef0fb23a9531b8bc2d198413fed7497328ee80a3",
+    "f6bc71f8bcb9ae093fa86b6ee426e6b4d6793c16",
+    "fd21e5972db3ba3406a894114b22876ecc984ac4"
+  ],
+  "score_ledger": [
+    [
+      0.71607034,
+      1
+    ],
+    [
+      0.72743133,
+      1
+    ],
+    [
+      0.944648233,
+      1
+    ],
+    [
+      0.909835762,
+      1
+    ],
+    [
+      0.977858499,
+      1
+    ],
+    [
+      0.976873595,
+      1
+    ],
+    [
+      0.982111165,
+      1
+    ],
+    [
+      0.977904285,
+      1
+    ],
+    [
+      0.976372396,
+      1
+    ],
+    [
+      0.987760849,
+      1
+    ],
+    [
+      0.983857576,
+      1
+    ],
+    [
+      0.987644356,
+      1
+    ],
+    [
+      0.98818507,
+      1
+    ],
+    [
+      0.988623471,
+      1
+    ],
+    [
+      0.98870954,
+      1
+    ],
+    [
+      0.986964476,
+      1
+    ],
+    [
+      0.983850098,
+      1
+    ],
+    [
+      0.988236094,
+      1
+    ],
+    [
+      0.890626384,
+      10
+    ],
+    [
+      0.989515925,
+      1
+    ],
+    [
+      0.98766338,
+      1
+    ],
+    [
+      0.990480365,
+      1
+    ],
+    [
+      0.991961893,
+      1
+    ],
+    [
+      0.989604049,
+      1
+    ],
+    [
+      0.991206006,
+      1
+    ],
+    [
+      0.991329823,
+      1
+    ],
+    [
+      0.995703101,
+      1
+    ],
+    [
+      0.994490332,
+      1
+    ],
+    [
+      0.995149308,
+      1
+    ],
+    [
+      0.983211392,
+      1
+    ],
+    [
+      0.988511443,
+      1
+    ],
+    [
+      0.982740707,
+      2
+    ],
+    [
+      0.995259309,
+      1
+    ],
+    [
+      0.987993596,
+      1
+    ],
+    [
+      0.995482882,
+      1
+    ],
+    [
+      0.995707377,
+      6
+    ]
+  ],
+  "cost_samples": [
+    [
+      1,
+      0.0016331999999999998
+    ],
+    [
+      1,
+      0.038578
+    ],
+    [
+      3,
+      0.007974120000000001
+    ],
+    [
+      2,
+      0.0674836
+    ],
+    [
+      2,
+      0.006647999999999987
+    ],
+    [
+      2,
+      0.006961999999999996
+    ],
+    [
+      2,
+      0.006108000000000002
+    ],
+    [
+      2,
+      0.006686400000000009
+    ],
+    [
+      1,
+      0.0013784000000000018
+    ],
+    [
+      3,
+      0.11274519999999999
+    ],
+    [
+      2,
+      0.006277199999999983
+    ],
+    [
+      1,
+      0.0017188000000000203
+    ],
+    [
+      1,
+      0.0017343999999999693
+    ],
+    [
+      1,
+      0.003949800000000003
+    ],
+    [
+      2,
+      0.005559599999999998
+    ],
+    [
+      2,
+      0.007185200000000003
+    ],
+    [
+      1,
+      0.001835800000000054
+    ],
+    [
+      1,
+      0.0017635999999999763
+    ],
+    [
+      1,
+      0.05501600000000001
+    ],
+    [
+      2,
+      0.0042331999999999925
+    ],
+    [
+      2,
+      0.007876800000000017
+    ],
+    [
+      1,
+      0.03367199999999998
+    ],
+    [
+      1,
+      0.0017992000000000008
+    ],
+    [
+      3,
+      0.010573800000000022
+    ],
+    [
+      1,
+      0.0036817999999999573
+    ],
+    [
+      2,
+      0.06976360000000004
+    ],
+    [
+      2,
+      0.01063320000000001
+    ],
+    [
+      2,
+      0.010185599999999961
+    ],
+    [
+      1,
+      0.0027702000000000004
+    ],
+    [
+      3,
+      0.06722440000000007
+    ]
+  ],
+  "exploring": false
+}

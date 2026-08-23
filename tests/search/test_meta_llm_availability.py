@@ -30,6 +30,12 @@ class TestLLMPoolCheckAvailability:
         pool.models[0].generate = AsyncMock(return_value=MagicMock(text="ok"))
         result = await pool.check_availability()
         assert result is True
+        pool.models[0].generate.assert_awaited_once_with(
+            "",
+            [{"role": "user", "content": "Reply with: pong"}],
+            max_tokens=256,
+            reasoning_effort="low",
+        )
 
     @pytest.mark.asyncio
     async def test_returns_false_when_unreachable(self):
@@ -120,4 +126,3 @@ class TestCoEvolutionControllerAvailabilityCheck:
         assert "share_llm: true" in caplog.text
         assert controller._guide_llm_available is True
         assert controller._meta_llm_available is False
-

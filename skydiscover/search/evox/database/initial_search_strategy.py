@@ -26,6 +26,7 @@ class EvolvedProgramDatabase(ProgramDatabase):
     def __init__(self, name: str, config: DatabaseConfig):
         super().__init__(name, config)
         self.initial_program = None
+        self.random_state = random.Random(getattr(config, "random_seed", None))
 
     def add(self, program: EvolvedProgram, iteration: Optional[int] = None, **kwargs) -> str:
         """Add a program to the database."""
@@ -64,21 +65,21 @@ class EvolvedProgramDatabase(ProgramDatabase):
             front = [p for p in self.get_pareto_front() if p.id in self.programs]
 
         if front:
-            parent = random.choice(front)
+            parent = self.random_state.choice(front)
             # Prefer other front members for context, then fill from population.
             pool = [p for p in front if p.id != parent.id]
             if len(pool) < (num_context_programs or 0):
                 extras = [p for p in candidates if p.id != parent.id and p not in pool]
-                random.shuffle(extras)
+                self.random_state.shuffle(extras)
                 pool.extend(extras)
             examples = pool[:num_context_programs]
             if len(examples) < (num_context_programs or 0):
                 # Extremely small front — allow duplicates avoidance only.
                 examples = [p for p in candidates if p.id != parent.id][:num_context_programs]
         else:
-            parent = random.choice(candidates)
+            parent = self.random_state.choice(candidates)
             sample_size = min((num_context_programs or 0) + 1, len(candidates))
-            examples = random.sample(candidates, sample_size)
+            examples = self.random_state.sample(candidates, sample_size)
             examples = [p for p in examples if p.id != parent.id][:num_context_programs]
 
         parent_dict = {"": parent}

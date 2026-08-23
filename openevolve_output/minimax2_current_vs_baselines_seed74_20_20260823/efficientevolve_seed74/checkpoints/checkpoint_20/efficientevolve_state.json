@@ -1,0 +1,83 @@
+{
+  "version": 8,
+  "curve": {
+    "unit": "usd",
+    "budget": 100.0,
+    "spent": 0.0480576,
+    "final_incumbent": 1.000002808880454,
+    "ba_auc": 99.98529641230823,
+    "ba_auc_normalized": 0.9998529641230823,
+    "num_points": 3,
+    "points": [
+      {
+        "cost": 0.0,
+        "score": 0.01979112384555867,
+        "incumbent": 0.01979112384555867,
+        "iteration": 0,
+        "candidates": 0
+      },
+      {
+        "cost": 0.0019236,
+        "score": 0.7160703395555554,
+        "incumbent": 0.7160703395555554,
+        "iteration": 1,
+        "candidates": 1
+      },
+      {
+        "cost": 0.0480576,
+        "score": 1.000002808880454,
+        "incumbent": 1.000002808880454,
+        "iteration": 2,
+        "candidates": 1
+      }
+    ]
+  },
+  "strategies": [],
+  "active_strategy": null,
+  "strategy_queue": [],
+  "strategy_costs": [],
+  "implementation_costs": [
+    0.0019236
+  ],
+  "guide_implementation_costs": [
+    0.046134
+  ],
+  "guide_implementation_due": false,
+  "guide_implementation_due_reason": null,
+  "guide_implementation_unguided": false,
+  "strategy_call_count": 0,
+  "strategy_replays_by_guide_call": {},
+  "anchor_next_cheap_to_incumbent": true,
+  "opening_cheap_probe_done": true,
+  "opening_guide_hedge_done": true,
+  "barren_rounds": 0,
+  "stagnation": 0,
+  "next_strategy_escalation": 32,
+  "strategy_escalation_gap": 32,
+  "next_long_horizon_exploration": 12,
+  "seen_solutions": [
+    "4c7d404d2d58282d4f05233dac9b267b870be95d",
+    "86032464ccc3dfb33043dffc08079cf9b5da2178"
+  ],
+  "score_ledger": [
+    [
+      0.71607034,
+      1
+    ],
+    [
+      1.000002809,
+      1
+    ]
+  ],
+  "cost_samples": [
+    [
+      1,
+      0.0019236
+    ],
+    [
+      1,
+      0.046134
+    ]
+  ],
+  "exploring": false
+}

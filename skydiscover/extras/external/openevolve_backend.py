@@ -164,6 +164,9 @@ def _map_config(config: Config, iterations: Optional[int], output_dir: str):
 
     # CLI overrides
     oe.max_iterations = iterations or config.max_iterations
+    random_seed = getattr(config.search.database, "random_seed", None)
+    if random_seed is not None:
+        oe.random_seed = int(random_seed)
 
     # LLM models (from --model / -c config)
     if config.llm.models:

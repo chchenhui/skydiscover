@@ -1,0 +1,152 @@
+{
+  "version": 8,
+  "curve": {
+    "unit": "usd",
+    "budget": 100.0,
+    "spent": 0.052319920000000006,
+    "final_incumbent": 0.9972148075314928,
+    "ba_auc": 99.70099968948988,
+    "ba_auc_normalized": 0.9970099968948988,
+    "num_points": 6,
+    "points": [
+      {
+        "cost": 0.0,
+        "score": 0.01979112384555867,
+        "incumbent": 0.01979112384555867,
+        "iteration": 0,
+        "candidates": 0
+      },
+      {
+        "cost": 0.0015804,
+        "score": 0.4905684810159334,
+        "incumbent": 0.4905684810159334,
+        "iteration": 1,
+        "candidates": 1
+      },
+      {
+        "cost": 0.037626400000000004,
+        "score": 0.8649358815497027,
+        "incumbent": 0.8649358815497027,
+        "iteration": 2,
+        "candidates": 1
+      },
+      {
+        "cost": 0.04251196,
+        "score": 0.9913378120131868,
+        "incumbent": 0.9913378120131868,
+        "iteration": 3,
+        "candidates": 3
+      },
+      {
+        "cost": 0.04719346,
+        "score": 0.9972148075314928,
+        "incumbent": 0.9972148075314928,
+        "iteration": 4,
+        "candidates": 3
+      },
+      {
+        "cost": 0.052319920000000006,
+        "score": 0.9972148075314928,
+        "incumbent": 0.9972148075314928,
+        "iteration": 5,
+        "candidates": 3
+      }
+    ]
+  },
+  "strategies": [],
+  "active_strategy": null,
+  "strategy_queue": [],
+  "strategy_costs": [],
+  "implementation_costs": [
+    0.0015804,
+    0.001628519999999999,
+    0.0015604999999999994,
+    0.0017088200000000022
+  ],
+  "guide_implementation_costs": [
+    0.036046
+  ],
+  "guide_implementation_due": false,
+  "guide_implementation_due_reason": null,
+  "guide_implementation_unguided": false,
+  "strategy_call_count": 0,
+  "strategy_replays_by_guide_call": {},
+  "anchor_next_cheap_to_incumbent": false,
+  "opening_cheap_probe_done": true,
+  "opening_guide_hedge_done": true,
+  "barren_rounds": 0,
+  "stagnation": 1,
+  "next_strategy_escalation": 32,
+  "strategy_escalation_gap": 32,
+  "next_long_horizon_exploration": 12,
+  "seen_solutions": [
+    "12fdc0612143bd7efe97e1d6530738ad3b624470",
+    "3d8fba2d753f52c58116973dc839790d5dc6c968",
+    "4b9cfa13d68f08f8de3bf6af0dd7dfd28d336c7f",
+    "6a6dcea741972e65ee9d338dfbb2e545dd951b7b",
+    "6af2763ac816561fd521066dd6fde08fdd7daca9",
+    "85310b88856fc69ba0ba65bedea93cd021e44498",
+    "ad3eb8b00ec6f05e478e103f766b6fc97114834c",
+    "be7efe1c3aa0c835a3e1999e34d5656992da4de0",
+    "eb4f58a2e34f1aca7f2b67648a29f9a885d19f36",
+    "ecf9aade6d09389881e49e900b939566f63fabae",
+    "f34d45a9aaeb5a7832c5cc636fe4d17d792b0353"
+  ],
+  "score_ledger": [
+    [
+      0.490568481,
+      1
+    ],
+    [
+      0.864935882,
+      1
+    ],
+    [
+      0.988761499,
+      1
+    ],
+    [
+      0.923328212,
+      1
+    ],
+    [
+      0.989918327,
+      1
+    ],
+    [
+      0.991337812,
+      2
+    ],
+    [
+      0.991024673,
+      1
+    ],
+    [
+      0.997214808,
+      3
+    ]
+  ],
+  "cost_samples": [
+    [
+      1,
+      0.0015804
+    ],
+    [
+      1,
+      0.036046
+    ],
+    [
+      3,
+      0.004885559999999997
+    ],
+    [
+      3,
+      0.004681499999999998
+    ],
+    [
+      3,
+      0.005126460000000006
+    ]
+  ],
+  "exploring": false
+}

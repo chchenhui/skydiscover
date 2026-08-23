@@ -10,10 +10,11 @@
 
 {other_context_programs}
 
-# Current Prompt
-{current_program}
-
 {search_guidance}
+
+<!-- BEGIN AUTHORITATIVE CURRENT PROMPT -->
+{current_program}
+<!-- END AUTHORITATIVE CURRENT PROMPT -->
 
 # Task
 Suggest improvements to the prompt that will improve its COMBINED_SCORE.
@@ -25,6 +26,8 @@ Provide the complete rewritten prompt.
 IMPORTANT: Your rewritten prompt must serve the same task as the original prompt,
 but with improved instructions, structure, or reasoning guidance.
 Do NOT change the task the prompt is designed for - only improve HOW it instructs the LLM.
+Use the prompt inside "AUTHORITATIVE CURRENT PROMPT" as the rewrite source;
+do not rewrite a previous, contextual, or rejected prompt.
 
 ```{language}
 # Your rewritten prompt here

@@ -1,0 +1,46 @@
+language: python
+diff_based_generation: true
+max_iterations: 20
+checkpoint_interval: 5
+max_solution_length: 60000
+log_level: INFO
+
+llm:
+  api_base: https://api.openai.com/v1
+  reasoning_effort: low
+  models:
+    - name: gpt-5.6-terra
+      weight: 1.0
+      reasoning_effort: low
+  guide_models:
+    - name: gpt-5.6-terra
+      weight: 1.0
+      reasoning_effort: low
+  max_tokens: 32000
+  timeout: 600
+
+prompt:
+  system_message: |
+    You are an expert computational geometer and optimization specialist. Evolve a deterministic
+    constructor returning exactly 21 non-overlapping circles as a NumPy array of shape (21, 3),
+    with rows (x, y, radius), inside a rectangle of perimeter 4. The rectangle dimensions are not
+    fixed: the minimum circumscribing rectangle must satisfy width + height <= 2.
+
+    Maximize the sum of the 21 positive radii. The reference is 2.3658321334167627 and
+    combined_score = radii_sum / 2.3658321334167627, so combined_score >= 1 matches or beats the
+    reference. All pairwise center distances must be at least the sum of the corresponding radii.
+    Keep the implementation deterministic, numerically robust at tolerance 1e-6, and within the
+    360-second evaluator limit. Prefer an accurate feasible construction over an invalid result.
+
+evaluator:
+  timeout: 360
+  max_retries: 3
+  cascade_evaluation: false
+
+search:
+  type: evox
+  share_llm: true
+  database:
+    random_seed: 73
+    auto_generate_variation_operators: true
+    config_path: /home/chenhui/skydiscover/openevolve_output/circle_rect_current_vs_baselines_seed73_20_20260823/configs/evox_meta_search.yaml

@@ -10,10 +10,11 @@
 
 {other_context_programs}
 
-# Current Solution
-{current_program}
-
 {search_guidance}
+
+<!-- BEGIN AUTHORITATIVE CURRENT SOLUTION -->
+{current_program}
+<!-- END AUTHORITATIVE CURRENT SOLUTION -->
 
 # Task
 Suggest improvements to the program that will improve its COMBINED_SCORE.
@@ -24,6 +25,8 @@ Provide the complete new program solution.
 
 IMPORTANT: Make sure your rewritten program maintains the same inputs and outputs
 as the original program, but with improved internal implementation.
+Use the program inside "AUTHORITATIVE CURRENT SOLUTION" as the rewrite source;
+do not rewrite a previous, contextual, or rejected program.
 
 ```{language}
 # Your rewritten program here

@@ -1,0 +1,282 @@
+{
+  "version": 6,
+  "curve": {
+    "unit": "usd",
+    "budget": 100.0,
+    "spent": 0.28017528,
+    "final_incumbent": 0.9914820086153843,
+    "ba_auc": 99.06813670950461,
+    "ba_auc_normalized": 0.9906813670950462,
+    "num_points": 11,
+    "points": [
+      {
+        "cost": 0.0,
+        "score": 0.01979112384555867,
+        "incumbent": 0.01979112384555867,
+        "iteration": 0,
+        "candidates": 0
+      },
+      {
+        "cost": 0.0049386000000000005,
+        "score": 0.0,
+        "incumbent": 0.01979112384555867,
+        "iteration": 1,
+        "candidates": 3
+      },
+      {
+        "cost": 0.0631666,
+        "score": 0.7160703395555557,
+        "incumbent": 0.7160703395555557,
+        "iteration": 2,
+        "candidates": 3
+      },
+      {
+        "cost": 0.0680752,
+        "score": 0.7160703395555557,
+        "incumbent": 0.7160703395555557,
+        "iteration": 3,
+        "candidates": 3
+      },
+      {
+        "cost": 0.073045,
+        "score": 0.8055791319999998,
+        "incumbent": 0.8055791319999998,
+        "iteration": 4,
+        "candidates": 3
+      },
+      {
+        "cost": 0.077041,
+        "score": 0.8055791319999998,
+        "incumbent": 0.8055791319999998,
+        "iteration": 5,
+        "candidates": 3
+      },
+      {
+        "cost": 0.0808058,
+        "score": 0.0,
+        "incumbent": 0.8055791319999998,
+        "iteration": 6,
+        "candidates": 2
+      },
+      {
+        "cost": 0.1589238,
+        "score": 0.9914820086153836,
+        "incumbent": 0.9914820086153836,
+        "iteration": 7,
+        "candidates": 1
+      },
+      {
+        "cost": 0.16833768,
+        "score": 0.9914820086153836,
+        "incumbent": 0.9914820086153836,
+        "iteration": 8,
+        "candidates": 3
+      },
+      {
+        "cost": 0.27094728,
+        "score": 0.9914820086153843,
+        "incumbent": 0.9914820086153843,
+        "iteration": 9,
+        "candidates": 3
+      },
+      {
+        "cost": 0.28017528,
+        "score": 0.9914820086153836,
+        "incumbent": 0.9914820086153843,
+        "iteration": 10,
+        "candidates": 3
+      }
+    ]
+  },
+  "strategies": [
+    {
+      "index": 1,
+      "title": "Incumbent pattern-search with grid safeguard",
+      "plan": "Keep the current seeded Gaussian point set as an explicit incumbent, evaluate its squared min/max ratio, and run deterministic coordinate pattern search around it: for each coordinate, test positive and negative displacements at step sizes \\(0.20,0.14,\\ldots\\) times its current diameter, accepting only strict improvements. In parallel, include a normalized \\(4\\times4\\) unit square grid as a guaranteed fallback candidate, because its minimum distance is 1 and its maximum distance is \\(\\sqrt{18}\\). Apply the same accepted-move local search to whichever of the incumbent and grid is better, always retaining the best complete 16-point configuration seen. This preserves validity because every trial remains a finite `(16, 2)` array and rejected trials cannot lower the returned objective. The grid safeguard has `min_max_ratio = (1/sqrt(18))^2 = 1/18`, so the guaranteed predicted `combined_score = (1/18)/(1/12.889266112) = 0.716070339556 > 0.0197911238456`.",
+      "cost": 0.018586000000000002,
+      "best_score": 0.7160703395555557,
+      "baseline_score": 0.01979112384555867,
+      "improvement_epsilon": 1e-09,
+      "rounds": 2,
+      "attempts": 6,
+      "implementations": 4,
+      "guide_implementation_attempts": 0,
+      "failure_feedback": [
+        "Diff SEARCH blocks did not match parent solution - no changes applied: ```diff <<<<<<< SEARCH def min_max_dist_dim2_16() -> np.ndarray: \"\"\" Creates 16 points in 2 dimensions in order to maximize the ratio of minimum to maximum distance. Returns points: np.ndarray of shape (16,2) containing the (x,y) coordinates of the points. \"\"\" n = 16 d = 2 # places points randomly np.random.seed(42) po"
+      ]
+    },
+    {
+      "index": 2,
+      "title": "Hexagonal-lattice subsystem replacement",
+      "plan": "Replace the Cartesian/random spacing subsystem by 16 points selected from the radius-two hexagonal lattice cluster. Use axial lattice coordinates `(q,r)` with Cartesian conversion `x=q+r/2`, `y=sqrt(3)*r/2`, retaining all points satisfying `max(abs(q),abs(r),abs(q+r)) <= 2` except `(0,-2)`, `(1,-2)`, and `(2,-2)`. This leaves exactly 16 distinct points, every nearest-neighbor lattice edge has length 1, and the retained points `(-2,0)` and `(2,0)` have separation 4. Hence the minimum distance is exactly 1 and the maximum distance is exactly 4; all constraints are met without numerical optimization, and translation or scaling is unnecessary. The construction changes the mesoscopic neighborhood topology from square/random adjacency to six-direction triangular-lattice adjacency, increasing the guaranteed separation for a fixed diameter. It has `min_max_ratio = (1/4)^2 = 1/16`, so the predicted `combined_score = (1/16)/(1/12.889266112) = 0.805579132 > 0.0197911238456`.",
+      "cost": 0.018586000000000002,
+      "best_score": 0.8055791319999998,
+      "baseline_score": 0.7160703395555557,
+      "improvement_epsilon": 1e-09,
+      "rounds": 2,
+      "attempts": 6,
+      "implementations": 4,
+      "guide_implementation_attempts": 0,
+      "failure_feedback": [
+        "Diff SEARCH blocks did not match parent solution - no changes applied: <<<<<<< SEARCH def min_max_dist_dim2_16() -> np.ndarray: \"\"\" Creates 16 points in 2 dimensions while maximizing the ratio of minimum pair distance to maximum pair distance through deterministic local search. Returns points: np.ndarray of shape (16,2) \"\"\" def squared_ratio(points: np.ndarray) -> float: diffs = points[:,"
+      ]
+    },
+    {
+      "index": 3,
+      "title": "Diameter-normalized contact-graph annealing",
+      "plan": "Use the hexagonal 16-point construction as a deterministic guaranteed initial state, then explore a different structural family by optimizing the contact graph directly rather than preserving lattice rows. After every proposed move, translate points to zero centroid and divide all coordinates by the current maximum pair distance, so every accepted candidate has diameter exactly one and maximizing the score is exactly maximizing its nearest-pair distance squared. Use a fixed-seed NumPy generator, 40,000 single-point Gaussian proposals, proposal standard deviation linearly decreasing from `0.08` to `0.002`, and Metropolis acceptance on the normalized squared ratio with temperature linearly decreasing from `0.002` to `0`; retain the best state, not merely the final state. Add deterministic repulsion proposals for every current closest pair by moving its two endpoints apart by `0.01` along their connecting unit vector before applying the usual normalization, which explicitly explores changes in the active nearest-neighbor contact graph. The stored hexagonal initial state is a valid fallback if no proposal improves it, so the returned array always has 16 finite 2D points. The fallback has `min_max_ratio = 1/16`, so the guaranteed predicted `combined_score = 0.805579132 > 0.0197911238456`.",
+      "cost": 0.018586000000000002,
+      "best_score": null,
+      "baseline_score": 0.8055791319999998,
+      "improvement_epsilon": 1e-09,
+      "rounds": 1,
+      "attempts": 2,
+      "implementations": 0,
+      "guide_implementation_attempts": 0,
+      "failure_feedback": [
+        "default_rng() got an unexpected keyword argument 'variant'",
+        "Diff SEARCH blocks did not match parent solution - no changes applied: ```diff <<<<<<< SEARCH def min_max_dist_dim2_16() -> np.ndarray: \"\"\"Return 16 points from a radius-two hexagonal lattice cluster.\"\"\" excluded = {(0, -2), (1, -2)} points = [] radius = 2 for q in range(-radius, radius + 1): for r in range(-radius, radius + 1): if max(abs(q), abs(r), abs(q + r)) <= radius and (q, r) not"
+      ]
+    },
+    {
+      "index": 4,
+      "title": "Active-contact stochastic polish",
+      "plan": "Retain the given 16-point shell configuration as the mandatory fallback, and locally exploit its active minimum-distance and diameter pairs with a deterministic seeded search. At each scale, identify the current closest pairs and farthest pairs: propose paired separating moves for closest pairs, paired inward moves for farthest pairs, and small one-point angular/radial moves for their endpoints; center every trial to remove translation. Use a short deterministic Metropolis phase to cross nonsmooth contact-graph barriers, retain the best-ever configuration, then perform strict-improvement-only coordinate and pair-direction polishing at decreasing step sizes. Every returned candidate is checked using the exact all-pairs squared ratio and replaces the shell fallback only if it is strictly larger, so the array always has shape `(16, 2)` and no invalid-distance convention is introduced. The expected-gain check is that the final exact acceptance test returns only a point set with `min_max_ratio > 1/13`, hence its predicted `combined_score` is `> 0.991482008615`.",
+      "cost": 0.024342000000000016,
+      "best_score": 0.9914820086153836,
+      "baseline_score": 0.9914820086153836,
+      "improvement_epsilon": 1e-09,
+      "rounds": 1,
+      "attempts": 2,
+      "implementations": 2,
+      "guide_implementation_attempts": 0,
+      "failure_feedback": []
+    },
+    {
+      "index": 5,
+      "title": "Diameter-disk contact-graph rebuild",
+      "plan": "Use a structurally different diameter-normalized formulation: constrain all 16 points to the closed unit disk, so every pair distance is at most two, and maximize the smallest pair distance by deterministic overlap relaxation. Initialize several explicit concentric-ring seeds, including `1+5+10`, `1+6+9`, and `4+12` arrangements with equally spaced angular sites and fixed phase offsets; after each relaxation sweep, push every pair closer than the current trial separation apart by half its deficit and project moved points back into the unit disk. Binary-search the trial separation, using a fixed number of sweeps and deterministic seed order, then take the best feasible-looking relaxed configuration and apply strict exact-ratio polishing before comparison with the original shell fallback. This can escape the original construction\u2019s fixed center/hexagon/interleaved-shell incidence graph, because boundary points are free to redistribute over the whole diameter circle rather than remain attached to three outer radial contacts. The expected-gain check is that exact scoring retains the rebuilt configuration only when `min_max_ratio > 1/13`, otherwise returns the original shell, so any accepted rebuild has predicted `combined_score > 0.991482008615`.",
+      "cost": 0.024342000000000016,
+      "best_score": 0.9914820086153836,
+      "baseline_score": 0.9914820086153843,
+      "improvement_epsilon": 1e-09,
+      "rounds": 1,
+      "attempts": 3,
+      "implementations": 2,
+      "guide_implementation_attempts": 0,
+      "failure_feedback": [
+        "closing parenthesis ')' does not match opening parenthesis '[' on line 72 (tmpy02fic_h.py, line 74)"
+      ]
+    }
+  ],
+  "active_strategy": 5,
+  "strategy_queue": [],
+  "strategy_costs": [
+    0.055758,
+    0.04868400000000003
+  ],
+  "implementation_costs": [
+    0.0016462000000000002,
+    0.001235,
+    0.0016361999999999998,
+    0.0016565999999999987,
+    0.0013319999999999999,
+    0.0018823999999999994,
+    0.003137959999999995,
+    0.0023837999999999915,
+    0.0030760000000000045
+  ],
+  "guide_implementation_costs": [
+    0.078118,
+    0.04915800000000001
+  ],
+  "guide_implementation_due": false,
+  "guide_implementation_due_reason": null,
+  "guide_implementation_unguided": false,
+  "strategy_call_count": 2,
+  "anchor_next_cheap_to_incumbent": false,
+  "barren_rounds": 1,
+  "stagnation": 3,
+  "next_strategy_escalation": 32,
+  "strategy_escalation_gap": 32,
+  "seen_solutions": [
+    "00beda42901b41f2825edea0be5f9f7307783a86",
+    "0974dffab31f009679e117e115998243d8c28dce",
+    "0d0d2efd3b10745794b7b0ba51f3019b161788b4",
+    "17e9b986da2ccd548f775e65065d5e5e1f7b12eb",
+    "4bc14b953d49fbdcb926bac44d4b649bfd081338",
+    "4c7196a0928754983e7d654cd9896b6e03a123b9",
+    "600cfe2a1a0d1ddffb39946933c2fdaa08e329d9",
+    "7c1cbbf3eabe1a4369c9ffe0bc4518787a77c5a2",
+    "8b4d294d7cc58c1ef157eeef7fd269003e3e4a17",
+    "a500467f600db6dfa886827b9e22d2dd21bd1d10",
+    "bea1775af436b18288524ec4685dd5669f013d1e",
+    "bef0f7def13d249ab242ca996f62d4b6975aa771",
+    "cf490eedaebd16a5d73f207d863df928bee2649a",
+    "cf56a22e1c0504d3715b4f69cb8b9bcdab5eefe4",
+    "d7ba0c69781000180ad343c3682d006fb7b386bf",
+    "d7bfbd1a8061997609e992e21efb920e34b7f606",
+    "f2c9711f165331dbe2023b9f7538fdef92c0e114"
+  ],
+  "score_ledger": [
+    [
+      0.71607034,
+      4
+    ],
+    [
+      0.805579132,
+      4
+    ],
+    [
+      0.991405036,
+      1
+    ],
+    [
+      0.991482009,
+      8
+    ]
+  ],
+  "cost_samples": [
+    [
+      3,
+      0.0049386000000000005
+    ],
+    [
+      2,
+      0.058228
+    ],
+    [
+      3,
+      0.004908599999999999
+    ],
+    [
+      3,
+      0.0049697999999999964
+    ],
+    [
+      3,
+      0.0039959999999999996
+    ],
+    [
+      2,
+      0.0037647999999999987
+    ],
+    [
+      1,
+      0.078118
+    ],
+    [
+      3,
+      0.009413879999999986
+    ],
+    [
+      3,
+      0.10260960000000002
+    ],
+    [
+      3,
+      0.009228000000000014
+    ]
+  ],
+  "exploring": false
+}

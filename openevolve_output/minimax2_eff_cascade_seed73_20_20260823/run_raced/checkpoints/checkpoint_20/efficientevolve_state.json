@@ -1,0 +1,186 @@
+{
+  "version": 8,
+  "curve": {
+    "unit": "usd",
+    "budget": 100.0,
+    "spent": 0.1172392,
+    "final_incumbent": 1.0000028088804547,
+    "ba_auc": 99.98856067586193,
+    "ba_auc_normalized": 0.9998856067586194,
+    "num_points": 5,
+    "points": [
+      {
+        "cost": 0.0,
+        "score": 0.01979112384555867,
+        "incumbent": 0.01979112384555867,
+        "iteration": 0,
+        "candidates": 0
+      },
+      {
+        "cost": 0.0018575999999999998,
+        "score": 0.9120487234828482,
+        "incumbent": 0.9120487234828482,
+        "iteration": 1,
+        "candidates": 1
+      },
+      {
+        "cost": 0.0487516,
+        "score": 0.7433594160140826,
+        "incumbent": 0.9120487234828482,
+        "iteration": 2,
+        "candidates": 1
+      },
+      {
+        "cost": 0.1141056,
+        "score": 0.991482008615381,
+        "incumbent": 0.991482008615381,
+        "iteration": 3,
+        "candidates": 1
+      },
+      {
+        "cost": 0.1172392,
+        "score": 1.0000028088804547,
+        "incumbent": 1.0000028088804547,
+        "iteration": 4,
+        "candidates": 2
+      }
+    ]
+  },
+  "strategies": [
+    {
+      "index": 1,
+      "title": "Epigraph-constrained multistart packing",
+      "plan": "Replace ratio-only annealing polish with the smooth auxiliary-variable formulation: normalize candidate diameter to at most one, maximize a scalar \\(t\\), impose every squared pair distance \\(q_{ij}\\ge t\\), and impose every \\(q_{ij}\\le1\\).  Use deterministic SLSQP multistarts with analytic gradients for both families of inequalities, beginning from the annealed incumbent plus explicit concentric-shell and staggered-row seeds; retain the actual best ratio rather than trusting the optimizer status.  This turns the nonsmooth minimum/maximum ratio into differentiable inequality constraints except at harmless active-set transitions, while preserving exactly 16 finite planar points throughout.  Pin one point at the origin during optimization to remove translation null directions, then center the returned point set.  Expected-gain check: accept an optimizer result only if its directly recomputed squared ratio exceeds \\(0.0707603299953\\), otherwise return the annealed incumbent, so the returned combined_score is \\(r^2/(1/12.889266112)>0.912048723483\\).",
+      "cost": 0.021784666666666664,
+      "best_score": 1.0000028088804547,
+      "baseline_score": 0.9120487234828482,
+      "improvement_epsilon": 1e-09,
+      "rounds": 2,
+      "attempts": 2,
+      "implementations": 3,
+      "guide_implementation_attempts": 0,
+      "source_strategy_index": null,
+      "cumulative_gain": 0.08795408539760652,
+      "cumulative_relative_gain": 0.08863648639183325,
+      "productive_rounds": 2,
+      "barren_rounds": 0,
+      "implementation_spend": 0.0031336000000000003,
+      "last_used_iteration": 4,
+      "failure_feedback": []
+    },
+    {
+      "index": 2,
+      "title": "Active-contact trust-region polish",
+      "plan": "Use the incumbent\u2019s nearest-pair and farthest-pair contact graph as a local exploitation stage after annealing.  At each trust-region iteration, include all pairs within a small relative band of the current minimum and maximum distances, solve the linearized max-min separation problem for point displacements with centroid fixed, and use a backtracking line search evaluated by the exact squared ratio.  Add pairs to the active sets whenever they enter the bands, so a formerly inactive pair cannot silently become the new bottleneck.  This is distinct from random perturbation because its displacement is determined by the gradients of the current contact constraints; reject every step whose exact objective does not increase.  The hard constraint is preserved because every proposal is still an ordinary finite `(16,2)` array and only strict exact-ratio improvements replace the fallback.  Expected-gain check: the first accepted trust-region step has directly recomputed \\(r^2>0.0707603299953\\), while no accepted step leaves the fallback worse, hence combined_score \\(=r^2/(1/12.889266112)>0.912048723483\\).",
+      "cost": 0.021784666666666664,
+      "best_score": null,
+      "baseline_score": null,
+      "improvement_epsilon": 1e-09,
+      "rounds": 0,
+      "attempts": 0,
+      "implementations": 0,
+      "guide_implementation_attempts": 0,
+      "source_strategy_index": null,
+      "cumulative_gain": 0.0,
+      "cumulative_relative_gain": 0.0,
+      "productive_rounds": 0,
+      "barren_rounds": 0,
+      "implementation_spend": 0.0,
+      "last_used_iteration": -1,
+      "failure_feedback": []
+    },
+    {
+      "index": 3,
+      "title": "Four-row subsystem replacement",
+      "plan": "Explore a mesoscopic alternative to individual-point annealing by constructing four ordered rows of four points, with independently optimized row heights, row shifts, and symmetric within-row spacings, before releasing all coordinates to the epigraph optimizer.  Initialize the row model from alternating horizontal shifts and slightly compressed outer rows, normalize its diameter to one, and optimize its small parameter vector against the same \\(q_{ij}\\ge t,\\ q_{ij}\\le1\\) constraints; then use the resulting 16 coordinates as a full-coordinate constrained-optimization start.  The row subsystem can change the grid\u2019s global contact topology in coordinated moves that one-point annealing is unlikely to discover, while the release stage removes any artificial row-model ceiling.  Keep both the original annealed point set and every released row candidate, selecting solely by the directly measured ratio.  Exactly sixteen points are maintained because the model always emits four rows of four coordinates and normalization is uniform scaling.  Expected-gain check: return a row-release result only when its measured \\(r^2>0.0707603299953\\), otherwise retain the incumbent, so combined_score \\(=r^2/(1/12.889266112)>0.912048723483\\).",
+      "cost": 0.021784666666666664,
+      "best_score": null,
+      "baseline_score": null,
+      "improvement_epsilon": 1e-09,
+      "rounds": 0,
+      "attempts": 0,
+      "implementations": 0,
+      "guide_implementation_attempts": 0,
+      "source_strategy_index": null,
+      "cumulative_gain": 0.0,
+      "cumulative_relative_gain": 0.0,
+      "productive_rounds": 0,
+      "barren_rounds": 0,
+      "implementation_spend": 0.0,
+      "last_used_iteration": -1,
+      "failure_feedback": []
+    }
+  ],
+  "active_strategy": 1,
+  "strategy_queue": [
+    2,
+    3
+  ],
+  "strategy_costs": [
+    0.065354
+  ],
+  "implementation_costs": [
+    0.0018575999999999998,
+    0.0015668000000000001
+  ],
+  "guide_implementation_costs": [
+    0.046894
+  ],
+  "guide_implementation_due": false,
+  "guide_implementation_due_reason": null,
+  "guide_implementation_unguided": false,
+  "strategy_call_count": 1,
+  "strategy_replays_by_guide_call": {},
+  "anchor_next_cheap_to_incumbent": false,
+  "opening_cheap_probe_done": true,
+  "opening_guide_hedge_done": true,
+  "barren_rounds": 0,
+  "stagnation": 0,
+  "next_strategy_escalation": 32,
+  "strategy_escalation_gap": 32,
+  "next_long_horizon_exploration": 12,
+  "seen_solutions": [
+    "47b5da240d636b23e9e28376f4c3224c30b82754",
+    "55452e21f05b65f7572cf1031b352f677be43f3d",
+    "70e9999f16beeefd165e4fd48d916a1ec4bc6f1b",
+    "ab06f2fc41bffbac3ab938c0e1f68047b2ac11c7",
+    "d8e65cd3b0dcc99a0f2311fae8d66ca116300980"
+  ],
+  "score_ledger": [
+    [
+      0.912048723,
+      1
+    ],
+    [
+      0.743359416,
+      1
+    ],
+    [
+      0.991482009,
+      1
+    ],
+    [
+      1.000002809,
+      2
+    ]
+  ],
+  "cost_samples": [
+    [
+      1,
+      0.0018575999999999998
+    ],
+    [
+      1,
+      0.046894
+    ],
+    [
+      1,
+      0.065354
+    ],
+    [
+      2,
+      0.0031336000000000003
+    ]
+  ],
+  "exploring": false
+}

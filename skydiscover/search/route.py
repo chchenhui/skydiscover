@@ -22,6 +22,8 @@ from skydiscover.search.default_discovery_controller import (
 )
 from skydiscover.search.evox.controller import CoEvolutionController
 from skydiscover.search.evox.database.search_strategy_db import SearchStrategyDatabase
+from skydiscover.search.efficientevolve.controller import EfficientEvolveController
+from skydiscover.search.efficientevolve.database import EfficientEvolveDatabase
 from skydiscover.search.gepa_native.controller import GEPANativeController
 from skydiscover.search.gepa_native.database import GEPANativeDatabase
 from skydiscover.search.openevolve_native.database import OpenEvolveNativeDatabase
@@ -63,6 +65,10 @@ register_controller("adaevolve", AdaEvolveController)
 
 # OpenEvolve Native
 register_database("openevolve_native", OpenEvolveNativeDatabase)
+
+# EfficientEvolve: one guide strategy followed by k cheap implementations
+register_database("efficientevolve", EfficientEvolveDatabase)
+register_controller("efficientevolve", EfficientEvolveController)
 
 # EvoX
 register_controller("evox", CoEvolutionController)

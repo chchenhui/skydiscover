@@ -1,0 +1,333 @@
+{
+  "version": 6,
+  "curve": {
+    "unit": "usd",
+    "budget": 100.0,
+    "spent": 0.388826,
+    "final_incumbent": 1.0000028088804556,
+    "ba_auc": 99.90134694642097,
+    "ba_auc_normalized": 0.9990134694642098,
+    "num_points": 11,
+    "points": [
+      {
+        "cost": 0.0,
+        "score": 0.01979112384555867,
+        "incumbent": 0.01979112384555867,
+        "iteration": 0,
+        "candidates": 0
+      },
+      {
+        "cost": 0.1009312,
+        "score": 1.0000028088804542,
+        "incumbent": 1.0000028088804542,
+        "iteration": 1,
+        "candidates": 4
+      },
+      {
+        "cost": 0.1072942,
+        "score": 1.0000028088804542,
+        "incumbent": 1.0000028088804542,
+        "iteration": 2,
+        "candidates": 3
+      },
+      {
+        "cost": 0.1727778,
+        "score": 1.0000028088804542,
+        "incumbent": 1.0000028088804542,
+        "iteration": 3,
+        "candidates": 3
+      },
+      {
+        "cost": 0.17943620000000002,
+        "score": 0.6783824269473681,
+        "incumbent": 1.0000028088804542,
+        "iteration": 4,
+        "candidates": 2
+      },
+      {
+        "cost": 0.1855514,
+        "score": 0.6783824269473681,
+        "incumbent": 1.0000028088804542,
+        "iteration": 5,
+        "candidates": 2
+      },
+      {
+        "cost": 0.3089886,
+        "score": 1.0000028088804531,
+        "incumbent": 1.0000028088804542,
+        "iteration": 6,
+        "candidates": 3
+      },
+      {
+        "cost": 0.3164254,
+        "score": 0.577131318447761,
+        "incumbent": 1.0000028088804542,
+        "iteration": 7,
+        "candidates": 2
+      },
+      {
+        "cost": 0.3232858,
+        "score": 1.0000028088804542,
+        "incumbent": 1.0000028088804542,
+        "iteration": 8,
+        "candidates": 3
+      },
+      {
+        "cost": 0.38089999999999996,
+        "score": 1.0000028088804547,
+        "incumbent": 1.0000028088804547,
+        "iteration": 9,
+        "candidates": 4
+      },
+      {
+        "cost": 0.388826,
+        "score": 1.0000028088804556,
+        "incumbent": 1.0000028088804556,
+        "iteration": 10,
+        "candidates": 3
+      }
+    ]
+  },
+  "strategies": [
+    {
+      "index": 1,
+      "title": "Multistart diameter-constrained packing",
+      "plan": "Replace the random constructor with a deterministic multistart constrained optimizer for the equivalent problem: fix the maximum squared pair distance to at most one, introduce an auxiliary variable \\(t\\), and maximize \\(t\\) subject to \\(t\\leq\\|p_i-p_j\\|^2\\leq1\\) for every pair. Use SLSQP from several deterministic seeds (square grid, staggered triangular rows, and a sunflower seed), with analytic Jacobians for the pairwise quadratic inequalities, anchoring one point at the origin to remove translation drift. Return the actual point set with the largest directly recomputed squared min/max ratio, never the optimizer\u2019s reported auxiliary value, and retain a normalized 4-by-4 square grid as a guaranteed fallback if SciPy is unavailable or a solve fails. This is a structural exploration because it permits non-lattice boundary and interior arrangements while the auxiliary-variable formulation turns the max/min ratio into smooth polynomial constraints away from active-set changes. Every returned candidate remains exactly a 16-by-2 finite coordinate array, and direct rescoring makes the selection invariant under arbitrary optimizer scaling. Expected-gain check: the fallback grid has minimum squared distance \\(1\\), maximum squared distance \\(18\\), hence min_max_ratio \\(=1/18\\) and predicted combined_score \\(=12.889266112/18=0.7160703396>0.0197911238456\\).",
+      "cost": 0.031565333333333334,
+      "best_score": 1.0000028088804542,
+      "baseline_score": 0.01979112384555867,
+      "improvement_epsilon": 1e-09,
+      "rounds": 3,
+      "attempts": 10,
+      "implementations": 10,
+      "guide_implementation_attempts": 1,
+      "failure_feedback": []
+    },
+    {
+      "index": 2,
+      "title": "Staggered triangular-row replacement",
+      "plan": "Replace the random cloud by four rows of four points, with row coordinates \\((j+\\tfrac12(i\\bmod2),\\,i\\sqrt3/2)\\) for \\(i,j\\in\\{0,1,2,3\\}\\). This mesoscopic replacement changes the neighbor graph from accidental random near-collisions into unit horizontal and diagonal contacts, so its minimum distance is exactly one. The largest separation is between \\((0,0)\\) and \\((3.5,3\\sqrt3/2)\\), whose squared distance is \\(19\\), so the raw squared ratio is exactly \\(1/19\\). The construction always returns sixteen distinct planar points and requires no stochastic state, optimization package, or numerical acceptance decision. Expected-gain check: min_max_ratio \\(=1/19=0.05263157895>0.00153547329022\\), so predicted combined_score \\(=12.889266112/19=0.6783824270>0.0197911238456\\).",
+      "cost": 0.031565333333333334,
+      "best_score": 0.6783824269473681,
+      "baseline_score": 1.0000028088804542,
+      "improvement_epsilon": 1e-09,
+      "rounds": 1,
+      "attempts": 2,
+      "implementations": 2,
+      "guide_implementation_attempts": 0,
+      "failure_feedback": []
+    },
+    {
+      "index": 3,
+      "title": "Active-contact local polishing",
+      "plan": "Start from the explicit staggered triangular-row construction and perform deterministic local accepted moves only: identify the currently shortest and longest pair, test the eight compass and diagonal displacements of each endpoint at a prescribed decreasing sequence of step sizes, and retain a move only if direct recomputation strictly increases the squared min/max ratio. Use the staggered layout unchanged whenever no proposed move improves it, so all operations preserve the exact shape, point count, and finite-coordinate constraints. This exploits local slack by separating the active shortest contact while avoiding creation of a new larger diameter, rather than replacing the whole topology. A smooth local alternative is to use the same auxiliary variable \\(t\\) with the pairwise inequalities and differentiate the active quadratic constraints, but acceptance must still be based on the original scorer because the active pair identities can change. Expected-gain check: the valid no-move fallback has min_max_ratio \\(=1/19>0.00153547329022\\), so predicted combined_score is at least \\(0.6783824270>0.0197911238456\\).",
+      "cost": 0.031565333333333334,
+      "best_score": 0.6783824269473681,
+      "baseline_score": 1.0000028088804542,
+      "improvement_epsilon": 1e-09,
+      "rounds": 1,
+      "attempts": 2,
+      "implementations": 2,
+      "guide_implementation_attempts": 0,
+      "failure_feedback": []
+    },
+    {
+      "index": 4,
+      "title": "Diameter-anchored contact-graph SQP",
+      "plan": "Use the squared minimum-distance variable \\(t\\) with constraints \\(d_{ij}^2\\ge t\\) and \\(d_{ij}^2\\le1\\), but remove the translation, rotation, and scale degeneracies by canonically choosing each seed\u2019s current diameter pair and fixing it at `(0,0)` and `(1,0)`.  Run analytic-Jacobian SLSQP from structurally distinct seeds: square grid, staggered lattice, a centered 3-5-5-3 triangular patch, concentric rings, and a deterministic sinusoidally perturbed patch.  This changes the optimization geometry substantially from the parent\u2019s single fixed origin: every feasible iterate has an explicit unit diameter pair, so the optimizer spends its degrees of freedom only on contact-graph rearrangement.  Recompute the actual ratio from every returned configuration after diameter normalization and retain it only when it is larger than the current best, preserving a valid fallback on failed or infeasible solves.  The expected-gain check is to accept a result only if its measured raw `min_max_ratio` exceeds `0.0775841541474`; since `combined_score = min_max_ratio / (1/12.889266112)`, the accepted result has predicted `combined_score > 1.00000280888`.",
+      "cost": 0.021340000000000015,
+      "best_score": 0.7160703395555554,
+      "baseline_score": 1.0000028088804542,
+      "improvement_epsilon": 1e-09,
+      "rounds": 1,
+      "attempts": 2,
+      "implementations": 2,
+      "guide_implementation_attempts": 0,
+      "failure_feedback": []
+    },
+    {
+      "index": 5,
+      "title": "3-5-5-3 band replacement",
+      "plan": "Use a 16-point triangular-patch construction with row populations `3, 5, 5, 3`, centered horizontally and separated vertically by `sqrt(3)/2`, rather than treating the four-by-four Cartesian rows as the only mesoscopic organization.  Normalize its farthest pair to unit diameter, then perform a two-stage constrained solve: first hold the two short outer rows fixed while optimizing the ten points in the two five-point middle bands and \\(t\\); then release all non-diameter-anchor coordinates for the final solve.  The first stage explicitly replaces the central subsystem, where the square-grid topology creates inefficient short contacts, while preserving the broad hull needed to control the maximum distance.  Both stages use the same smooth auxiliary-variable inequalities \\(d_{ij}^2-t\\ge0\\), \\(1-d_{ij}^2\\ge0\\), with analytic derivatives, and the final candidate is rescaled by its true diameter before scoring.  Keep the pre-replacement candidate whenever either stage fails or lowers the measured ratio.  The expected-gain check is to accept the replacement only when its directly recomputed raw `min_max_ratio` exceeds `0.0775841541474`, which converts through `1/12.889266112` to predicted `combined_score > 1.00000280888`.",
+      "cost": 0.021340000000000015,
+      "best_score": 0.577131318447761,
+      "baseline_score": 1.0000028088804542,
+      "improvement_epsilon": 1e-09,
+      "rounds": 1,
+      "attempts": 2,
+      "implementations": 2,
+      "guide_implementation_attempts": 0,
+      "failure_feedback": []
+    },
+    {
+      "index": 6,
+      "title": "Active-contact nullspace polishing",
+      "plan": "Starting from every accepted constrained-optimization result, identify short-contact pairs with squared distance within `1e-7` of the minimum and diameter contacts within `1e-7` of the maximum.  Form the analytic Jacobian of those contact distances, fix one diameter pair as `(0,0)` and `(1,0)`, and compute a damped least-squares/nullspace displacement that increases the common short-contact lower bound while keeping diameter-contact first derivatives zero.  Use deterministic backtracking steps, recomputing all 120 squared distances after each step; accept only steps that strictly improve the exact global minimum-to-maximum ratio, not merely the selected contact surrogate.  This is a local exploitation mechanism different from compass moves because it moves the coupled active contact graph simultaneously and explicitly respects the diameter tangent space.  Stop after a finite schedule of damping values and retain the original point set if no strictly improving step is found, so validity and the incumbent fallback are preserved.  The expected-gain check is that a step is retained only after its exact raw `min_max_ratio` is greater than `0.0775841541474`, hence its converted predicted `combined_score` is strictly greater than `1.00000280888`.",
+      "cost": 0.021340000000000015,
+      "best_score": 1.0000028088804542,
+      "baseline_score": 1.0000028088804542,
+      "improvement_epsilon": 1e-09,
+      "rounds": 1,
+      "attempts": 3,
+      "implementations": 3,
+      "guide_implementation_attempts": 0,
+      "failure_feedback": []
+    },
+    {
+      "index": 7,
+      "title": "Concentric-ring and hex-core structural multistart",
+      "plan": "Add deterministic seeds that are not affine variants of the rectangular grid: a center-plus-5-plus-10 concentric-ring layout, a 3-plus-6-plus-7 three-ring layout, and a truncated hexagonal axial lattice containing its center, complete first shell, and nine second-shell sites. Normalize every seed to unit diameter, then solve the smooth epigraph formulation maximizing auxiliary squared separation \\(t\\), subject to \\(t\\leq\\|p_i-p_j\\|^2\\leq1\\) for all 120 pairs, with the existing analytic constraint Jacobian. Retain a candidate only after recomputing all pair distances directly, scaling it by its actual diameter, and requiring its raw `min_max_ratio` to exceed the stored incumbent, so every returned result has exactly 16 finite planar points and cannot be worse than the grid fallback. These ring and hex-core contact graphs supply interior/boundary coordination patterns unavailable from the present row-based starts and can escape the current grid-derived active set. Expected-gain check: accepting the first validated candidate with raw ratio at least \\(0.077584324\\) gives \\(0.077584324/(1/12.889266112)=1.0000050\\), strictly above the current 1.00000280888 predicted `combined_score`.",
+      "cost": 0.025432999999999983,
+      "best_score": 1.0000028088804547,
+      "baseline_score": 1.0000028088804542,
+      "improvement_epsilon": 1e-09,
+      "rounds": 1,
+      "attempts": 4,
+      "implementations": 4,
+      "guide_implementation_attempts": 0,
+      "failure_feedback": []
+    },
+    {
+      "index": 8,
+      "title": "Active-contact face refinement",
+      "plan": "Starting from the best multistart result, identify minimum-distance contacts within \\(10^{-6}\\) of the minimum and diameter contacts within \\(10^{-6}\\) of the maximum after unit-diameter normalization. Freeze translation by pinning point zero and remove rotational drift by fixing one nonzero coordinate of a selected diameter endpoint; then run a second constrained SQP on the full inequalities while warm-starting from the current point and giving the active contact set exact analytic Jacobian rows first. Use a deterministic sequence of decreasing active-set thresholds \\(10^{-4},10^{-5},10^{-6}\\), retaining only full-pairwise validated improvements after each pass; this is a local exploitation route rather than a new seed family. The auxiliary variable remains \\(t\\), so the nonsmooth minimum is handled as differentiable pairwise inequalities, while direct final rescoring protects against solver tolerance errors. Expected-gain check: a validated active-face step raising raw ratio from 0.0775841541474 to at least 0.077584210 gives \\(0.077584210/(1/12.889266112)=1.00000353\\), strictly above the current 1.00000280888 predicted `combined_score`.",
+      "cost": 0.025432999999999983,
+      "best_score": 1.0000028088804556,
+      "baseline_score": 1.0000028088804547,
+      "improvement_epsilon": 1e-09,
+      "rounds": 1,
+      "attempts": 3,
+      "implementations": 3,
+      "guide_implementation_attempts": 0,
+      "failure_feedback": []
+    }
+  ],
+  "active_strategy": 8,
+  "strategy_queue": [],
+  "strategy_costs": [
+    0.094696,
+    0.06402000000000005,
+    0.05086599999999997
+  ],
+  "implementation_costs": [
+    0.002078399999999999,
+    0.0021210000000000027,
+    0.002904799999999999,
+    0.0033292000000000044,
+    0.0030575999999999937,
+    0.004241599999999984,
+    0.0037184000000000106,
+    0.0022867999999999964,
+    0.002249399999999994,
+    0.0026420000000000146
+  ],
+  "guide_implementation_costs": [
+    0.059674000000000005,
+    0.05093399999999998
+  ],
+  "guide_implementation_due": false,
+  "guide_implementation_due_reason": null,
+  "guide_implementation_unguided": false,
+  "strategy_call_count": 3,
+  "anchor_next_cheap_to_incumbent": false,
+  "barren_rounds": 1,
+  "stagnation": 9,
+  "next_strategy_escalation": 32,
+  "strategy_escalation_gap": 32,
+  "seen_solutions": [
+    "00f97155d5a32b218bd11f06ac84c0ef2600aad6",
+    "01e3f75197c808fe7e42f8b5072f7651fbed9e27",
+    "098a493c8f20415f27048ec39392eada36e456dc",
+    "220a8b08b412f165033aefa78169e7523709009a",
+    "2a70030bb1984a49500d8b84643bc7600c556469",
+    "4062e22c5d27a8aae4c4e4f72c2253c42581b73d",
+    "4450567186adfcd063d31cb86a2a3d8264730541",
+    "45cb8fcbf9177e3db516c21c205bb154e3fcc54e",
+    "48c2169d55b31940244ba4a3922efb007e836932",
+    "48d6a2284793ba6bfe324b8b794ea402ab364298",
+    "4b2aedbc37480e806dbe4f7579a7e0ebb8900525",
+    "4f52825afe42f4d96c4edd90390679a24c2970c4",
+    "521ceb39d06e69c53f0b8791949b0c858ad15013",
+    "63e9b17afb370aa404e11a01d56f68c5d3d94ee9",
+    "6e09b8fe313d97ba486413e6765934f5015f9f94",
+    "73a0f00793d661802b175a0353200363f92c56a4",
+    "788d16494d3b86c69ad121bb04f25fe25e720d05",
+    "84ae31e524eae2fac9ce2699e0cfaef79841fd6f",
+    "85fb0250100043bd1b475b1e43dc32c232a30b6d",
+    "88df21451b4b72e716cf6490947a7f0ae2885216",
+    "9184681b9d3c7a3d2f95c94503fa0ee3e83ab1f9",
+    "92181b36729128fb1cca05f8c1def7bcfed5f3f3",
+    "b415e10c6fbfde780b18e7294d8b964d41a02d74",
+    "bef143b4caea0e61bd8d9d5988db6f8cd80da33e",
+    "cf07aadf2358a065f37bb150dae74dacd40cf50e",
+    "d07c34ddcaccc94f5f1ffce0081f0df9d809b4db",
+    "ddbf8a7a0f8bbfb2451b337e72a55bb0d27991a9",
+    "f156118c71ba406cf391b370e474b67ee068fb36",
+    "fb8d9817c4eb4cdec8dfc4fb0dc7d3263de7912d"
+  ],
+  "score_ledger": [
+    [
+      0.678382427,
+      4
+    ],
+    [
+      0.577131318,
+      2
+    ],
+    [
+      0.71607034,
+      4
+    ],
+    [
+      0.995003388,
+      2
+    ],
+    [
+      1.000002809,
+      17
+    ]
+  ],
+  "cost_samples": [
+    [
+      3,
+      0.1009312
+    ],
+    [
+      3,
+      0.0063630000000000075
+    ],
+    [
+      3,
+      0.0654836
+    ],
+    [
+      2,
+      0.006658400000000009
+    ],
+    [
+      2,
+      0.006115199999999987
+    ],
+    [
+      3,
+      0.1234372
+    ],
+    [
+      2,
+      0.007436800000000021
+    ],
+    [
+      3,
+      0.006860399999999989
+    ],
+    [
+      3,
+      0.05761419999999995
+    ],
+    [
+      3,
+      0.007926000000000044
+    ]
+  ],
+  "exploring": false
+}

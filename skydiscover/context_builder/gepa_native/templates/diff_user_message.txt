@@ -10,10 +10,11 @@
 
 {other_context_programs}
 
-# Current Solution
-{current_program}
-
 {search_guidance}
+
+<!-- BEGIN AUTHORITATIVE CURRENT SOLUTION -->
+{current_program}
+<!-- END AUTHORITATIVE CURRENT SOLUTION -->
 
 # Task
 Suggest improvements to the program that will improve its COMBINED_SCORE.
@@ -42,7 +43,13 @@ for i in range(m):
             C[i, j] += A[i, k] * B[k, j]
 >>>>>>> REPLACE
 
-**CRITICAL**: You can suggest multiple changes. Each SEARCH section must EXACTLY match code in "# Current Solution" - copy it character-for-character, preserving all whitespace and indentation. Do NOT paraphrase or reformat.
+**CRITICAL**:
+- You can suggest multiple changes.
+- Copy each SEARCH section only from the code fence inside "AUTHORITATIVE CURRENT SOLUTION". Never copy SEARCH text from previous attempts, other context solutions, or rejected attempts.
+- Each SEARCH section must match the authoritative code character-for-character, including blank lines, indentation, comments, and docstrings. Do not normalize, paraphrase, or reformat any text in SEARCH.
+- Prefer the smallest uniquely identifying code span needed for each change. If you change a comment or docstring, put its exact old text in SEARCH and its new text in REPLACE.
+- Before answering, verify that every SEARCH block occurs exactly in the authoritative current solution.
+
 Be thoughtful about your changes and explain your reasoning thoroughly.
 Include a concise docstring at the start of functions describing the exact approach taken.
 

@@ -1,0 +1,294 @@
+{
+  "version": 6,
+  "curve": {
+    "unit": "usd",
+    "budget": 100.0,
+    "spent": 0.2929648,
+    "final_incumbent": 1.0000028088804558,
+    "ba_auc": 99.97491951637694,
+    "ba_auc_normalized": 0.9997491951637695,
+    "num_points": 11,
+    "points": [
+      {
+        "cost": 0.0,
+        "score": 0.01979112384555867,
+        "incumbent": 0.01979112384555867,
+        "iteration": 0,
+        "candidates": 0
+      },
+      {
+        "cost": 0.007092,
+        "score": 0.7160703395555557,
+        "incumbent": 0.7160703395555557,
+        "iteration": 1,
+        "candidates": 1
+      },
+      {
+        "cost": 0.0088506,
+        "score": 0.7160703395555557,
+        "incumbent": 0.7160703395555557,
+        "iteration": 2,
+        "candidates": 3
+      },
+      {
+        "cost": 0.0718186,
+        "score": 0.9914820086153839,
+        "incumbent": 0.9914820086153839,
+        "iteration": 3,
+        "candidates": 1
+      },
+      {
+        "cost": 0.07554208,
+        "score": 1.0000028088804558,
+        "incumbent": 1.0000028088804558,
+        "iteration": 4,
+        "candidates": 3
+      },
+      {
+        "cost": 0.0809302,
+        "score": 1.0000028088804558,
+        "incumbent": 1.0000028088804558,
+        "iteration": 5,
+        "candidates": 3
+      },
+      {
+        "cost": 0.20669700000000002,
+        "score": 1.0000028088804527,
+        "incumbent": 1.0000028088804558,
+        "iteration": 6,
+        "candidates": 3
+      },
+      {
+        "cost": 0.212513,
+        "score": 0.9914820086153839,
+        "incumbent": 1.0000028088804558,
+        "iteration": 7,
+        "candidates": 2
+      },
+      {
+        "cost": 0.219889,
+        "score": 0.0,
+        "incumbent": 1.0000028088804558,
+        "iteration": 8,
+        "candidates": 2
+      },
+      {
+        "cost": 0.2855112,
+        "score": 1.0000028088804558,
+        "incumbent": 1.0000028088804558,
+        "iteration": 9,
+        "candidates": 4
+      },
+      {
+        "cost": 0.2929648,
+        "score": 0.9914820086153839,
+        "incumbent": 1.0000028088804558,
+        "iteration": 10,
+        "candidates": 2
+      }
+    ]
+  },
+  "strategies": [
+    {
+      "index": 1,
+      "title": "4-by-4 square lattice",
+      "plan": "Replace the random Gaussian cloud with the 16 points \\((i,j)\\) for integer \\(i,j\\in\\{0,1,2,3\\}\\), returned in a fixed row-major order.  This is a deterministic packing with minimum pairwise distance \\(d_{\\min}=1\\), attained by horizontally or vertically adjacent lattice points, and maximum distance \\(d_{\\max}=\\sqrt{3^2+3^2}=\\sqrt{18}\\), attained by opposite corners.  Thus the squared metric is exactly \\((d_{\\min}/d_{\\max})^2=1/18\\), with no duplicate points and exactly the required \\((16,2)\\) output shape.  An auxiliary variable route is applicable in general\u2014fix diameter to one and maximize a separation variable subject to smooth squared-distance inequalities\u2014but this explicit lattice construction is more reliable than runtime optimization and already substantially improves the random seed.  Expected-gain check: the predicted `min_max_ratio` is \\(1/18=0.0555555556>0.00153547329022\\), so `combined_score` is \\((1/18)/(1/12.889266112)=12.889266112/18=0.7160703396\\), which strictly exceeds the current ranking score \\(0.0197911238456\\).",
+      "cost": 0.007092,
+      "best_score": 0.7160703395555557,
+      "baseline_score": 0.01979112384555867,
+      "improvement_epsilon": 1e-09,
+      "rounds": 2,
+      "attempts": 4,
+      "implementations": 4,
+      "guide_implementation_attempts": 0,
+      "failure_feedback": []
+    },
+    {
+      "index": 2,
+      "title": "Diameter-normalized maximin multistart",
+      "plan": "Replace the variable-diameter formulation by the equivalent bounded-diameter formulation: scale every start to have maximum squared pair distance one, introduce a scalar \\(t\\), maximize \\(t\\), and impose \\(d_{ij}^2-t\\ge0\\) and \\(1-d_{ij}^2\\ge0\\) for all 120 pairs. This directly maximizes the reported raw `min_max_ratio`, avoids the extra nonlinear diameter-square variable, and gives a feasible starting point for every normalized seed. Use analytic Jacobians for both pairwise constraint families and a centroid equality constraint, with deterministic starts from the incumbent clipped triangular lattice, the 3-5-5-3 triangular topology, affine/sheared variants, and a 1+5+10 concentric-ring seed. Preserve validity by accepting only finite candidates, recomputing all 120 distances from returned coordinates, and retaining the best actual ratio after final normalization; otherwise retain the best feasible seed. Expected-gain check: accept a refined candidate only if its recomputed raw `min_max_ratio` is strictly greater than `0.0775841541474`, which makes its predicted `combined_score` strictly greater than `1.00000280888`.",
+      "cost": 0.021282666666666672,
+      "best_score": 1.0000028088804527,
+      "baseline_score": 1.0000028088804558,
+      "improvement_epsilon": 1e-09,
+      "rounds": 1,
+      "attempts": 2,
+      "implementations": 1,
+      "guide_implementation_attempts": 0,
+      "failure_feedback": [
+        "operands could not be broadcast together with shapes (21,2) (16,2)"
+      ]
+    },
+    {
+      "index": 3,
+      "title": "Boundary-shell contact replacement",
+      "plan": "Use the clipped triangular seed but split it into a six-point central rhombus and a ten-point boundary shell, then perform alternating constrained solves: first hold the core fixed while optimizing the shell and \\(t\\), then release the core and optimize all 16 points. The central set should be the six points nearest the seed centroid; the shell contains the two-point top and bottom caps plus the left and right boundary chains. This is a mesoscopic replacement rather than a perturbation because it permits the outer cap contacts and extreme-diameter pairs to switch topology while the dense interior initially remains a stable triangular scaffold. In each phase use the same diameter-one maximin constraints \\(d_{ij}^2\\ge t\\), \\(d_{ij}^2\\le1\\), analytic derivatives, and centroid fixing after the full release; normalize only after the final solve and compare actual pair distances. Expected-gain check: retain the shell-replaced configuration only when recomputation gives raw `min_max_ratio > 0.0775841541474`, yielding predicted `combined_score > 1.00000280888`, otherwise return the incumbent configuration unchanged.",
+      "cost": 0.021282666666666672,
+      "best_score": 0.9914820086153839,
+      "baseline_score": 1.0000028088804558,
+      "improvement_epsilon": 1e-09,
+      "rounds": 1,
+      "attempts": 2,
+      "implementations": 2,
+      "guide_implementation_attempts": 0,
+      "failure_feedback": []
+    },
+    {
+      "index": 4,
+      "title": "Polar-ring structural exploration",
+      "plan": "Explore a genuinely non-lattice contact graph using a deterministic 1+5+10 seed: one center point, five equally spaced inner-ring points, and ten equally spaced outer-ring points, with both radii chosen from the seed\u2019s own maximum-distance normalization. Include phase offsets of zero and half an outer angular step, plus several fixed inner-to-outer radius ratios such as 0.35, 0.45, 0.55, and 0.65 before scaling each seed to unit diameter. Refine each seed with the diameter-normalized maximin formulation and analytic pairwise derivatives, allowing every coordinate to move after initialization so the polar symmetry is only an escape mechanism rather than an imposed restriction. This route can reach disk-like compact packings whose diameter contacts are distributed around the boundary instead of inheriting the flat caps of clipped triangular rows. Expected-gain check: keep a polar-refined result only if direct all-pairs evaluation gives raw `min_max_ratio > 0.0775841541474`, hence predicted `combined_score > 1.00000280888`; otherwise use the incumbent fallback.",
+      "cost": 0.021282666666666672,
+      "best_score": null,
+      "baseline_score": 1.0000028088804558,
+      "improvement_epsilon": 1e-09,
+      "rounds": 1,
+      "attempts": 2,
+      "implementations": 0,
+      "guide_implementation_attempts": 0,
+      "failure_feedback": [
+        "name 'constraint_jacobian' is not defined",
+        "Diff SEARCH blocks did not match parent solution - no changes applied: The following change replaces the lattice perturbation search with deterministic polar-ring exploration. It evaluates both outer-ring phase choices and four inner/outer radius ratios, then refines every coordinate using analytic pairwise-distance derivatives while constraining the diameter to one. The incumbent lattice"
+      ]
+    },
+    {
+      "index": 5,
+      "title": "Analytic all-pair active-set refinement",
+      "plan": "Replace finite-difference SLSQP constraints with exact Jacobians for all 240 separation and diameter inequalities, while retaining the existing clipped-triangular seed and deterministic perturbation schedule.  Use the smooth auxiliary diameter variable \\(D\\), minimize \\(D\\), and enforce \\(||p_i-p_j||^2\\ge1\\) and \\(D^2-||p_i-p_j||^2\\ge0\\); this converts the nonsmooth min/max ratio into smooth constrained optimization.  Add the distinct 3-5-5-3 triangular seed and its deterministic perturbations, but always score candidates after exact minimum-distance normalization rather than trusting SLSQP's reported objective.  Exact pairwise derivatives make the narrow active-contact basin substantially more reliable than finite differences, especially when many unit contacts and several diameter contacts are simultaneously active.  The implementation retains a result only when its directly recomputed `min_max_ratio` is strictly larger than the incumbent's `0.0775841541474`; otherwise it returns the valid best seed fallback, so the checkable mechanism strictly raises the same objective whenever accepted and preserves a valid fallback.",
+      "cost": 0.02859700000000001,
+      "best_score": 1.0000028088804558,
+      "baseline_score": 1.0000028088804558,
+      "improvement_epsilon": 1e-09,
+      "rounds": 1,
+      "attempts": 4,
+      "implementations": 3,
+      "guide_implementation_attempts": 0,
+      "failure_feedback": [
+        "index 15 is out of bounds for axis 0 with size 15"
+      ]
+    },
+    {
+      "index": 6,
+      "title": "Diameter-lens endpoint structural search",
+      "plan": "Use a structurally different normalization: fix one candidate diameter pair at \\((-1/2,0)\\) and \\((1/2,0)\\), require every other point to remain in the intersection of their two unit disks, and maximize a separation variable \\(t\\) subject to every pair distance being at least \\(t\\).  This automatically enforces the global upper diameter bound of one, removes translation, rotation, scale, and one diameter-contact ambiguity, and searches a compact \u201clens\u201d configuration space rather than perturbing an unconstrained lattice.  Generate deterministic feasible starts by taking the clipped triangular seed, selecting each of its actual farthest pairs in turn, rigidly mapping that pair to the fixed endpoints, and including the reflected map; add only lens-preserving coordinate moves followed by a feasibility check before optimization.  Optimize \\(t\\) with analytic derivatives for \\(||p_i-p_j||^2-t^2\\ge0\\), keeping the endpoint coordinates fixed, and accept a point set only after checking all 120 distances are at most one and then comparing its squared separation to the incumbent ratio.  The precise acceptance mechanism is to return this structural candidate only if its checked `min_max_ratio` exceeds `0.0775841541474`, otherwise return the incumbent lattice-refinement fallback; thus every accepted replacement strictly improves the same metric while the fallback remains valid.",
+      "cost": 0.02859700000000001,
+      "best_score": 0.9914820086153839,
+      "baseline_score": 1.0000028088804558,
+      "improvement_epsilon": 1e-09,
+      "rounds": 1,
+      "attempts": 2,
+      "implementations": 1,
+      "guide_implementation_attempts": 0,
+      "failure_feedback": [
+        "non-broadcastable output operand with shape (1,) doesn't match the broadcast shape (2,)"
+      ]
+    }
+  ],
+  "active_strategy": 6,
+  "strategy_queue": [],
+  "strategy_costs": [
+    0.007092,
+    0.06384800000000002,
+    0.05719400000000002
+  ],
+  "implementation_costs": [
+    0.0005861999999999999,
+    0.0012411600000000005,
+    0.0017960399999999987,
+    0.003435400000000005,
+    0.002907999999999994,
+    0.003687999999999997,
+    0.002809399999999999,
+    0.0037268000000000023
+  ],
+  "guide_implementation_costs": [
+    0.062968,
+    0.055048
+  ],
+  "guide_implementation_due": false,
+  "guide_implementation_due_reason": null,
+  "guide_implementation_unguided": false,
+  "strategy_call_count": 3,
+  "anchor_next_cheap_to_incumbent": false,
+  "barren_rounds": 1,
+  "stagnation": 6,
+  "next_strategy_escalation": 32,
+  "strategy_escalation_gap": 32,
+  "seen_solutions": [
+    "35fab353c8761d677617ab7c572401d188451458",
+    "3a46e2f00951e0c184d020e299303e0f8b1fff1e",
+    "453b1c048908bf6f5ec8ac13c475c7b149daf009",
+    "48839530ddee7867c34d850b6723fb0c1ab0b5a4",
+    "4ea36224214948948505b0846aa57f1721b3cd44",
+    "6112a511e3e2883aa20e1a0d851fa339a4528864",
+    "697893db1ba400640ea13adf65f1f3b083decacd",
+    "75c16bd4894531e6982b9476d762c9bc1ebebdd6",
+    "75ef1feef6ee77c73b2b918cce881204933e40f7",
+    "85655df6e63d501acca9f3ced5c0c39e00cb5807",
+    "952edca0cc51bf0689a01289b593c343cc22a8c5",
+    "b33b8ca0c6f82d11e5e3608234bf284443d2877a",
+    "cc2778a03ef6a2b8cb0e962b4f187fa475def4bf",
+    "d3ded2f46349f5c09c06b356f6228d73b9b56f17",
+    "db06b2f59e58e9d9c0f24fa3e0c24ad8244e7a39",
+    "e29853c4e0363797f1db1d136ca09fce26897ba9",
+    "e4cbabb28c90d5762e57cb55a3b0208ea5440af6",
+    "e609c57ff80815829ae8544661530223775a0613",
+    "f3f3b33558428cfc6adba315d464f706a569d3a5"
+  ],
+  "score_ledger": [
+    [
+      0.71607034,
+      4
+    ],
+    [
+      1.000002809,
+      10
+    ],
+    [
+      0.991482009,
+      5
+    ]
+  ],
+  "cost_samples": [
+    [
+      1,
+      0.007092
+    ],
+    [
+      3,
+      0.0017586
+    ],
+    [
+      1,
+      0.062968
+    ],
+    [
+      3,
+      0.0037234800000000012
+    ],
+    [
+      3,
+      0.005388119999999996
+    ],
+    [
+      3,
+      0.1257668
+    ],
+    [
+      2,
+      0.005815999999999988
+    ],
+    [
+      2,
+      0.007375999999999994
+    ],
+    [
+      3,
+      0.06562220000000002
+    ],
+    [
+      2,
+      0.007453600000000005
+    ]
+  ],
+  "exploring": false
+}

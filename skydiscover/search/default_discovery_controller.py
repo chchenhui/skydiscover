@@ -44,6 +44,7 @@ class DiscoveryControllerInput:
     file_suffix: str = ".py"
     output_dir: Optional[str] = None
     evaluator_env_vars: Optional[Dict[str, str]] = None
+    checkpoint_path: Optional[str] = None
 
 
 class DiscoveryController:
@@ -65,6 +66,7 @@ class DiscoveryController:
         self.file_suffix = controller_input.file_suffix
         self.output_dir = controller_input.output_dir
         self.evaluator_env_vars = controller_input.evaluator_env_vars
+        self.checkpoint_path = controller_input.checkpoint_path
 
         self.shutdown_event = mp.Event()
         self.early_stopping_triggered = False
@@ -910,6 +912,7 @@ class DiscoveryController:
         iteration: int,
         checkpoint_callback: Optional[Callable[[int], None]] = None,
         verbose: bool = True,
+        run_checkpoint: bool = True,
     ) -> None:
         """
         Process the result from a single iteration.
@@ -919,6 +922,8 @@ class DiscoveryController:
             iteration: Current iteration number.
             checkpoint_callback: Optional callback for checkpoint intervals.
             verbose: If True, log progress and metrics; if False, suppress logging.
+            run_checkpoint: If False, defer checkpoint handling to another result
+                in the same logical iteration (used for candidate batches).
         """
         if result.error:
             if verbose:
@@ -959,7 +964,7 @@ class DiscoveryController:
                 f" eval: {result.eval_time:.2f}s)"
             )
 
-        if iteration > 0 and iteration % self.config.checkpoint_interval == 0:
+        if run_checkpoint and iteration > 0 and iteration % self.config.checkpoint_interval == 0:
             if verbose:
                 logger.debug(f"Checkpoint interval reached at iteration {iteration}")
 
@@ -973,7 +978,9 @@ class DiscoveryController:
                     f"{k}={v:.4f}" if isinstance(v, (int, float)) else f"{k}={v}"
                     for k, v in child_program.metrics.items()
                 )
-                logger.debug(f"Metrics: {metrics_str}")
+                # Match OpenEvolve: candidate scores are part of normal run
+                # progress and should be visible at the default INFO level.
+                logger.info(f"Metrics: {metrics_str}")
 
             if not hasattr(self, "_warned_about_combined_score"):
                 self._warned_about_combined_score = False

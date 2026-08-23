@@ -248,6 +248,7 @@ See [Benchmark Performance](#-benchmark-performance) for a detailed comparison o
 | 🎲&nbsp;**Best-of-N** | `--search best_of_n` | Generates N variants per iteration, keeps the best |
 | 🧪&nbsp;**GEPA&nbsp;Native** | `--search gepa_native` | Pareto-efficient search with reflective prompting and LLM-mediated merge |
 | 🗺️&nbsp;**OpenEvolve&nbsp;Native** | `--search openevolve_native` | MAP-Elites + island-based evolutionary search |
+| ⚡&nbsp;**EfficientEvolve** | `--search efficientevolve` | One guide strategy feeds multiple independently evaluated MAP-Elites candidates per iteration |
 
 ### External backends
 

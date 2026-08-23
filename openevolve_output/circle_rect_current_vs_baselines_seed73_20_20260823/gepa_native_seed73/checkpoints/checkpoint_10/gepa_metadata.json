@@ -1,0 +1,101 @@
+{
+  "elite_pool": [
+    "0bdba0c0-80b6-4c85-9d35-e16b30514455",
+    "dc58bbd5-732b-43e3-8473-c8cdb849d335",
+    "3a77001e-a7e1-4266-9d86-505c6eb919a2",
+    "4137e320-9f60-459f-9873-17a21357f043",
+    "ab38dc8a-0396-4e0d-8d4d-26726612f157",
+    "224c4539-56ce-4154-aaf9-7455cf9faf62",
+    "af39a42a-e351-40e4-b51c-10fac044bbe6",
+    "3d1f562d-a8d9-409f-9619-25058e3d822a",
+    "1044858f-1061-4187-a4ab-3ce88892cc03",
+    "d7fada9c-1dfe-4324-8cd6-e92f46a3fc6f",
+    "b2d92ce9-8fc5-41f5-9a4a-72052637f6f3",
+    "a1ae0811-8a7b-4497-bd87-e318ce102a13",
+    "9a6b222f-1925-48d0-9785-277f5218dab5",
+    "b7234f5a-77c3-49d1-9f0e-009942518cdc",
+    "05451144-4cd9-4308-9b2b-41cee53257d0",
+    "2e815581-19bb-40e5-af96-4f81c7b4f3d9",
+    "1f1d72c4-fa0c-4006-84f8-6fcdf47baaec"
+  ],
+  "initial_program_id": "1f1d72c4-fa0c-4006-84f8-6fcdf47baaec",
+  "metric_best": {
+    "radii_sum": [
+      "0bdba0c0-80b6-4c85-9d35-e16b30514455",
+      2.3658323735449662
+    ],
+    "combined_score": [
+      "0bdba0c0-80b6-4c85-9d35-e16b30514455",
+      1.0000001014984115
+    ],
+    "eval_time": [
+      "4137e320-9f60-459f-9873-17a21357f043",
+      151.109445810318
+    ]
+  },
+  "program_at_metric_front": {
+    "radii_sum": [
+      "0bdba0c0-80b6-4c85-9d35-e16b30514455"
+    ],
+    "combined_score": [
+      "0bdba0c0-80b6-4c85-9d35-e16b30514455"
+    ],
+    "eval_time": [
+      "4137e320-9f60-459f-9873-17a21357f043"
+    ]
+  },
+  "rejection_history": [
+    {
+      "id": "e32aa192-adf9-45ed-a9b8-498e0bf98ac0",
+      "solution": "# EVOLVE-BLOCK-START\nimport numpy as np\n\n\ndef circle_packing21() -> np.ndarray:\n    \"\"\"Maximize 21 circle radii in a width ``w`` by height ``2-w`` rectangle.\n\n    Deterministic staggered five-row multistarts seed distinct contact graphs;\n    SLSQP then optimizes every center, radius, and aspect ratio using exact\n    constraint derivatives.  A final common-radius scaling supplies strict\n    numerical feasibility.\n    \"\"\"\n    n = 21\n    # Pair ordering agrees with the original nested i/j loops and is reused\n    # by constraints, derivatives, and the feasibility certification.\n    pi, pj = np.triu_indices(n, 1)\n    rng = np.random.default_rng(21021)\n\n    # Variable layout: [width, x_0..x_20, y_0..y_20, r_0..r_20].\n    def unpack(z):\n        return z[0], z[1:1 + n], z[1 + n:1 + 2 * n], z[1 + 2 * n:]\n\n    def constraints(z):\n        \"\"\"Return boundary and squared-distance inequalities in one vector.\"\"\"\n        w, x, y, r = unpack(z)\n        h = 2.0 - w\n        dx = x[pi] - x[pj]\n        dy = y[pi] - y[pj]\n        pairwise = dx * dx + dy * dy - (r[pi] + r[pj]) ** 2\n        return np.concatenate((x - r, w - x - r, y - r, h - y - r, pairwise))\n\n    def constraint_jacobian(z):\n        \"\"\"Return the exact dense Jacobian with vectorized pair derivatives.\"\"\"\n        _, x, y, r = unpack(z)\n        jac = np.zeros((4 * n + len(pi), 1 + 3 * n))\n        q = np.arange(n)\n        jac[q, 1 + q] = 1.0\n        jac[q, 1 + 2 * n + q] = -1.0\n        jac[n + q, 0] = 1.0\n        jac[n + q, 1 + q] = -1.0\n        jac[n + q, 1 + 2 * n + q] = -1.0\n        jac[2 * n + q, 1 + n + q] = 1.0\n        jac[2 * n + q, 1 + 2 * n + q] = -1.0\n        jac[3 * n + q, 0] = -1.0\n        jac[3 * n + q, 1 + n + q] = -1.0\n        jac[3 * n + q, 1 + 2 * n + q] = -1.0\n\n        rows = 4 * n + np.arange(len(pi))\n        dx = x[pi] - x[pj]\n        dy = y[pi] - y[pj]\n        sr = r[pi] + r[pj]\n        jac[rows, 1 + pi] = 2.0 * dx\n        jac[rows, 1 + pj] = -2.0 * dx\n        jac[rows, 1 + n + pi] = 2.0 * dy\n        jac[rows, 1 + n + pj] = -2.0 * dy\n        jac[rows, 1 + 2 * n + pi] = -2.0 * sr\n        jac[rows, 1 + 2 * n + pj] = -2.0 * sr\n        return jac\n\n    def make_start(w, row_counts, jitter, phase):\n        \"\"\"Build a compact row seed with deterministic alternating row phase.\"\"\"\n        r0 = 0.089 + 0.004 * rng.random(n)\n        h = 2.0 - w\n        x = np.empty(n)\n        y = np.empty(n)\n        k = 0\n        spacing = min(0.185, (w - 0.10) / max(row_counts))\n        row_gap = min(\n            np.sqrt(3.0) * spacing * 0.5,\n            (h - 0.12) / max(1, len(row_counts) - 1),\n        )\n        for row, count in enumerate(row_counts):\n            yy = h * 0.5 + (row - 0.5 * (len(row_counts) - 1)) * row_gap\n            # Adjacent rows differ by one half-spacing when phase is +/-1.\n            # The opposite signs keep the full seed centered in the box.\n            shift = phase * (0.25 if row % 2 else -0.25) * spacing\n            for col in range(count):\n                x[k] = w * 0.5 + shift + (col - (count - 1) * 0.5) * spacing\n                y[k] = yy\n                if jitter:\n                    x[k] += rng.uniform(-jitter, jitter)\n                    y[k] += rng.uniform(-jitter, jitter)\n                k += 1\n        return np.concatenate(([w], x, y, r0))\n\n    topologies = (\n        (4, 4, 5, 4, 4),\n        (4, 5, 4, 4, 4),\n        (4, 4, 4, 5, 4),\n        (5, 4, 4, 4, 4),\n        (4, 4, 5, 3, 5),\n        (5, 3, 5, 4, 4),\n        # These create different boundary contacts than the nearly uniform\n        # 4/5-row family and are useful escapes from its local optima.\n        (3, 5, 5, 5, 3),\n        (3, 4, 5, 5, 4),\n        (4, 5, 5, 4, 3),\n        (3, 5, 5, 3, 5),\n        (3, 4, 7, 4, 3),\n        # Six-row arrangements expose contact graphs unavailable to all\n        # five-row starts.  Alternating 3/4 rows are especially compact.\n        (3, 4, 3, 4, 3, 4),\n        (4, 3, 4, 3, 4, 3),\n        (3, 4, 4, 3, 4, 3),\n        (3, 4, 3, 4, 4, 3),\n        (4, 3, 4, 4, 3, 3),\n        (3, 3, 4, 4, 4, 3),\n    )\n    # Retain the original starts, then add independent deterministic\n    # perturbations.  Circle-packing optima are quite sensitive to the\n    # initial contact graph, so extra starts improve the best-of-run result\n    # without changing feasibility handling.\n    starts = []\n    # Phase zero is the original portfolio.  The two signed phases add\n    # centered triangular-row contact graphs without relying on randomness.\n    widths = (0.80, 0.85, 0.90, 0.95, 1.00, 1.05, 1.10, 1.15, 1.20)\n    for phase in (0.0, 1.0, -1.0):\n        for w in widths:\n            for topology in topologies:\n                starts.append(make_start(w, topology, 0.006, phase))\n\n        for jitter in (0.012, 0.020, 0.030):\n            for w in widths:\n                for topology in topologies:\n                    starts.append(make_start(w, topology, jitter, phase))\n\n    best = None\n    best_sum = -np.inf\n\n    try:\n        from scipy.optimize import minimize\n\n        bounds = [(0.75, 1.25)] + [(-0.1, 1.35)] * (2 * n) + [(1e-5, 0.3)] * n\n        for start in starts:\n            result = minimize(\n                lambda z: -np.sum(z[1 + 2 * n:]),\n                start,\n                jac=lambda z: np.r_[0.0, np.zeros(2 * n), -np.ones(n)],\n                method=\"SLSQP\",\n                bounds=bounds,\n                constraints={\n                    \"type\": \"ineq\",\n                    \"fun\": constraints,\n                    \"jac\": constraint_jacobian,\n                },\n                options={\"maxiter\": 1800, \"ftol\": 2e-12, \"disp\": False},\n            )\n            candidate = result.x if np.all(np.isfinite(result.x)) else start\n            w, x, y, r = unpack(candidate)\n            if 0.0 < w < 2.0 and np.all(r > 0.0):\n                h = 2.0 - w\n                boundary_scale = np.min(\n                    np.concatenate((x / r, (w - x) / r, y / r, (h - y) / r))\n                )\n                distances = np.hypot(x[pi] - x[pj], y[pi] - y[pj])\n                scale = min(1.0, boundary_scale, np.min(distances / (r[pi] + r[pj])))\n                score = float(np.sum(r) * scale)\n                if score > best_sum:\n                    best_sum = score\n                    best = candidate\n    except Exception:\n        # The construction remains valid even in minimal environments without\n        # SciPy, although the optimized result is normally substantially better.\n        best = starts[1]\n\n    w, x, y, r = unpack(best)\n    h = 2.0 - w\n\n    # Scale every radius together by the smallest available clearance.  This\n    # preserves all center positions and guarantees strict feasibility despite\n    # small SLSQP residuals or evaluator roundoff.\n    boundary_scale = np.min(\n        np.concatenate((x / r, (w - x) / r, y / r, (h - y) / r))\n    )\n    distances = np.hypot(x[pi] - x[pj], y[pi] - y[pj])\n    scale = min(1.0, boundary_scale, np.min(distances / (r[pi] + r[pj])))\n    r = r * (0.999999 * scale)\n\n    return np.column_stack((x, y, r))\n\n\n# EVOLVE-BLOCK-END\n\nif __name__ == \"__main__\":\n    circles = circle_packing21()\n    print(f\"Radii sum: {np.sum(circles[:,-1])}\")\n",
+      "language": "python",
+      "metrics": {
+        "radii_sum": 2.3658300100784144,
+        "combined_score": 0.9999991024983057,
+        "eval_time": 192.38373708724976
+      },
+      "iteration_found": 7,
+      "parent_id": "224c4539-56ce-4154-aaf9-7455cf9faf62",
+      "other_context_ids": [
+        "af39a42a-e351-40e4-b51c-10fac044bbe6",
+        "3d1f562d-a8d9-409f-9619-25058e3d822a",
+        "1044858f-1061-4187-a4ab-3ce88892cc03",
+        "d7fada9c-1dfe-4324-8cd6-e92f46a3fc6f"
+      ],
+      "parent_info": [
+        "",
+        "224c4539-56ce-4154-aaf9-7455cf9faf62"
+      ],
+      "context_info": [
+        [
+          "",
+          "af39a42a-e351-40e4-b51c-10fac044bbe6"
+        ],
+        [
+          "",
+          "3d1f562d-a8d9-409f-9619-25058e3d822a"
+        ],
+        [
+          "",
+          "1044858f-1061-4187-a4ab-3ce88892cc03"
+        ],
+        [
+          "",
+          "d7fada9c-1dfe-4324-8cd6-e92f46a3fc6f"
+        ]
+      ],
+      "timestamp": 1787496928.2252328,
+      "metadata": {
+        "changes": "Change 1: Near `n = 21...` (5\u21925 lines)\nChange 2: Modified function `constraints`: Return boundary and squared-distance inequalities in one vector.\nChange 3: Modified function `constraint_jacobian`: Return the exact dense Jacobian with vectorized pair derivatives.\nChange 4: 'widths = (0.85, 0.90, 0.95, 1.00, 1.05, 1.10, 1.15)' \u2192 'widths = (0.80, 0.85, 0.90, 0.95, 1.00, 1.05, 1.10, 1.15, 1.20)'\nChange 5: Near `if 0.0 < w < 2.0 and np.all(r > 0.0):...` (11\u21928 lines)\nChange 6: Near `scale = 1.0...` (9\u21926 lines)",
+        "parent_metrics": {
+          "radii_sum": 2.3658300100784224,
+          "combined_score": 0.999999102498309,
+          "eval_time": 141.9336519241333
+        }
+      },
+      "artifacts": {},
+      "prompts": null,
+      "generation": 0
+    }
+  ]
+}

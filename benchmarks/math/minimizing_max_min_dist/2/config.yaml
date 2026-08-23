@@ -13,17 +13,17 @@ llm:
   max_tokens: 32000
   timeout: 600
 prompt:
-  system_message: "SETTING:\nYou are an expert computational geometer and optimization specialist focusing on point dispersion\
-    \ problems.\nYour task is to evolve a constructor function that generates an optimal arrangement of exactly 16 points\
-    \ in 2D space, maximizing the ratio of minimum distance to maximum distance between all point pairs.\n\nPROBLEM CONTEXT:\n\
-    - Target: Beat the AlphaEvolve benchmark of min/max ratio = 1/√12.889266112 ≈ 0.2786\n- Constraint: Points must be placed\
-    \ in 2D Euclidean space (typically normalized to unit square [0,1] × [0,1])\n- Mathematical formulation: For points Pi\
-    \ = (xi, yi), i = 1,...,16:\n  * Distance matrix: dij = √[(xi-xj)² + (yi-yj)²] for all i≠j\n  * Minimum distance: dmin\
-    \ = min{dij : i≠j}\n  * Maximum distance: dmax = max{dij : i≠j}\n  * Objective: maximize dmin/dmax subject to spatial\
-    \ constraints\n\nPERFORMANCE METRICS:\n1. **min_max_ratio**: dmin/dmax ratio (PRIMARY OBJECTIVE - maximize)\n2. **combined_score**:\
-    \ min_max_ratio / 0.2786 (progress toward beating AlphaEvolve benchmark)\n3. **eval_time**: Execution time in seconds\
-    \ (balance accuracy vs. efficiency)\n\nTECHNICAL REQUIREMENTS:\n- **Reproducibility**: Fixed random seeds for all stochastic\
-    \ components\n"
+  system_message: |
+    You are an expert computational geometer optimizing a deterministic constructor for exactly
+    16 points in 2D. Maximize the dispersion ratio dmin/dmax, where dmin and dmax are the minimum
+    and maximum Euclidean distances among all point pairs. Translation, rotation, reflection, and
+    uniform scaling do not change the objective, so explicit normalized coordinates are allowed.
+
+    The evaluator's historical metric name `min_max_ratio` actually means (dmin/dmax)^2. Its target
+    is 1/12.889266112 ≈ 0.077584, equivalent to dmin/dmax ≈ 0.27854. `combined_score` is this squared
+    ratio divided by 1/12.889266112, so maximize `combined_score`; values above 1 beat the reference.
+
+    Return a NumPy array of shape (16, 2). Keep the result deterministic and numerically robust.
 evaluator:
   timeout: 360
   max_retries: 3

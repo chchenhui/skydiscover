@@ -27,6 +27,7 @@ _SEARCH_CHOICES = [
     "beam_search",
     "topk",
     "openevolve_native",
+    "efficientevolve",
     "openevolve",
     "shinkaevolve",
     "gepa",
@@ -293,7 +294,7 @@ def _configure_logging(level_name: Optional[str]) -> None:
         handler.setFormatter(_ConsoleFormatter())
         handler.addFilter(_ConsoleFilter())
         root.addHandler(handler)
-    logging.getLogger("skydiscover").setLevel(logging.INFO)
+    logging.getLogger("skydiscover").setLevel(log_level)
 
 
 def _find_latest_checkpoint(checkpoint_dir: str) -> Optional[str]:

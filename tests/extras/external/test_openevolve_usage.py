@@ -10,8 +10,10 @@ pytest.importorskip("openevolve")
 from skydiscover.extras.external.openevolve_backend import (
     _USAGE_EVENT_PATH_ENV,
     _init_tracked_openevolve_llm,
+    _map_config,
     _report_usage_events,
 )
+from skydiscover.config import Config
 from skydiscover.llm.pricing import Usage
 
 
@@ -27,9 +29,7 @@ def test_raw_response_is_recorded_before_openevolve_discards_usage(monkeypatch):
             self.model = model_cfg.name
             self.api_base = model_cfg.api_base
             self.client = SimpleNamespace(
-                chat=SimpleNamespace(
-                    completions=SimpleNamespace(create=lambda **kwargs: response)
-                )
+                chat=SimpleNamespace(completions=SimpleNamespace(create=lambda **kwargs: response))
             )
 
     monkeypatch.setattr("openevolve.llm.openai.OpenAILLM", FakeOpenAILLM)
@@ -69,3 +69,25 @@ def test_worker_usage_events_are_aggregated_in_main_process(tmp_path, monkeypatc
     assert summary["total"]["calls"] == 2
     assert summary["total"]["total_tokens"] == 34
     assert summary["total"]["cost_usd"] is not None
+
+
+def test_openevolve_random_seed_is_mapped_from_shared_database_config(tmp_path):
+    config = Config.from_dict(
+        {
+            "search": {"type": "openevolve", "database": {"random_seed": 123}},
+            "llm": {
+                "api_base": "https://api.openai.com/v1",
+                "models": [
+                    {
+                        "name": "gpt-5.6-terra",
+                        "api_key": "test",
+                        "api_base": "https://api.openai.com/v1",
+                    }
+                ],
+            },
+        }
+    )
+
+    mapped = _map_config(config, iterations=10, output_dir=str(tmp_path))
+
+    assert mapped.random_seed == 123

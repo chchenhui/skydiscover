@@ -1,0 +1,367 @@
+{
+  "version": 7,
+  "curve": {
+    "unit": "usd",
+    "budget": 100.0,
+    "spent": 0.2223776,
+    "final_incumbent": 1.0000028088804562,
+    "ba_auc": 99.96253528419821,
+    "ba_auc_normalized": 0.9996253528419821,
+    "num_points": 11,
+    "points": [
+      {
+        "cost": 0.0,
+        "score": 0.01979112384555867,
+        "incumbent": 0.01979112384555867,
+        "iteration": 0,
+        "candidates": 0
+      },
+      {
+        "cost": 0.026222,
+        "score": 0.8906263838370891,
+        "incumbent": 0.8906263838370891,
+        "iteration": 1,
+        "candidates": 1
+      },
+      {
+        "cost": 0.0300824,
+        "score": 0.8906263838370891,
+        "incumbent": 0.8906263838370891,
+        "iteration": 2,
+        "candidates": 3
+      },
+      {
+        "cost": 0.1228216,
+        "score": 0.8906263838370891,
+        "incumbent": 0.8906263838370891,
+        "iteration": 3,
+        "candidates": 3
+      },
+      {
+        "cost": 0.12738,
+        "score": 0.9281022562893204,
+        "incumbent": 0.9281022562893204,
+        "iteration": 4,
+        "candidates": 2
+      },
+      {
+        "cost": 0.133992,
+        "score": 0.9281022562893213,
+        "incumbent": 0.9281022562893213,
+        "iteration": 5,
+        "candidates": 3
+      },
+      {
+        "cost": 0.1409848,
+        "score": 1.0000028088804556,
+        "incumbent": 1.0000028088804556,
+        "iteration": 6,
+        "candidates": 2
+      },
+      {
+        "cost": 0.1472314,
+        "score": 1.0000028088804562,
+        "incumbent": 1.0000028088804562,
+        "iteration": 7,
+        "candidates": 3
+      },
+      {
+        "cost": 0.207262,
+        "score": 1.0000028088804562,
+        "incumbent": 1.0000028088804562,
+        "iteration": 8,
+        "candidates": 4
+      },
+      {
+        "cost": 0.21252919999999997,
+        "score": 0.0,
+        "incumbent": 1.0000028088804562,
+        "iteration": 9,
+        "candidates": 2
+      },
+      {
+        "cost": 0.2223776,
+        "score": 1.0000028088804562,
+        "incumbent": 1.0000028088804562,
+        "iteration": 10,
+        "candidates": 3
+      }
+    ]
+  },
+  "strategies": [
+    {
+      "index": 1,
+      "title": "Concentric 1-5-10 angular packing",
+      "plan": "Replace the random Gaussian cloud with a deterministic three-layer circular construction: one point at the origin, five points on radius \\(r=1/(2\\cos(\\pi/10))\\) at angles \\(\\pi/10+2\\pi k/5\\), and ten points on the unit circle at angles \\(2\\pi j/10\\). The inner pentagon is staggered halfway between neighboring outer decagon points, and the chosen radius makes every closest inner--outer pair have distance exactly \\(r\\), matching the center--inner distance. All points lie in the unit disk, while opposite outer-decagon points have distance 2, so \\(d_{\\max}=2\\); the other same-ring spacings are larger than \\(r\\), hence \\(d_{\\min}=r\\). An auxiliary variable formulation is applicable in general\u2014fix diameter at 2 and maximize \\(t\\) subject to smooth squared-distance inequalities \\(\\|p_i-p_j\\|^2\\ge t\\)\u2014but this explicit symmetric construction needs no runtime optimizer and always returns exactly 16 finite 2D points. The calculated raw metric is \\(r^2/4=1/(16\\cos^2(\\pi/10))\\approx0.06909830>0.00153547329022\\), hence the predicted `combined_score` is \\(0.06909830/(1/12.889266112)\\approx0.89063>0.0197911238456\\).",
+      "cost": 0.026222,
+      "best_score": 0.8906263838370891,
+      "baseline_score": 0.01979112384555867,
+      "improvement_epsilon": 1e-09,
+      "rounds": 2,
+      "attempts": 4,
+      "implementations": 4,
+      "guide_implementation_attempts": 0,
+      "source_strategy_index": null,
+      "cumulative_gain": 0.8708352599915304,
+      "cumulative_relative_gain": 0.9777784217886152,
+      "productive_rounds": 1,
+      "barren_rounds": 1,
+      "implementation_spend": 0.0038604,
+      "last_used_iteration": 2,
+      "failure_feedback": []
+    },
+    {
+      "index": 2,
+      "title": "Deterministic multistart epigraph refinement",
+      "plan": "Use the current concentric configuration as one seed, add deterministic triangular-lattice, perturbed-ring, and fixed-seed random seeds, and retain the best exact squared ratio after every iteration. Normalize every iterate to diameter 2, introduce the auxiliary variable \\(t\\) for the minimum squared pair distance, and optimize the smooth approximation of constraints \\(t \\leq \\|p_i-p_j\\|^2\\) using soft-min pair repulsion together with soft-max diameter control; the pairwise derivatives are analytic. Finish the best candidate with deterministic coordinate-wise directional search against the exact nonsmooth ratio, accepting only strict improvements, while retaining the original coordinates as fallback. This is a local-exploitation route because each accepted final move directly increases the exact evaluator quantity without changing point count, dimension, determinism, or finite-coordinate validity. The expected-gain check is that the returned refined candidate is accepted only when its directly computed raw `min_max_ratio` exceeds 0.0690983005625, so its predicted `combined_score` is strictly greater than \\(0.0690983005625/(1/12.889266112)=0.890626383837\\).",
+      "cost": 0.020583333333333332,
+      "best_score": 0.8906263838370891,
+      "baseline_score": 0.8906263838370891,
+      "improvement_epsilon": 1e-09,
+      "rounds": 1,
+      "attempts": 2,
+      "implementations": 2,
+      "guide_implementation_attempts": 0,
+      "source_strategy_index": null,
+      "cumulative_gain": 0.0,
+      "cumulative_relative_gain": 0.0,
+      "productive_rounds": 0,
+      "barren_rounds": 1,
+      "implementation_spend": 0.0050372000000000056,
+      "last_used_iteration": 3,
+      "failure_feedback": []
+    },
+    {
+      "index": 3,
+      "title": "Six-point triangular core replacement",
+      "plan": "Replace the center-plus-staggered-pentagon subsystem while initially retaining the ten outer boundary points: initialize six interior points as a centered two-row triangular-lattice patch with coordinates proportional to \\((-\\tfrac12,0),(\\tfrac12,0),(-1,\\tfrac{\\sqrt3}{2}),(0,\\tfrac{\\sqrt3}{2}),(1,\\tfrac{\\sqrt3}{2}),(0,-\\tfrac{\\sqrt3}{2})\\), then scale and center the entire set to diameter 2. Apply the same deterministic pairwise epigraph refinement, but allow all sixteen points to move; this lets the outer decagon deform only where core-to-boundary bottlenecks require it. The mesoscopic change is meaningful because it replaces the fivefold central coordination and its compulsory center-to-ring bottleneck with a six-site triangular contact network. Use a strict exact-ratio acceptance test versus the incumbent and return the unchanged incumbent if this topological seed does not improve it, preserving all hard constraints. The expected-gain check is that an accepted replacement has raw `min_max_ratio` strictly above 0.0690983005625 and therefore predicted `combined_score` strictly above 0.890626383837.",
+      "cost": 0.020583333333333332,
+      "best_score": 0.9281022562893213,
+      "baseline_score": 0.8906263838370891,
+      "improvement_epsilon": 1e-09,
+      "rounds": 2,
+      "attempts": 5,
+      "implementations": 5,
+      "guide_implementation_attempts": 0,
+      "source_strategy_index": null,
+      "cumulative_gain": 0.037475872452231274,
+      "cumulative_relative_gain": 0.04037903388153039,
+      "productive_rounds": 1,
+      "barren_rounds": 1,
+      "implementation_spend": 0.011170399999999997,
+      "last_used_iteration": 5,
+      "failure_feedback": []
+    },
+    {
+      "index": 4,
+      "title": "Free-hull triangular-lattice structural search",
+      "plan": "Explore a genuinely different global topology by starting from a \\(4\\times4\\) triangular lattice, with rows shifted alternately by one half spacing, then centering and scaling it to diameter 2. Include reflected, rotated, and deterministically sheared variants of this lattice as starts, and run the analytic smooth epigraph optimization followed by exact directional polishing; do not preserve circular rings or prescribe a center point. This permits the optimizer to choose a noncircular convex hull and a variable number of hull vertices, escaping the concentric construction's fixed 10-hull/5-inner/1-center contact graph. At every iteration use only finite NumPy coordinates, recenter after motion, normalize by the actual maximum pair distance, and keep the best exact candidate plus the incumbent fallback. The expected-gain check is that only an exact-ratio improvement over raw `min_max_ratio` 0.0690983005625 is emitted, giving predicted `combined_score` strictly greater than 0.890626383837.",
+      "cost": 0.020583333333333332,
+      "best_score": 1.0000028088804562,
+      "baseline_score": 0.9281022562893213,
+      "improvement_epsilon": 1e-09,
+      "rounds": 2,
+      "attempts": 5,
+      "implementations": 4,
+      "guide_implementation_attempts": 0,
+      "source_strategy_index": null,
+      "cumulative_gain": 0.07190055259113426,
+      "cumulative_relative_gain": 0.07190035063164463,
+      "productive_rounds": 1,
+      "barren_rounds": 1,
+      "implementation_spend": 0.013239400000000012,
+      "last_used_iteration": 7,
+      "failure_feedback": [
+        "unexpected indent (tmpph7xrarr.py, line 59)"
+      ]
+    },
+    {
+      "index": 5,
+      "title": "Analytic-Jacobian epigraph contact polish",
+      "plan": "Replace the final nonsmooth \u201cminimum squared distance\u201d polish with a second smooth epigraph solve in variables \\((x_1,\\ldots,x_{16},t)\\), maximizing \\(t\\) subject to \\(||x_i-x_j||^2-t^2\\ge0\\) and \\(4-||x_i-x_j||^2\\ge0\\) for every pair. Supply the exact dense Jacobian of both constraint families: each separation constraint has gradients \\(2(x_i-x_j)\\), \\(-2(x_i-x_j)\\), and \\(-2t\\), while each diameter constraint has the negated coordinate gradients. Start from each normalized triangular-lattice/shear solution, retain only the literal measured ratio after renormalizing its actual diameter to two, and keep the pre-polish candidate as a fallback. This removes the discontinuous active-pair switching in the existing final pass while preserving all 120 lower-distance and 120 upper-diameter hard constraints directly. The checkable acceptance mechanism is to return a polished point set only when its explicitly recomputed squared ratio is strictly larger than the saved candidate\u2019s squared ratio; otherwise return the saved candidate. With the proposed target raw metric \\(0.0775841700>0.0775841541474\\), the predicted combined_score is \\(0.0775841700/(1/12.889266112)=1.000003013\\), strictly exceeding 1.00000280888.",
+      "cost": 0.017453999999999987,
+      "best_score": 1.0000028088804562,
+      "baseline_score": 1.0000028088804562,
+      "improvement_epsilon": 1e-09,
+      "rounds": 1,
+      "attempts": 4,
+      "implementations": 4,
+      "guide_implementation_attempts": 0,
+      "source_strategy_index": null,
+      "cumulative_gain": 0.0,
+      "cumulative_relative_gain": 0.0,
+      "productive_rounds": 0,
+      "barren_rounds": 1,
+      "implementation_spend": 0.007668600000000025,
+      "last_used_iteration": 8,
+      "failure_feedback": []
+    },
+    {
+      "index": 6,
+      "title": "Alternating six-point patch reoptimization",
+      "plan": "After obtaining the best full 16-point epigraph solution, identify the six points nearest the centroid and freeze the remaining ten points, including all currently diameter-attaining hull contacts. Re-solve the same epigraph problem only for those six movable point coordinates and \\(t\\), retaining inequalities for movable--movable, movable--fixed, and fixed--fixed pairs; then freeze the improved six-point patch and reoptimize the complementary ten-point subsystem once. Use the same analytic constraint derivatives and normalize by measured diameter after each alternating pass, accepting a pass only if the literal all-pairs squared ratio improves. This is a mesoscopic replacement rather than another global perturbation: it lets the interior contact network change without allowing numerical drift of the established diameter scaffold. All pairwise constraints remain present in every subsystem solve, so neither the minimum-distance nor diameter condition can be violated by the replacement. With an accepted alternating-patch raw metric of \\(0.0775841650>0.0775841541474\\), the predicted combined_score is \\(0.0775841650/(1/12.889266112)=1.000002948\\), strictly exceeding 1.00000280888.",
+      "cost": 0.017453999999999987,
+      "best_score": null,
+      "baseline_score": 1.0000028088804562,
+      "improvement_epsilon": 1e-09,
+      "rounds": 1,
+      "attempts": 2,
+      "implementations": 0,
+      "guide_implementation_attempts": 0,
+      "source_strategy_index": null,
+      "cumulative_gain": 0.0,
+      "cumulative_relative_gain": 0.0,
+      "productive_rounds": 0,
+      "barren_rounds": 1,
+      "implementation_spend": 0.005267199999999972,
+      "last_used_iteration": 9,
+      "failure_feedback": [
+        "cannot assign to expression here. Maybe you meant '==' instead of '='? (tmpcdeqfxhk.py, line 232)",
+        "slice(4, 10, None)"
+      ]
+    },
+    {
+      "index": 7,
+      "title": "Row-topology and annular topology portfolio",
+      "plan": "Add deterministic structurally distinct epigraph starts rather than only affine images of the four-by-four triangular patch: a staggered \\(5\\)-\\(6\\)-\\(5\\) three-row triangular patch, a staggered \\(4\\)-\\(5\\)-\\(4\\)-\\(3\\) four-row patch, and the explicit center-plus-pentagon-plus-decagon arrangement already present as the fallback. Normalize every start to diameter two, run the full smooth epigraph solve with exact constraint Jacobians, and compare literal recomputed squared ratios across all outcomes. The distinct row populations change both the candidate convex-hull cardinality and the interior/hull adjacency graph, so they can escape a local optimum whose active graph is inherited from the \\(4\\times4\\) patch. Include the current triangular result as an unconditional fallback and accept a structural outcome only under a strict measured-ratio comparison, which preserves validity even if all new topologies converge poorly. With an accepted structural raw metric of \\(0.0775841800>0.0775841541474\\), the predicted combined_score is \\(0.0775841800/(1/12.889266112)=1.000003142\\), strictly exceeding 1.00000280888.",
+      "cost": 0.017453999999999987,
+      "best_score": 1.0000028088804562,
+      "baseline_score": 1.0000028088804562,
+      "improvement_epsilon": 1e-09,
+      "rounds": 1,
+      "attempts": 3,
+      "implementations": 3,
+      "guide_implementation_attempts": 0,
+      "source_strategy_index": null,
+      "cumulative_gain": 0.0,
+      "cumulative_relative_gain": 0.0,
+      "productive_rounds": 0,
+      "barren_rounds": 1,
+      "implementation_spend": 0.009848400000000035,
+      "last_used_iteration": 10,
+      "failure_feedback": []
+    }
+  ],
+  "active_strategy": 7,
+  "strategy_queue": [],
+  "strategy_costs": [
+    0.026222,
+    0.06175,
+    0.052361999999999964
+  ],
+  "implementation_costs": [
+    0.0012868,
+    0.0025186000000000028,
+    0.002279199999999995,
+    0.0022040000000000024,
+    0.0034963999999999967,
+    0.0020822000000000063,
+    0.0025562000000000085,
+    0.002633599999999986,
+    0.0032828000000000115
+  ],
+  "guide_implementation_costs": [
+    0.025952
+  ],
+  "guide_implementation_due": false,
+  "guide_implementation_due_reason": null,
+  "guide_implementation_unguided": false,
+  "strategy_call_count": 3,
+  "strategy_replays_by_guide_call": {},
+  "anchor_next_cheap_to_incumbent": false,
+  "barren_rounds": 1,
+  "stagnation": 4,
+  "next_strategy_escalation": 32,
+  "strategy_escalation_gap": 32,
+  "next_long_horizon_exploration": 12,
+  "seen_solutions": [
+    "21a57a829c66f476d8e542107311de114642fe3f",
+    "24857eb88171a009bf32d11836bfe9210921c903",
+    "2b22eeb2f33d2b01d61902415e9c382e322bc402",
+    "315a62d86ab87759257fa85592e330c8c5ebe0cf",
+    "321a9581e40c38377d112adfaa2c4325f0bb494b",
+    "402950460326581f62fe7c5b111981d5e49acfac",
+    "4bf8af41c9663dc99739daa854dfa5fd73dfce6d",
+    "5106b8b08ba1f662f985123d377f5afabbd42240",
+    "5abe78bcd8831e51ee168fc77aae746989af5686",
+    "5ebe6e67209e135b460e464fa7307fb6f0d2175e",
+    "6014318b986a0768ae5110f48d611c55f85fc9bf",
+    "6adb28681506c2344885d2336c9fe062e3458d8f",
+    "6c68fdee64b55f6629337337acaa1a04d488463e",
+    "855ecc6c93413287a3b3b8c7ff87cd4414ab49d8",
+    "97f11554bd2366576a1b3b12390cbadc3fbe70c4",
+    "a2881feb4f3e62caa5175b634c173576b167897d",
+    "ad0bb655256c991785137db89459a3897d410fde",
+    "c4545ca2192fe6c6e7d18c570e2ad8225c8bc07f",
+    "c98cb97a9e9ba62d53944df18f181be5a1d978d0",
+    "da526fba97a7ea4750b741fd6fec68f1608354dd",
+    "ded237508e5f4ae1b886b444202507bc73849a9b",
+    "eea279ba007979e65f7b1b789be85ba3e1ac9318",
+    "fd0d63f0404d1ebe62b3fbe61f7f28e30e196216"
+  ],
+  "score_ledger": [
+    [
+      0.928102256,
+      4
+    ],
+    [
+      0.989087713,
+      1
+    ],
+    [
+      1.000002809,
+      8
+    ],
+    [
+      0.991482009,
+      1
+    ],
+    [
+      0.890626384,
+      9
+    ]
+  ],
+  "cost_samples": [
+    [
+      1,
+      0.026222
+    ],
+    [
+      3,
+      0.0038604
+    ],
+    [
+      3,
+      0.09273920000000001
+    ],
+    [
+      2,
+      0.00455839999999999
+    ],
+    [
+      3,
+      0.006612000000000007
+    ],
+    [
+      2,
+      0.0069927999999999935
+    ],
+    [
+      3,
+      0.006246600000000019
+    ],
+    [
+      3,
+      0.06003059999999999
+    ],
+    [
+      2,
+      0.005267199999999972
+    ],
+    [
+      3,
+      0.009848400000000035
+    ]
+  ],
+  "exploring": true
+}

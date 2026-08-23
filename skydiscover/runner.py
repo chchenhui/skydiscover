@@ -140,6 +140,7 @@ class Runner:
             file_suffix=self.config.file_suffix,
             output_dir=self.output_dir,
             evaluator_env_vars=self.evaluator_env_vars,
+            checkpoint_path=checkpoint_path,
         )
 
         # Get the discovery controller
@@ -422,6 +423,10 @@ class Runner:
         os.makedirs(checkpoint_path, exist_ok=True)
 
         self.database.save(checkpoint_path, iteration)
+
+        save_controller_state = getattr(self.discovery_controller, "save_checkpoint_state", None)
+        if callable(save_controller_state):
+            save_controller_state(checkpoint_path)
 
         best = self._get_best_program()
         if best:

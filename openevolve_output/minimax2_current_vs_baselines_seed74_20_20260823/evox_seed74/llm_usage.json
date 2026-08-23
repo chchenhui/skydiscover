@@ -1,0 +1,39 @@
+{
+  "currency": "USD",
+  "pricing_file": "/home/chenhui/skydiscover/skydiscover/llm/models.yaml",
+  "total": {
+    "input_tokens": 170537,
+    "output_tokens": 69077,
+    "cache_read_tokens": 48862,
+    "cache_write_tokens": 0,
+    "cache_write_1h_tokens": 0,
+    "reasoning_tokens": 23972,
+    "calls": 56,
+    "prompt_tokens": 219399,
+    "total_tokens": 288476,
+    "cost_usd": 1.1797704
+  },
+  "models": {
+    "openai/gpt-5.6-terra": {
+      "input_tokens": 170537,
+      "output_tokens": 69077,
+      "cache_read_tokens": 48862,
+      "cache_write_tokens": 0,
+      "cache_write_1h_tokens": 0,
+      "reasoning_tokens": 23972,
+      "calls": 56,
+      "prompt_tokens": 219399,
+      "total_tokens": 288476,
+      "provider": "openai",
+      "rates_per_million": {
+        "input_per_million": 2.0,
+        "output_per_million": 12.0,
+        "cache_read_per_million": 0.2,
+        "cache_write_per_million": 2.5,
+        "cache_write_1h_per_million": null
+      },
+      "cost_usd": 1.1797704
+    }
+  },
+  "unpriced_models": []
+}

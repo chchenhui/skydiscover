@@ -453,3 +453,56 @@ replacement
 >>>>>>> REPLACE"""
         result = apply_diff(original, diff)
         assert result == original
+
+    def test_unique_match_tolerates_model_whitespace_normalization(self):
+        original = "def f():\n    value = 1   \n    return value\n"
+        diff = """<<<<<<< SEARCH
+def f():
+  value = 1
+  return value
+=======
+def f():
+    value = 2
+    return value
+>>>>>>> REPLACE"""
+        assert apply_diff(original, diff) == "def f():\n    value = 2\n    return value\n"
+
+    def test_whitespace_fallback_refuses_ambiguous_fragment(self):
+        original = "if a:\n    return 1\nif b:\n    return 1"
+        diff = """<<<<<<< SEARCH
+  return 1
+=======
+    return 2
+>>>>>>> REPLACE"""
+        assert apply_diff(original, diff) == original
+
+    def test_named_function_fallback_tolerates_reflowed_docstring(self):
+        original = '''import numpy as np
+
+def solve():
+    """Original wording with a blank line.
+
+    More detail.
+    """
+    return np.array([1])'''
+        diff = '''<<<<<<< SEARCH
+def solve():
+    """Reflowed summary and detail."""
+    return np.array([1])
+=======
+def solve():
+    """Better implementation."""
+    return np.array([2])
+>>>>>>> REPLACE'''
+        assert "return np.array([2])" in apply_diff(original, diff)
+
+    def test_named_definition_fallback_requires_a_unique_top_level_target(self):
+        original = "def solve():\n    return 1\n\ndef solve():\n    return 2"
+        diff = '''<<<<<<< SEARCH
+def solve():
+    return 0
+=======
+def solve():
+    return 3
+>>>>>>> REPLACE'''
+        assert apply_diff(original, diff) == original

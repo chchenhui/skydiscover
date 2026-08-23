@@ -1,0 +1,228 @@
+{
+  "unit": "usd",
+  "budget": 100.0,
+  "spent": 0.5636511200000001,
+  "final_incumbent": 0.9957073772264913,
+  "ba_auc": 99.54701500290354,
+  "ba_auc_normalized": 0.9954701500290354,
+  "num_points": 31,
+  "points": [
+    {
+      "cost": 0.0,
+      "score": 0.01979112384555867,
+      "incumbent": 0.01979112384555867,
+      "iteration": 0,
+      "candidates": 0
+    },
+    {
+      "cost": 0.0016331999999999998,
+      "score": 0.7160703395555557,
+      "incumbent": 0.7160703395555557,
+      "iteration": 1,
+      "candidates": 1
+    },
+    {
+      "cost": 0.0402112,
+      "score": 0.8906263838370891,
+      "incumbent": 0.8906263838370891,
+      "iteration": 2,
+      "candidates": 1
+    },
+    {
+      "cost": 0.048185320000000004,
+      "score": 0.8906263838370891,
+      "incumbent": 0.8906263838370891,
+      "iteration": 3,
+      "candidates": 3
+    },
+    {
+      "cost": 0.11566892000000001,
+      "score": 0.9446482325048313,
+      "incumbent": 0.9446482325048313,
+      "iteration": 4,
+      "candidates": 3
+    },
+    {
+      "cost": 0.12231692,
+      "score": 0.8906263838370891,
+      "incumbent": 0.9446482325048313,
+      "iteration": 5,
+      "candidates": 2
+    },
+    {
+      "cost": 0.12927892,
+      "score": 0.8906263838370891,
+      "incumbent": 0.9446482325048313,
+      "iteration": 6,
+      "candidates": 2
+    },
+    {
+      "cost": 0.13538692,
+      "score": 0.9778584994951233,
+      "incumbent": 0.9778584994951233,
+      "iteration": 7,
+      "candidates": 2
+    },
+    {
+      "cost": 0.14207332,
+      "score": 0.9821111653643217,
+      "incumbent": 0.9821111653643217,
+      "iteration": 8,
+      "candidates": 2
+    },
+    {
+      "cost": 0.14345172,
+      "score": 0.9763723958941384,
+      "incumbent": 0.9821111653643217,
+      "iteration": 9,
+      "candidates": 1
+    },
+    {
+      "cost": 0.25619692,
+      "score": 0.9877608486594851,
+      "incumbent": 0.9877608486594851,
+      "iteration": 10,
+      "candidates": 3
+    },
+    {
+      "cost": 0.26247412,
+      "score": 0.9881850699857587,
+      "incumbent": 0.9881850699857587,
+      "iteration": 11,
+      "candidates": 2
+    },
+    {
+      "cost": 0.26419292,
+      "score": 0.9886234714368264,
+      "incumbent": 0.9886234714368264,
+      "iteration": 12,
+      "candidates": 1
+    },
+    {
+      "cost": 0.26592731999999997,
+      "score": 0.9887095402771541,
+      "incumbent": 0.9887095402771541,
+      "iteration": 13,
+      "candidates": 1
+    },
+    {
+      "cost": 0.26987711999999997,
+      "score": 0.9869644762331249,
+      "incumbent": 0.9887095402771541,
+      "iteration": 14,
+      "candidates": 1
+    },
+    {
+      "cost": 0.27543671999999997,
+      "score": 0.988236094148905,
+      "incumbent": 0.9887095402771541,
+      "iteration": 15,
+      "candidates": 2
+    },
+    {
+      "cost": 0.28262191999999997,
+      "score": 0.8906263838370891,
+      "incumbent": 0.9887095402771541,
+      "iteration": 16,
+      "candidates": 2
+    },
+    {
+      "cost": 0.28445772,
+      "score": 0.9895159247256881,
+      "incumbent": 0.9895159247256881,
+      "iteration": 17,
+      "candidates": 1
+    },
+    {
+      "cost": 0.28622132,
+      "score": 0.9876633796918384,
+      "incumbent": 0.9895159247256881,
+      "iteration": 18,
+      "candidates": 1
+    },
+    {
+      "cost": 0.34123732,
+      "score": 0.9904803653467001,
+      "incumbent": 0.9904803653467001,
+      "iteration": 19,
+      "candidates": 1
+    },
+    {
+      "cost": 0.34547052,
+      "score": 0.9919618926127022,
+      "incumbent": 0.9919618926127022,
+      "iteration": 20,
+      "candidates": 2
+    },
+    {
+      "cost": 0.35334732,
+      "score": 0.9913298227236707,
+      "incumbent": 0.9919618926127022,
+      "iteration": 21,
+      "candidates": 2
+    },
+    {
+      "cost": 0.38701932,
+      "score": 0.9957073772264913,
+      "incumbent": 0.9957073772264913,
+      "iteration": 22,
+      "candidates": 1
+    },
+    {
+      "cost": 0.38881852,
+      "score": 0.9957031014997184,
+      "incumbent": 0.9957073772264913,
+      "iteration": 23,
+      "candidates": 1
+    },
+    {
+      "cost": 0.39939232,
+      "score": 0.9957073772264913,
+      "incumbent": 0.9957073772264913,
+      "iteration": 24,
+      "candidates": 3
+    },
+    {
+      "cost": 0.40307412,
+      "score": 0.9944903321239423,
+      "incumbent": 0.9957073772264913,
+      "iteration": 25,
+      "candidates": 1
+    },
+    {
+      "cost": 0.47283772,
+      "score": 0.9951493080395453,
+      "incumbent": 0.9957073772264913,
+      "iteration": 26,
+      "candidates": 3
+    },
+    {
+      "cost": 0.48347092,
+      "score": 0.9885114427518525,
+      "incumbent": 0.9957073772264913,
+      "iteration": 27,
+      "candidates": 2
+    },
+    {
+      "cost": 0.49365652,
+      "score": 0.9952593092887447,
+      "incumbent": 0.9957073772264913,
+      "iteration": 28,
+      "candidates": 2
+    },
+    {
+      "cost": 0.49642672,
+      "score": 0.987993596138814,
+      "incumbent": 0.9957073772264913,
+      "iteration": 29,
+      "candidates": 1
+    },
+    {
+      "cost": 0.5636511200000001,
+      "score": 0.9957073772264913,
+      "incumbent": 0.9957073772264913,
+      "iteration": 30,
+      "candidates": 3
+    }
+  ]
+}

@@ -67,14 +67,21 @@ class LLMPool:
         backend, not the entire pool.  A healthy first backend does not
         guarantee all backends are reachable (and vice-versa).
 
-        The max_tokens=1 probe verifies endpoint connectivity and auth, not
-        generation correctness.  Reasoning models may return empty content on
-        such minimal requests without raising an error.
+        The small low-effort probe verifies endpoint connectivity and auth,
+        not generation quality.  It still reserves enough output tokens for a
+        reasoning model: several OpenAI reasoning endpoints reject
+        ``max_tokens=1`` before returning any response, which used to make a
+        healthy EvoX meta endpoint look offline.
         """
         try:
             model = self.models[0]
             await asyncio.wait_for(
-                model.generate("", [{"role": "user", "content": "ping"}], max_tokens=1),
+                model.generate(
+                    "",
+                    [{"role": "user", "content": "Reply with: pong"}],
+                    max_tokens=256,
+                    reasoning_effort="low",
+                ),
                 timeout=timeout,
             )
             return True

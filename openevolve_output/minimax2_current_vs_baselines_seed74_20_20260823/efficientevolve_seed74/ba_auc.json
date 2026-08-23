@@ -1,0 +1,32 @@
+{
+  "unit": "usd",
+  "budget": 100.0,
+  "spent": 0.0480576,
+  "final_incumbent": 1.000002808880454,
+  "ba_auc": 99.98529641230823,
+  "ba_auc_normalized": 0.9998529641230823,
+  "num_points": 3,
+  "points": [
+    {
+      "cost": 0.0,
+      "score": 0.01979112384555867,
+      "incumbent": 0.01979112384555867,
+      "iteration": 0,
+      "candidates": 0
+    },
+    {
+      "cost": 0.0019236,
+      "score": 0.7160703395555554,
+      "incumbent": 0.7160703395555554,
+      "iteration": 1,
+      "candidates": 1
+    },
+    {
+      "cost": 0.0480576,
+      "score": 1.000002808880454,
+      "incumbent": 1.000002808880454,
+      "iteration": 2,
+      "candidates": 1
+    }
+  ]
+}

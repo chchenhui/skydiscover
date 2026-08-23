@@ -1,0 +1,208 @@
+{
+  "version": 8,
+  "curve": {
+    "unit": "usd",
+    "budget": 100.0,
+    "spent": 0.12231692,
+    "final_incumbent": 0.9446482325048313,
+    "ba_auc": 94.45041833036841,
+    "ba_auc_normalized": 0.944504183303684,
+    "num_points": 6,
+    "points": [
+      {
+        "cost": 0.0,
+        "score": 0.01979112384555867,
+        "incumbent": 0.01979112384555867,
+        "iteration": 0,
+        "candidates": 0
+      },
+      {
+        "cost": 0.0016331999999999998,
+        "score": 0.7160703395555557,
+        "incumbent": 0.7160703395555557,
+        "iteration": 1,
+        "candidates": 1
+      },
+      {
+        "cost": 0.0402112,
+        "score": 0.8906263838370891,
+        "incumbent": 0.8906263838370891,
+        "iteration": 2,
+        "candidates": 1
+      },
+      {
+        "cost": 0.048185320000000004,
+        "score": 0.8906263838370891,
+        "incumbent": 0.8906263838370891,
+        "iteration": 3,
+        "candidates": 3
+      },
+      {
+        "cost": 0.11566892000000001,
+        "score": 0.9446482325048313,
+        "incumbent": 0.9446482325048313,
+        "iteration": 4,
+        "candidates": 3
+      },
+      {
+        "cost": 0.12231692,
+        "score": 0.8906263838370891,
+        "incumbent": 0.9446482325048313,
+        "iteration": 5,
+        "candidates": 2
+      }
+    ]
+  },
+  "strategies": [
+    {
+      "index": 1,
+      "title": "Active-contact smooth multistart refinement",
+      "plan": "Use the current center\u2013pentagon\u2013decagon coordinates as one seed, plus deterministic asymmetric perturbations of that seed, and optimize all 32 coordinate variables jointly.  Introduce an epigraph variable \\(t\\) for the squared minimum separation and normalize each iterate to squared diameter one, so the desired constraints are \\(||p_i-p_j||^2\\ge t\\); use a differentiable log-sum-exp approximation to the minimum pair distance during continuation from broad to sharply active contacts.  Its analytic gradient is the weighted sum of pair-difference gradients, while the corresponding soft maximum diameter term prevents irrelevant expansion and makes the update scale-invariant.  At every continuation stage evaluate the exact squared ratio over all 120 pairs, retain only strict exact improvements, and retain the analytic parent construction as fallback; centering and diameter normalization preserve the shape, finiteness, and exact 16-by-2 constraint.  The expected-gain check is: return a refined candidate only when its directly recomputed raw `min_max_ratio` is greater than 0.0690983005625, which makes its predicted `combined_score = min_max_ratio / (1/12.889266112) > 0.890626383837`.",
+      "cost": 0.020931333333333333,
+      "best_score": 0.9446482325048313,
+      "baseline_score": 0.8906263838370891,
+      "improvement_epsilon": 1e-09,
+      "rounds": 2,
+      "attempts": 5,
+      "implementations": 5,
+      "guide_implementation_attempts": 0,
+      "source_strategy_index": null,
+      "cumulative_gain": 0.05402184866774218,
+      "cumulative_relative_gain": 0.05718726485572066,
+      "productive_rounds": 1,
+      "barren_rounds": 1,
+      "implementation_spend": 0.01133759999999999,
+      "last_used_iteration": 5,
+      "failure_feedback": []
+    },
+    {
+      "index": 2,
+      "title": "Decagon shell with free six-point core",
+      "plan": "Replace the parent\u2019s rigid center-plus-pentagon subsystem by a six-point free core while initially retaining the regular decagon shell, then optimize the 12 core coordinates and the ten shell radii/angles under reflection-symmetric-breaking deterministic seeds.  Initialize the core from the parent center and pentagon, but give the five former pentagon vertices alternating tangential offsets and split the center into a close radial pair before the constrained continuation; this explicitly permits the central contact graph to change from the parent\u2019s fivefold star.  Parameterize shell points by independent radial displacement and angular displacement from the decagon angles, with zero-mean angular displacement, so this is a mesoscopic shell/core replacement rather than a generic coordinate jitter.  Maximize epigraph \\(t\\) subject to every squared distance being at least \\(t\\) after diameter normalization, using active-pair analytic gradients and exact pairwise rescoring after every accepted parameter update.  Keep the original parent array as a fallback, so every returned array remains a deterministic finite `(16, 2)` NumPy array and cannot lose score.  The expected-gain check is: accept this altered core/shell topology only after exact rescoring verifies `min_max_ratio > 0.0690983005625`, yielding predicted `combined_score = min_max_ratio / (1/12.889266112) > 0.890626383837`.",
+      "cost": 0.020931333333333333,
+      "best_score": null,
+      "baseline_score": null,
+      "improvement_epsilon": 1e-09,
+      "rounds": 0,
+      "attempts": 0,
+      "implementations": 0,
+      "guide_implementation_attempts": 0,
+      "source_strategy_index": null,
+      "cumulative_gain": 0.0,
+      "cumulative_relative_gain": 0.0,
+      "productive_rounds": 0,
+      "barren_rounds": 0,
+      "implementation_spend": 0.0,
+      "last_used_iteration": -1,
+      "failure_feedback": []
+    },
+    {
+      "index": 3,
+      "title": "Topology-diverse free packing search",
+      "plan": "Use several deterministic full-packing seeds that do not inherit the parent\u2019s central-star topology: an 8-plus-8 staggered double ring, a 7-plus-9 staggered double ring, and a golden-angle disk spiral with radii proportional to square roots of rank.  Normalize each seed to unit diameter and solve the same epigraph form, \\(||p_i-p_j||^2\\ge t\\), by deterministic smooth active-contact continuation with analytic pair-constraint derivatives, then select the exact best candidate across all seeds and the incumbent.  This is the high-upside structural route because it can discover a contact graph with no center point and no forced regular decagon diameter pair.  Use fixed seed order, fixed perturbation signs, and exact 120-pair squared-distance evaluation rather than random acceptance, making it reproducible and ensuring a valid finite 16-point result.  The expected-gain check is: select a non-parent topology only if its exact recomputed `min_max_ratio` exceeds 0.0690983005625, so its predicted `combined_score = min_max_ratio / (1/12.889266112) > 0.890626383837`.",
+      "cost": 0.020931333333333333,
+      "best_score": null,
+      "baseline_score": null,
+      "improvement_epsilon": 1e-09,
+      "rounds": 0,
+      "attempts": 0,
+      "implementations": 0,
+      "guide_implementation_attempts": 0,
+      "source_strategy_index": null,
+      "cumulative_gain": 0.0,
+      "cumulative_relative_gain": 0.0,
+      "productive_rounds": 0,
+      "barren_rounds": 0,
+      "implementation_spend": 0.0,
+      "last_used_iteration": -1,
+      "failure_feedback": []
+    }
+  ],
+  "active_strategy": 1,
+  "strategy_queue": [
+    2,
+    3
+  ],
+  "strategy_costs": [
+    0.062794
+  ],
+  "implementation_costs": [
+    0.0016331999999999998,
+    0.0026580400000000004,
+    0.002344800000000001,
+    0.0033239999999999936
+  ],
+  "guide_implementation_costs": [
+    0.038578
+  ],
+  "guide_implementation_due": false,
+  "guide_implementation_due_reason": null,
+  "guide_implementation_unguided": false,
+  "strategy_call_count": 1,
+  "strategy_replays_by_guide_call": {},
+  "anchor_next_cheap_to_incumbent": false,
+  "opening_cheap_probe_done": true,
+  "opening_guide_hedge_done": true,
+  "barren_rounds": 1,
+  "stagnation": 1,
+  "next_strategy_escalation": 32,
+  "strategy_escalation_gap": 32,
+  "next_long_horizon_exploration": 12,
+  "seen_solutions": [
+    "0519fd3060d42142922d1331846f012f2cf65c77",
+    "1494bd19c9ee961cad34da6f4c2d6dc6a4a35d7f",
+    "34aaf7172e1492109605480ac1d32872a5d072a2",
+    "3f7074a3682621f9fd7e7fd78f26381ca5b3b0c4",
+    "3f98773ae088e2024acbc666d9657f81f57c8283",
+    "8819e4df8e0c8c6d7cb3b35a55aefe490223a04f",
+    "ba9a1f9f47587853b8e6ef4daabf63515d302ecd",
+    "cd830b1d34134348ad942da482d246aed77634a3",
+    "df9449de979f2c0438222d3758e74837157d8cf2",
+    "f6bc71f8bcb9ae093fa86b6ee426e6b4d6793c16"
+  ],
+  "score_ledger": [
+    [
+      0.71607034,
+      1
+    ],
+    [
+      0.72743133,
+      1
+    ],
+    [
+      0.944648233,
+      1
+    ],
+    [
+      0.909835762,
+      1
+    ],
+    [
+      0.890626384,
+      6
+    ]
+  ],
+  "cost_samples": [
+    [
+      1,
+      0.0016331999999999998
+    ],
+    [
+      1,
+      0.038578
+    ],
+    [
+      3,
+      0.007974120000000001
+    ],
+    [
+      2,
+      0.0674836
+    ],
+    [
+      2,
+      0.006647999999999987
+    ]
+  ],
+  "exploring": false
+}

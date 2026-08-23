@@ -1,0 +1,59 @@
+{
+  "currency": "USD",
+  "pricing_file": "/home/chenhui/skydiscover/skydiscover/llm/models.yaml",
+  "total": {
+    "input_tokens": 111960,
+    "output_tokens": 44832,
+    "cache_read_tokens": 2634,
+    "cache_write_tokens": 0,
+    "cache_write_1h_tokens": 0,
+    "reasoning_tokens": 16338,
+    "calls": 29,
+    "prompt_tokens": 114594,
+    "total_tokens": 159426,
+    "cost_usd": 0.21886968
+  },
+  "models": {
+    "openai/gpt-5.6-luna": {
+      "input_tokens": 101195,
+      "output_tokens": 33420,
+      "cache_read_tokens": 2634,
+      "cache_write_tokens": 0,
+      "cache_write_1h_tokens": 0,
+      "reasoning_tokens": 11105,
+      "calls": 26,
+      "prompt_tokens": 103829,
+      "total_tokens": 137249,
+      "provider": "openai",
+      "rates_per_million": {
+        "input_per_million": 0.2,
+        "output_per_million": 1.2,
+        "cache_read_per_million": 0.02,
+        "cache_write_per_million": 0.25,
+        "cache_write_1h_per_million": null
+      },
+      "cost_usd": 0.06039568
+    },
+    "openai/gpt-5.6-terra": {
+      "input_tokens": 10765,
+      "output_tokens": 11412,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "cache_write_1h_tokens": 0,
+      "reasoning_tokens": 5233,
+      "calls": 3,
+      "prompt_tokens": 10765,
+      "total_tokens": 22177,
+      "provider": "openai",
+      "rates_per_million": {
+        "input_per_million": 2.0,
+        "output_per_million": 12.0,
+        "cache_read_per_million": 0.2,
+        "cache_write_per_million": 2.5,
+        "cache_write_1h_per_million": null
+      },
+      "cost_usd": 0.158474
+    }
+  },
+  "unpriced_models": []
+}

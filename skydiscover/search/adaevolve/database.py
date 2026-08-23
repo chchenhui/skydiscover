@@ -163,6 +163,7 @@ class AdaEvolveDatabase(ProgramDatabase):
 
     def __init__(self, name: str, config: DatabaseConfig):
         super().__init__(name, config)
+        self.random_state = random.Random(getattr(config, "random_seed", None))
 
         # Language-aware label selection (set by Runner after creation)
         # Default to "python"; overridden to "text" for prompt optimization
@@ -555,7 +556,7 @@ class AdaEvolveDatabase(ProgramDatabase):
         # Determine sampling mode based on intensity
         # Formula: exploration=intensity%, exploitation=(1-intensity)*70%, balanced=(1-intensity)*30%
         # Example with intensity=0.4: exploration=40%, exploitation=42%, balanced=18%
-        rand = random.random()
+        rand = self.random_state.random()
         if rand < intensity:
             mode = "exploration"
         elif rand < intensity + (1 - intensity) * 0.7:
@@ -630,7 +631,7 @@ class AdaEvolveDatabase(ProgramDatabase):
         # Determine sampling mode based on intensity
         # Formula: exploration=intensity%, exploitation=(1-intensity)*70%, balanced=(1-intensity)*30%
         # Example with intensity=0.4: exploration=40%, exploitation=42%, balanced=18%
-        rand = random.random()
+        rand = self.random_state.random()
         if rand < intensity:
             parent = self._sample_random(population)
             mode = "exploration"
@@ -666,13 +667,13 @@ class AdaEvolveDatabase(ProgramDatabase):
 
     def _sample_random(self, population: List[Program]) -> Program:
         """Sample uniformly at random (exploration)."""
-        return random.choice(population)
+        return self.random_state.choice(population)
 
     def _sample_top(self, population: List[Program]) -> Program:
         """Sample from top performers (exploitation)."""
         sorted_pop = sorted(population, key=self._get_fitness, reverse=True)
         top_k = max(1, len(sorted_pop) // 4)
-        return random.choice(sorted_pop[:top_k])
+        return self.random_state.choice(sorted_pop[:top_k])
 
     def _sample_pareto_front(self, archive, population: List[Program]) -> Program:
         """Sample from Pareto front weighted by crowding distance.
@@ -696,7 +697,7 @@ class AdaEvolveDatabase(ProgramDatabase):
                 cd = 1e6
             weights.append(max(cd, 0.001))
 
-        return random.choices(front_programs, weights=weights, k=1)[0]
+        return self.random_state.choices(front_programs, weights=weights, k=1)[0]
 
     def _sample_weighted(self, population: List[Program]) -> Program:
         """Sample weighted by fitness (balanced)."""
@@ -708,7 +709,7 @@ class AdaEvolveDatabase(ProgramDatabase):
         total = sum(weights)
         weights = [w / total for w in weights]
 
-        return random.choices(population, weights=weights, k=1)[0]
+        return self.random_state.choices(population, weights=weights, k=1)[0]
 
     def _sample_global_top(self, exclude_id: str, n: int) -> List[Program]:
         """Sample top programs from ALL islands for cross-pollination."""
@@ -2120,7 +2121,7 @@ class AdaEvolveDatabase(ProgramDatabase):
             preset for preset in ISLAND_CONFIG_PRESETS if usage_counts[preset["name"]] == min_usage
         ]
 
-        selected = random.choice(underused)
+        selected = self.random_state.choice(underused)
         return selected["name"], selected
 
     def _seed_new_island(self, island_idx: int) -> None:

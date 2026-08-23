@@ -1,0 +1,492 @@
+{
+  "version": 8,
+  "curve": {
+    "unit": "usd",
+    "budget": 100.0,
+    "spent": 0.43935508,
+    "final_incumbent": 1.0000000724983868,
+    "ba_auc": 99.96091903517443,
+    "ba_auc_normalized": 0.9996091903517442,
+    "num_points": 16,
+    "points": [
+      {
+        "cost": 0.0,
+        "score": 0.0,
+        "incumbent": 0.0,
+        "iteration": 0,
+        "candidates": 0
+      },
+      {
+        "cost": 0.0028679999999999995,
+        "score": 4.1370893659118333e-07,
+        "incumbent": 4.1370893659118333e-07,
+        "iteration": 1,
+        "candidates": 1
+      },
+      {
+        "cost": 0.038774,
+        "score": 0.9708599307692319,
+        "incumbent": 0.9708599307692319,
+        "iteration": 2,
+        "candidates": 1
+      },
+      {
+        "cost": 0.0409972,
+        "score": 0.9973594922653785,
+        "incumbent": 0.9973594922653785,
+        "iteration": 3,
+        "candidates": 1
+      },
+      {
+        "cost": 0.0430488,
+        "score": 0.999330447057981,
+        "incumbent": 0.999330447057981,
+        "iteration": 4,
+        "candidates": 1
+      },
+      {
+        "cost": 0.04924332,
+        "score": 0.9993304770383787,
+        "incumbent": 0.9993304770383787,
+        "iteration": 5,
+        "candidates": 3
+      },
+      {
+        "cost": 0.05612328,
+        "score": 0.9993304770383938,
+        "incumbent": 0.9993304770383938,
+        "iteration": 6,
+        "candidates": 3
+      },
+      {
+        "cost": 0.15202327999999998,
+        "score": 0.9993304770383947,
+        "incumbent": 0.9993304770383947,
+        "iteration": 7,
+        "candidates": 3
+      },
+      {
+        "cost": 0.16429988,
+        "score": 0.9993304770383947,
+        "incumbent": 0.9993304770383947,
+        "iteration": 8,
+        "candidates": 3
+      },
+      {
+        "cost": 0.17566688,
+        "score": 0.9993304770383947,
+        "incumbent": 0.9993304770383947,
+        "iteration": 9,
+        "candidates": 3
+      },
+      {
+        "cost": 0.30141968,
+        "score": 0.9993304770383985,
+        "incumbent": 0.9993304770383985,
+        "iteration": 10,
+        "candidates": 3
+      },
+      {
+        "cost": 0.31819147999999997,
+        "score": 0.9993304770383985,
+        "incumbent": 0.9993304770383985,
+        "iteration": 11,
+        "candidates": 3
+      },
+      {
+        "cost": 0.32998088000000003,
+        "score": 0.9993304770383985,
+        "incumbent": 0.9993304770383985,
+        "iteration": 12,
+        "candidates": 3
+      },
+      {
+        "cost": 0.40748488,
+        "score": 1.0000000724983868,
+        "incumbent": 1.0000000724983868,
+        "iteration": 13,
+        "candidates": 1
+      },
+      {
+        "cost": 0.41932828,
+        "score": 1.0000000724983868,
+        "incumbent": 1.0000000724983868,
+        "iteration": 14,
+        "candidates": 3
+      },
+      {
+        "cost": 0.43935508,
+        "score": 1.0000000724983868,
+        "incumbent": 1.0000000724983868,
+        "iteration": 15,
+        "candidates": 3
+      }
+    ]
+  },
+  "strategies": [
+    {
+      "index": 1,
+      "title": "Direct aspect-ratio multistart refinement",
+      "plan": "Replace the two-stage \u201cchoose one square winner, then refine it\u201d path with direct optimization in the full variables \\((x_i,y_i,r_i,w)\\), where rectangle height is the smooth affine variable \\(h=2-w\\).  First retain several of the best square solutions from the existing row-pattern portfolio, then create feasible aspect-ratio starts at \\(w\\in\\{0.80,0.86,0.93,1.00,1.07,1.14,1.20\\}\\) by scaling centers and radii by the corresponding coordinate scales and by \\(\\min(w,h)\\).  Supply analytic objective and inequality Jacobians to SLSQP, and use the same full pairwise squared-distance constraints, wall constraints, and a final uniform radius shrink based on the exact minimum feasibility factor.  This is a mesoscopic subsystem replacement because the aspect ratio is optimized from multiple distinct square contact topologies rather than only from the single square incumbent.  Exact prediction is impossible, but every aspect candidate is accepted only when its repaired raw `radii_sum` strictly exceeds 2.36424815448, so the valid incumbent fallback gives an accepted result with combined_score strictly greater than \\(2.36424815448/2.3658321334167627=0.999330477038\\).",
+      "cost": 0.028985333333333335,
+      "best_score": 0.9993304770383947,
+      "baseline_score": 0.9993304770383938,
+      "improvement_epsilon": 1e-09,
+      "rounds": 1,
+      "attempts": 3,
+      "implementations": 3,
+      "guide_implementation_attempts": 0,
+      "source_strategy_index": null,
+      "cumulative_gain": 0.0,
+      "cumulative_relative_gain": 0.0,
+      "productive_rounds": 0,
+      "barren_rounds": 1,
+      "implementation_spend": 0.00894399999999998,
+      "last_used_iteration": 7,
+      "failure_feedback": []
+    },
+    {
+      "index": 2,
+      "title": "Active-contact KKT polishing",
+      "plan": "Use the best feasible packing returned by the current program as a local exploitation seed, identify its active set as all wall or pair constraints with slack below \\(10^{-5}\\), and polish it with a constrained trust-region/SQP solve using exact gradients.  Keep all original wall and all-pairs inequalities in the optimization, but use the active-contact graph to build a sparse Jacobian and initialize multiplier estimates only on the active contacts; this avoids repeatedly finite-differencing the 210 pair constraints near a jammed solution.  Add the rectangle width variable and retain \\(h=2-w\\), because the active graph can release a small aspect-ratio motion that is unavailable in the final square-only basin.  After every local solve, recompute all feasibility ratios from the returned geometry and uniformly shrink radii by \\(1-10^{-8}\\) times the smallest ratio, accepting only strict objective improvements.  Exact prediction is impossible, but the checkable acceptance mechanism replaces the incumbent only for a valid raw `radii_sum > 2.36424815448`, hence any accepted output has combined_score strictly greater than 0.999330477038.",
+      "cost": 0.028985333333333335,
+      "best_score": 0.9993304770383947,
+      "baseline_score": 0.9993304770383947,
+      "improvement_epsilon": 1e-09,
+      "rounds": 1,
+      "attempts": 3,
+      "implementations": 3,
+      "guide_implementation_attempts": 0,
+      "source_strategy_index": null,
+      "cumulative_gain": 0.0,
+      "cumulative_relative_gain": 0.0,
+      "productive_rounds": 0,
+      "barren_rounds": 1,
+      "implementation_spend": 0.012276600000000026,
+      "last_used_iteration": 8,
+      "failure_feedback": []
+    },
+    {
+      "index": 3,
+      "title": "Deterministic disk-inflation structural search",
+      "plan": "Add a structurally different seed generator based on deterministic disk inflation rather than row layouts: initialize 21 centers from a Halton-like base-2/base-3 sequence, plus mirrored copies, in each of several fixed rectangles with widths \\(0.72,0.82,0.92,1.00,1.08,1.18,1.28\\).  Start all radii at \\(10^{-3}\\), repeatedly move each center by the sum of pairwise overlap-repulsion vectors and wall-repulsion vectors, project centers into the rectangle, and increase a common temporary scale until the minimum pair/wall clearance becomes active; then hand the resulting unequal-radius SLSQP formulation the jammed seed.  Use a fixed iteration count, fixed center ordering, and no randomness, so this explores non-row contact graphs reproducibly, including defect-rich arrangements with a few larger circles.  The final optimizer must still enforce all 210 pair inequalities and four wall inequalities per circle, followed by the same global radius-factor repair.  Exact prediction is impossible, but this route has a valid incumbent fallback and accepts a structural seed only after direct verification that its repaired raw `radii_sum` exceeds 2.36424815448, giving combined_score strictly greater than 0.999330477038.",
+      "cost": 0.028985333333333335,
+      "best_score": 0.9993304770383947,
+      "baseline_score": 0.9993304770383947,
+      "improvement_epsilon": 1e-09,
+      "rounds": 1,
+      "attempts": 3,
+      "implementations": 2,
+      "guide_implementation_attempts": 0,
+      "source_strategy_index": null,
+      "cumulative_gain": 0.0,
+      "cumulative_relative_gain": 0.0,
+      "productive_rounds": 0,
+      "barren_rounds": 1,
+      "implementation_spend": 0.011366999999999988,
+      "last_used_iteration": 9,
+      "failure_feedback": [
+        "index 20 is out of bounds for axis 0 with size 20"
+      ]
+    },
+    {
+      "index": 4,
+      "title": "Distance-constraint contact polishing",
+      "plan": "Replace the squared pairwise separation inequalities by direct clearance constraints `hypot(dx,dy) - ri - rj >= 0`, with analytic derivatives, for both square and variable-aspect optimization.  This removes the small-gradient conditioning problem of squared-distance contacts and lets SLSQP resolve the final active contact graph more accurately; retain every feasible result and use the current best as a fallback.  Run the existing row-pattern starts in the square, then retain the best distinct results and continue each through a fixed grid of aspect starts, followed by one final direct-clearance polish from the best candidate.  The hard constraints remain explicit: four wall clearances per circle, all 210 direct pair clearances, positive-radius bounds, and `h=2-w`; a final uniform radius scaling is applied only if necessary.  An auxiliary minimum-clearance variable is unnecessary here because each individual direct-clearance inequality is smooth whenever centers are distinct, and all supplied starts have distinct centers.  Expected-gain check: the program accepts only a repaired candidate with raw `radii_sum` strictly greater than the incumbent 2.36424815448, otherwise returns the incumbent fallback, so any accepted improvement has `combined_score > 2.36424815448 / 2.3658321334167627 = 0.999330477038`.",
+      "cost": 0.02424333333333332,
+      "best_score": 0.9993304770383985,
+      "baseline_score": 0.9993304770383947,
+      "improvement_epsilon": 1e-09,
+      "rounds": 1,
+      "attempts": 2,
+      "implementations": 2,
+      "guide_implementation_attempts": 0,
+      "source_strategy_index": null,
+      "cumulative_gain": 0.0,
+      "cumulative_relative_gain": 0.0,
+      "productive_rounds": 0,
+      "barren_rounds": 1,
+      "implementation_spend": 0.009188800000000052,
+      "last_used_iteration": 10,
+      "failure_feedback": []
+    },
+    {
+      "index": 5,
+      "title": "Frozen-neighbor subsystem reoptimization",
+      "plan": "Use the best full packing as a scaffold, select deterministic overlapping local neighborhoods around the circles with the smallest radii or smallest total incident clearance, and temporarily optimize only each neighborhood while holding all other circles fixed.  For each neighborhood, optimize its centers and radii together with rectangle width using direct distance constraints against both movable circles and frozen exterior circles; use neighborhoods consisting of one target circle plus all centers within twice the largest radius, then repeat in a fixed order for two sweeps.  This is a mesoscopic replacement rather than a whole-packing restart: it can change a locally inefficient chain of contacts without losing the global basin already found.  Accept a local replacement only after direct validation against every frozen circle and every pair in the replacement, and retain the previous full candidate otherwise; finish with a global direct-clearance polish.  The rectangle invariant is preserved by retaining `w+h=2` and all wall inequalities throughout, while a final uniform shrink handles solver-scale residuals.  Expected-gain check: each subsystem update is committed only when its full-packing raw `radii_sum` is strictly larger than 2.36424815448 and remains feasible after repair, hence every committed final result has `combined_score > 0.999330477038`.",
+      "cost": 0.02424333333333332,
+      "best_score": 0.9993304770383985,
+      "baseline_score": 0.9993304770383985,
+      "improvement_epsilon": 1e-09,
+      "rounds": 1,
+      "attempts": 3,
+      "implementations": 3,
+      "guide_implementation_attempts": 0,
+      "source_strategy_index": null,
+      "cumulative_gain": 0.0,
+      "cumulative_relative_gain": 0.0,
+      "productive_rounds": 0,
+      "barren_rounds": 1,
+      "implementation_spend": 0.016771799999999948,
+      "last_used_iteration": 11,
+      "failure_feedback": []
+    },
+    {
+      "index": 6,
+      "title": "Deterministic triangular-lattice topology search",
+      "plan": "Add a genuinely different family of starts generated from clipped triangular lattices rather than horizontal row patterns: create a staggered lattice with horizontal pitch one, vertical pitch `sqrt(3)/2`, enumerate fixed choices of 21 lattice sites from successive clipped diagonals, and affinely scale each selected site set into each of several `w` by `2-w` rectangles.  Give all circles a conservatively feasible common radius equal to the minimum of half the nearest-center distance and all wall distances, then use direct-clearance SLSQP to permit unequal radii and topology changes.  Include both lattice orientations, deterministic diagonal offsets of `0`, `1/4`, and `1/2` horizontal pitch, and site counts distributed over three through six clipped lattice rows; these produce contact graphs not represented by the existing purely row-count seeds.  Keep the best repaired candidate from this structural family and compare it against the incumbent rather than assuming that a lattice start is feasible or superior.  All initial configurations are made feasible by the explicit common-radius calculation, and every optimized result is validated and uniformly shrunk if necessary.  Expected-gain check: the structural candidate is selected only if its validated raw `radii_sum` strictly exceeds 2.36424815448, which directly implies `combined_score > 0.999330477038`; otherwise the valid incumbent is retained.",
+      "cost": 0.02424333333333332,
+      "best_score": 0.9993304770383985,
+      "baseline_score": 0.9993304770383985,
+      "improvement_epsilon": 1e-09,
+      "rounds": 1,
+      "attempts": 3,
+      "implementations": 3,
+      "guide_implementation_attempts": 0,
+      "source_strategy_index": null,
+      "cumulative_gain": 0.0,
+      "cumulative_relative_gain": 0.0,
+      "productive_rounds": 0,
+      "barren_rounds": 1,
+      "implementation_spend": 0.011789400000000061,
+      "last_used_iteration": 12,
+      "failure_feedback": []
+    },
+    {
+      "index": 7,
+      "title": "Enumerated row-topology aspect search",
+      "plan": "Extend the initialization family from the current few row-count patterns to a deterministic enumeration of all distinct permutations of the balanced six-row topology `(4,4,4,3,3,3)`, together with all permutations of `(5,4,4,4,4)` and `(6,5,5,5)`.  For every topology, use several alternating horizontal offsets, optimize first in the unit square, then transform each of the best contact graphs into several variable-aspect rectangles and optimize width jointly with all circle variables.  Retain the actual width attached to each candidate, because a later polish must start in its own containing rectangle rather than incorrectly resetting its width to one.  Use direct-distance inequalities and analytic derivatives, then apply only a uniform radius shrink based on the exact minimum wall/pairwise ratio, so every retained output remains feasible.  This is a structural escape from the present limited set of row contact graphs while still exploiting the high-quality constrained optimizer already demonstrated to work.  Expected-gain check: accept a result only if its repaired raw radii sum exceeds `2.3658321334167627`, which gives `combined_score = sum/2.3658321334167627 > 1.0 > 0.999330477038`.",
+      "cost": 0.025834666666666655,
+      "best_score": 1.0000000724983868,
+      "baseline_score": 0.9993304770383985,
+      "improvement_epsilon": 1e-09,
+      "rounds": 2,
+      "attempts": 4,
+      "implementations": 4,
+      "guide_implementation_attempts": 0,
+      "source_strategy_index": null,
+      "cumulative_gain": 0.000669595459988348,
+      "cumulative_relative_gain": 0.0006695954114437608,
+      "productive_rounds": 1,
+      "barren_rounds": 1,
+      "implementation_spend": 0.011843400000000004,
+      "last_used_iteration": 14,
+      "failure_feedback": []
+    },
+    {
+      "index": 8,
+      "title": "Frozen-boundary cavity replacement",
+      "plan": "Starting from each strong aspect-ratio candidate, construct its near-contact graph using a clearance threshold such as `3e-4`, then choose every connected six-to-eight-circle interior patch whose circles do not touch a wall.  Freeze all circles outside one patch and reoptimize only the patch centers/radii, its interactions with frozen circles, and rectangle width; initialize the patch from several deterministic local triangular arrangements spanning the frozen patch bounding box.  After a patch improves, repeat once with the enlarged affected patch containing its new near-contact neighbors, because this permits a local contact-graph flip without destabilizing the entire packing.  Constraints include every patch-to-patch, patch-to-frozen, wall, and width-plus-height inequality, with analytic derivatives exactly as in the parent solver; frozen circles preserve their prior valid separations.  This mesoscopic replacement can change the central triangulation that ordinary full-coordinate SLSQP often leaves unchanged.  Expected-gain check: retain a cavity replacement only after exact direct-clearance repair proves its raw radii sum is greater than `2.3658321334167627`, yielding `combined_score > 1.0 > 0.999330477038`.",
+      "cost": 0.025834666666666655,
+      "best_score": 1.0000000724983868,
+      "baseline_score": 1.0000000724983868,
+      "improvement_epsilon": 1e-09,
+      "rounds": 1,
+      "attempts": 3,
+      "implementations": 1,
+      "guide_implementation_attempts": 0,
+      "source_strategy_index": null,
+      "cumulative_gain": 0.0,
+      "cumulative_relative_gain": 0.0,
+      "productive_rounds": 0,
+      "barren_rounds": 1,
+      "implementation_spend": 0.02002680000000001,
+      "last_used_iteration": 15,
+      "failure_feedback": [
+        "name 'reference_sum' is not defined"
+      ]
+    },
+    {
+      "index": 9,
+      "title": "Tangent-cone objective ascent",
+      "plan": "For the best feasible candidate, form the active wall/contact constraints and solve a deterministic linear tangent-cone subproblem for a displacement of centers, radii, and width that maximizes the first-order increase in total radius, with normalized infinity norm at most one.  Test several active-set thresholds and add a smooth auxiliary clearance variable `t`: impose each direct clearance at least `t`, keep total radius at least the incumbent plus a proposed increment, and maximize `t` after the increment is found.  The auxiliary variable converts the otherwise nonsmooth minimum-clearance choice into smooth inequality constraints, while the radius objective itself remains linear.  Take a backtracked nonlinear step only when direct pairwise distances and wall margins remain positive, then use SLSQP on the resulting active contact basin and exact uniform repair.  This is explicitly local, but unlike ordinary repeated SLSQP it searches a computed feasible tangent direction that can reveal a missed ascent direction at a degenerate contact configuration.  Expected-gain check: commit a tangent step only if repaired radii sum exceeds `2.3658321334167627`, so the resulting `combined_score > 1.0 > 0.999330477038`.",
+      "cost": 0.025834666666666655,
+      "best_score": null,
+      "baseline_score": null,
+      "improvement_epsilon": 1e-09,
+      "rounds": 0,
+      "attempts": 0,
+      "implementations": 0,
+      "guide_implementation_attempts": 0,
+      "source_strategy_index": null,
+      "cumulative_gain": 0.0,
+      "cumulative_relative_gain": 0.0,
+      "productive_rounds": 0,
+      "barren_rounds": 0,
+      "implementation_spend": 0.0,
+      "last_used_iteration": -1,
+      "failure_feedback": []
+    }
+  ],
+  "active_strategy": 8,
+  "strategy_queue": [
+    9
+  ],
+  "strategy_costs": [
+    0.086956,
+    0.07272999999999996,
+    0.07750399999999996
+  ],
+  "implementation_costs": [
+    0.0028679999999999995,
+    0.0022231999999999946,
+    0.0020516000000000006,
+    0.0020648400000000005,
+    0.0022933199999999993,
+    0.00447199999999999,
+    0.0040922000000000085,
+    0.003788999999999996,
+    0.004594400000000026,
+    0.005590599999999983,
+    0.003929800000000021,
+    0.003947800000000001,
+    0.006675600000000004
+  ],
+  "guide_implementation_costs": [
+    0.035906,
+    0.04383400000000001
+  ],
+  "guide_implementation_due": false,
+  "guide_implementation_due_reason": null,
+  "guide_implementation_unguided": false,
+  "strategy_call_count": 3,
+  "strategy_replays_by_guide_call": {},
+  "anchor_next_cheap_to_incumbent": false,
+  "opening_cheap_probe_done": true,
+  "opening_guide_hedge_done": true,
+  "barren_rounds": 1,
+  "stagnation": 2,
+  "next_strategy_escalation": 32,
+  "strategy_escalation_gap": 32,
+  "next_long_horizon_exploration": 12,
+  "seen_solutions": [
+    "02a705ee2ee2eddff74a586f09f010fd4ae96dd0",
+    "0360d7045ef93cdf8239b6d9e52478a2035a5974",
+    "0f06f958084b51e142830a6eaf75a9faa561687b",
+    "14b0230279dde045178529b4e92e3da54a96e2ca",
+    "1695b907ee9f787f4d5f963bec22a53c47c2a9b8",
+    "1f1808001e11f9d5c933291f971ce5c56fc7f88e",
+    "20ca86838db432f0e0348d09a9743d596d08ca88",
+    "213e8d02adf6e4a5e5821de76b55a2f01b48451b",
+    "252317b6a0068245adfe961adaa63e3a655f45cb",
+    "38b81b558fec5177528c38bda4e1e52297c576ce",
+    "3bab7ae5a6cfc27596e31fa88d78ce1474c340ce",
+    "49b2545e4d79005324e69c8a58e92aa3de829fc1",
+    "5d0349e04759587f7bb3bb1bbe8e615abacc6f45",
+    "6260c10c1d14a8bb45c3a43e9e27eb9da519619c",
+    "6f5c9268448d1e501be11cfc192765cc33a0beb0",
+    "750f30db6d2b2b8805803b01ec0bdc7e45bcee18",
+    "7bf19110bda5c6e45b474c48688ec5be6c9690ac",
+    "7f6fa23d8441aaee809a6c833b2815ff0cb2520d",
+    "8abc7e550b9f3b487ce5fcad206eec352617bd96",
+    "94486c660464a53a5f8c47186470f4f3676fd018",
+    "94def68a41eb9a842e6c292d368d073e74e3de86",
+    "952d0197821d496e2073ef9909cc3daaeba2cf87",
+    "9c35294a9352283364664ad2142fdcc012024c5c",
+    "a12708ae2f7b2c4d543996d93a44ee89e81eaeba",
+    "b6cd4c32f2a816efac00e38197d19d42d37364f7",
+    "d1eb7720434748ad37963a0495aca3a2c743f83f",
+    "d3a6cd4e9ecdc1cb3fc9090ce099048ec1f410ab",
+    "df7cf92a60a7cd0f36adfbbe2745973b3e887ae8",
+    "e0c6d966fdebe2c02d8d04af223b472e66167e57",
+    "ed46dd11941e57817129f93b5ff09c1c414b99e8",
+    "f344130768c47949ff6af7b7e8a9097c99f10c1e"
+  ],
+  "score_ledger": [
+    [
+      4.14e-07,
+      1
+    ],
+    [
+      0.970859931,
+      1
+    ],
+    [
+      0.997359492,
+      2
+    ],
+    [
+      0.999330447,
+      2
+    ],
+    [
+      0.997624932,
+      1
+    ],
+    [
+      0.997359712,
+      1
+    ],
+    [
+      0.999330477,
+      18
+    ],
+    [
+      1.000000072,
+      5
+    ]
+  ],
+  "cost_samples": [
+    [
+      1,
+      0.0028679999999999995
+    ],
+    [
+      1,
+      0.035906
+    ],
+    [
+      1,
+      0.0022231999999999946
+    ],
+    [
+      1,
+      0.0020516000000000006
+    ],
+    [
+      3,
+      0.006194520000000002
+    ],
+    [
+      3,
+      0.0068799599999999975
+    ],
+    [
+      2,
+      0.09589999999999999
+    ],
+    [
+      3,
+      0.012276600000000026
+    ],
+    [
+      3,
+      0.011366999999999988
+    ],
+    [
+      3,
+      0.12575280000000003
+    ],
+    [
+      3,
+      0.016771799999999948
+    ],
+    [
+      3,
+      0.011789400000000061
+    ],
+    [
+      1,
+      0.07750399999999996
+    ],
+    [
+      3,
+      0.011843400000000004
+    ],
+    [
+      3,
+      0.02002680000000001
+    ]
+  ],
+  "exploring": true
+}

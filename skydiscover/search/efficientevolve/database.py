@@ -45,7 +45,7 @@ def _safe_numeric_average(metrics: Dict[str, Any]) -> float:
         return 0.0
     numeric_values = []
     for value in metrics.values():
-        if isinstance(value, (int, float)):
+        if isinstance(value, (int, float)) and not isinstance(value, bool):
             try:
                 fv = float(value)
                 if fv == fv:  # NaN guard
@@ -71,7 +71,11 @@ def _get_fitness(
     feature_dims = set(feature_dimensions) if feature_dimensions else set()
     fitness_metrics: Dict[str, float] = {}
     for key, value in metrics.items():
-        if key not in feature_dims and isinstance(value, (int, float)):
+        if (
+            key not in feature_dims
+            and isinstance(value, (int, float))
+            and not isinstance(value, bool)
+        ):
             try:
                 fv = float(value)
                 if fv == fv:
@@ -178,7 +182,14 @@ class EfficientEvolveDatabase(ProgramDatabase):
         if not self.programs:
             raise ValueError("Cannot sample: no programs in database")
 
-        parent = self._sample_parent()
+        parent_mode = kwargs.get("parent_mode")
+        if parent_mode == "diversity":
+            parent = self._sample_long_horizon_parent()
+        else:
+            parent = self._sample_parent()
+        parent.metadata["_efficientevolve_parent_uses"] = (
+            int(parent.metadata.get("_efficientevolve_parent_uses", 0)) + 1
+        )
         if num_context_programs is None:
             num_context_programs = 4
         other_context_programs = self._sample_other_context_programs(parent, n=num_context_programs)
@@ -312,8 +323,41 @@ class EfficientEvolveDatabase(ProgramDatabase):
 
         return self.programs[random.choice(valid)]
 
+    def _sample_long_horizon_parent(self) -> Program:
+        """Least-used non-incumbent parent for the persistent exploration lane.
+
+        Ordinary exploration remains stochastic.  A deliberately sparse lane
+        should not spend its few calls rediscovering the same elite, so it
+        covers under-used programs first and excludes the global incumbent
+        whenever the island contains an alternative.
+        """
+        island_programs = self.islands[self.current_island]
+        valid = [pid for pid in island_programs if pid in self.programs]
+        if not valid:
+            return self._seed_empty_island(self.current_island)
+
+        alternatives = [pid for pid in valid if pid != self.best_program_id]
+        pool = alternatives or valid
+        fewest_uses = min(
+            int(self.programs[pid].metadata.get("_efficientevolve_parent_uses", 0))
+            for pid in pool
+        )
+        least_used = [
+            pid
+            for pid in pool
+            if int(self.programs[pid].metadata.get("_efficientevolve_parent_uses", 0))
+            == fewest_uses
+        ]
+        return self.programs[random.choice(least_used)]
+
     def _sample_exploitation_parent(self) -> Program:
-        """Elite program from archive, preferring current island."""
+        """Sample from the archive's top-scoring elites, preferring this island.
+
+        The archive may be larger than the live population (the defaults are
+        100 and 40), so merely choosing a random archive member is not
+        exploitation: in that common case the archive contains everyone.  Rank
+        the eligible pool and sample only its top ``elite_selection_ratio``.
+        """
         if not self.archive:
             return self._sample_exploration_parent()
 
@@ -333,9 +377,17 @@ class EfficientEvolveDatabase(ProgramDatabase):
             if self.programs[pid].metadata.get("island") == self.current_island
         ]
 
-        if in_island:
-            return self.programs[random.choice(in_island)]
-        return self.programs[random.choice(valid_archive)]
+        pool = in_island or valid_archive
+        ranked = sorted(
+            pool,
+            key=lambda pid: _get_fitness(
+                self.programs[pid].metrics,
+                self.feature_dimensions,
+            ),
+            reverse=True,
+        )
+        elite_count = max(1, int(len(ranked) * self.elite_selection_ratio + 0.999999))
+        return self.programs[random.choice(ranked[:elite_count])]
 
     def _sample_random_parent(self) -> Program:
         """Uniformly random program from entire population."""
@@ -422,8 +474,14 @@ class EfficientEvolveDatabase(ProgramDatabase):
             nearby: List[Program] = []
             for _ in range(remaining_slots * 3):
                 perturbed = [
-                    max(0, min(self.feature_bins - 1, c + random.randint(-2, 2)))
-                    for c in feature_coords
+                    max(
+                        0,
+                        min(
+                            self.feature_bins_per_dim.get(dim, self.feature_bins) - 1,
+                            coord + random.randint(-2, 2),
+                        ),
+                    )
+                    for dim, coord in zip(self.feature_dimensions, feature_coords)
                 ]
                 key = self._feature_coords_to_key(perturbed)
                 if key in cell_map:
@@ -791,6 +849,10 @@ class EfficientEvolveDatabase(ProgramDatabase):
                         language=migrant.language,
                         parent_id=migrant.id,
                         generation=migrant.generation,
+                        # A migrant is a clone, not a discovery: keep the
+                        # iteration its original was found at, otherwise it
+                        # defaults to 0 and pollutes per-iteration analysis.
+                        iteration_found=migrant.iteration_found,
                         metrics=migrant.metrics.copy(),
                         metadata={
                             **migrant.metadata,

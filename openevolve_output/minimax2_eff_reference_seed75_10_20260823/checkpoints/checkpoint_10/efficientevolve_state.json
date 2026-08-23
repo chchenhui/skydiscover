@@ -1,0 +1,327 @@
+{
+  "version": 6,
+  "curve": {
+    "unit": "usd",
+    "budget": 100.0,
+    "spent": 0.21886968,
+    "final_incumbent": 0.994135091983333,
+    "ba_auc": 99.40381165798867,
+    "ba_auc_normalized": 0.9940381165798867,
+    "num_points": 11,
+    "points": [
+      {
+        "cost": 0.0,
+        "score": 0.01979112384555867,
+        "incumbent": 0.01979112384555867,
+        "iteration": 0,
+        "candidates": 0
+      },
+      {
+        "cost": 0.005769,
+        "score": 0.9350807481793938,
+        "incumbent": 0.9350807481793938,
+        "iteration": 1,
+        "candidates": 3
+      },
+      {
+        "cost": 0.01120608,
+        "score": 0.7160703395555554,
+        "incumbent": 0.9350807481793938,
+        "iteration": 2,
+        "candidates": 3
+      },
+      {
+        "cost": 0.07471607999999999,
+        "score": 0.9937104130861393,
+        "incumbent": 0.9937104130861393,
+        "iteration": 3,
+        "candidates": 4
+      },
+      {
+        "cost": 0.07947528000000001,
+        "score": 0.9934325743724497,
+        "incumbent": 0.9937104130861393,
+        "iteration": 4,
+        "candidates": 2
+      },
+      {
+        "cost": 0.08631408,
+        "score": 0.994135091983333,
+        "incumbent": 0.994135091983333,
+        "iteration": 5,
+        "candidates": 3
+      },
+      {
+        "cost": 0.09152408,
+        "score": 0.9941110715372504,
+        "incumbent": 0.994135091983333,
+        "iteration": 6,
+        "candidates": 2
+      },
+      {
+        "cost": 0.09696488,
+        "score": 0.9922251465033034,
+        "incumbent": 0.994135091983333,
+        "iteration": 7,
+        "candidates": 2
+      },
+      {
+        "cost": 0.20422128,
+        "score": 0.994135091983333,
+        "incumbent": 0.994135091983333,
+        "iteration": 8,
+        "candidates": 3
+      },
+      {
+        "cost": 0.21186288,
+        "score": 0.994135091983333,
+        "incumbent": 0.994135091983333,
+        "iteration": 9,
+        "candidates": 3
+      },
+      {
+        "cost": 0.21886968,
+        "score": 0.994135091983333,
+        "incumbent": 0.994135091983333,
+        "iteration": 10,
+        "candidates": 3
+      }
+    ]
+  },
+  "strategies": [
+    {
+      "index": 1,
+      "title": "Active-contact basin refinement",
+      "plan": "Keep the existing deterministic annealer as a reliable incumbent generator, then replace its final random-only phase with an active-contact refinement stage. On every refinement iteration, identify the shortest pair and the longest pair; move the endpoints of the shortest pair apart while moving the endpoints of the longest pair together, add a small decaying random component, and retain only score-improving candidates (with occasional tiny-temperature acceptance before the final greedy pass). Use all pairs within a small multiplicative neighborhood of the current minimum and maximum distances, rather than only one pair, so tied contacts are treated symmetrically and the construction can leave a lattice basin. Normalize only at the end by the computed diameter, preserving exactly 16 finite 2D points and leaving the ratio invariant under translation and scaling. The expected-gain check is: initialize the refinement from the existing deterministic incumbent, retain it as fallback, and accept a refinement candidate only after directly computing `min_max_ratio > 0.0725472451305`, so its `combined_score = min_max_ratio/(1/12.889266112) > 0.935080748179`.",
+      "cost": 0.018634,
+      "best_score": 0.9937104130861393,
+      "baseline_score": 0.9350807481793938,
+      "improvement_epsilon": 1e-09,
+      "rounds": 2,
+      "attempts": 6,
+      "implementations": 6,
+      "guide_implementation_attempts": 0,
+      "failure_feedback": []
+    },
+    {
+      "index": 2,
+      "title": "Coordinate stencil local search",
+      "plan": "After annealing, perform an explicit local exploitation sweep around the best point set: for each of the 16 points, test fixed displacements in the eight compass directions plus the two active-pair directions, at a geometrically decreasing sequence of step sizes. Accept the single best strictly improving tested displacement, immediately restart the point sweep after an accepted move, and stop only after a complete sweep at the smallest step has no improvement. This is a deterministic nonsmooth pattern search, unlike the stochastic annealing mechanism, and is especially suitable because the objective changes only when near-contact or diameter-defining pairs change. Recenter after each accepted sweep but do not otherwise constrain coordinates; recentering is an objective-preserving translation and cannot violate the 16-by-2 requirement. The expected-gain check is: keep the annealed set as fallback and commit a stencil move only when its directly recomputed raw `min_max_ratio` is strictly above `0.0725472451305`, yielding `combined_score = min_max_ratio/(1/12.889266112) > 0.935080748179`.",
+      "cost": 0.018634,
+      "best_score": 0.994135091983333,
+      "baseline_score": 0.9937104130861393,
+      "improvement_epsilon": 1e-09,
+      "rounds": 2,
+      "attempts": 5,
+      "implementations": 5,
+      "guide_implementation_attempts": 0,
+      "failure_feedback": []
+    },
+    {
+      "index": 3,
+      "title": "Ring-and-core topology search",
+      "plan": "Add a genuinely different structural start family based on a diameter-defining outer ring: place eight points on a regular octagon, place four points on a rotated inner square, and place four remaining points on a second rotated rectangle or small four-cycle between the core and ring. Enumerate a fixed small deterministic grid of outer radius, inner-square radius, intermediate radii, and angular offsets; normalize each candidate by its diameter and use the existing annealer only on the best few structural seeds. This explores contact graphs with many boundary contacts and radial shells, which a noisy 4-by-4 lattice seed is unlikely to reach, while all coordinates are explicitly generated and no external optimization data is needed. Preserve the strongest lattice-derived incumbent across all seeds, so an unsuccessful topology cannot reduce the returned score. The expected-gain check is: score every normalized ring-core seed and every subsequently refined candidate directly, retain the existing incumbent unless one has raw `min_max_ratio > 0.0725472451305`, and therefore return only a candidate with `combined_score = min_max_ratio/(1/12.889266112) > 0.935080748179`.",
+      "cost": 0.018634,
+      "best_score": 0.9922251465033034,
+      "baseline_score": 0.994135091983333,
+      "improvement_epsilon": 1e-09,
+      "rounds": 1,
+      "attempts": 2,
+      "implementations": 2,
+      "guide_implementation_attempts": 0,
+      "failure_feedback": []
+    },
+    {
+      "index": 4,
+      "title": "Contact-component rigid-block search",
+      "plan": "After the existing annealing and single-point compass phase, form overlapping local components consisting of each point and its 3, 4, and 5 nearest neighbors.  Treat each component as a rigid body and greedily test small translations in the eight compass directions plus small positive and negative rotations about that component\u2019s centroid; this changes several active contacts coherently without collapsing internal distances.  Rebuild the components after every accepted sweep so the blocks track the current nearest-neighbor/contact graph rather than a stale initial lattice.  Retain the current best configuration unless a candidate has a strictly larger raw squared ratio, and normalize only at return, so translation, rotation, and uniform scale invariance are preserved exactly.  Expected-gain check: every accepted block move is directly checkable to satisfy `dmin2/dmax2 > 0.0771289135739`, which implies `combined_score > 0.994135091983`, while the unchanged incumbent is a valid fallback.",
+      "cost": 0.019117999999999996,
+      "best_score": 0.994135091983333,
+      "baseline_score": 0.994135091983333,
+      "improvement_epsilon": 1e-09,
+      "rounds": 1,
+      "attempts": 2,
+      "implementations": 2,
+      "guide_implementation_attempts": 0,
+      "failure_feedback": []
+    },
+    {
+      "index": 5,
+      "title": "Bundle tangent contact polishing",
+      "plan": "Use the final incumbent\u2019s entire near-shortest and near-diameter contact sets rather than just one shortest and one longest pair.  Construct gradients in the 32 coordinate variables for increasing every edge within `1.01*dmin2` and decreasing every edge within `0.99*dmax2`, then generate a deterministic bundle of normalized directions from individual gradients, their signed sums, and the weighted aggregate direction.  For each direction, perform a short geometric line search and accept only an actual increase in the exact minimum-over-maximum squared-distance objective; recompute the active sets after each accepted move.  This is a local nonsmooth optimization mechanism distinct from coordinate polling because one motion can satisfy multiple tied contacts simultaneously.  Center after every trial and retain the best exact incumbent, preserving all validity constraints and ensuring a finite result even when no direction improves.  Expected-gain check: an accepted line-search candidate is explicitly required to have `dmin2/dmax2 > 0.0771289135739`, hence its converted `combined_score` is strictly greater than `0.994135091983`, with incumbent fallback otherwise.",
+      "cost": 0.019117999999999996,
+      "best_score": 0.994135091983333,
+      "baseline_score": 0.994135091983333,
+      "improvement_epsilon": 1e-09,
+      "rounds": 1,
+      "attempts": 3,
+      "implementations": 3,
+      "guide_implementation_attempts": 0,
+      "failure_feedback": []
+    },
+    {
+      "index": 6,
+      "title": "Two-shell symmetry escape portfolio",
+      "plan": "Add a separate structural-search portfolio before the existing refinement, seeded from two explicit polar families: an outer regular octagon plus an inner regular octagon, and an outer regular decagon plus an inner regular hexagon.  For each family, enumerate inner radii `0.35, 0.375, ..., 0.80` and relative angular phases `j*pi/64` for `j=0,...,15`; then apply the existing annealing/refinement machinery independently to a modest deterministic subset of the best seeds, retaining the global best among them and the lattice incumbent.  The shells provide a topology-changing route with deliberately distributed diameter points and a different short-contact graph from the inherited perturbed square lattice.  All seeds have 16 distinct finite planar points, and each subsequent trial uses the same exact pairwise objective and best-so-far protection.  Expected-gain check: only a shell-descended configuration with directly measured `dmin2/dmax2 > 0.0771289135739` replaces the incumbent, which converts to `combined_score > 0.994135091983`; otherwise the original valid incumbent is returned.",
+      "cost": 0.019117999999999996,
+      "best_score": 0.994135091983333,
+      "baseline_score": 0.994135091983333,
+      "improvement_epsilon": 1e-09,
+      "rounds": 1,
+      "attempts": 3,
+      "implementations": 3,
+      "guide_implementation_attempts": 0,
+      "failure_feedback": []
+    }
+  ],
+  "active_strategy": 6,
+  "strategy_queue": [],
+  "strategy_costs": [
+    0.055902,
+    0.05735399999999999
+  ],
+  "implementation_costs": [
+    0.001923,
+    0.00181236,
+    0.0025359999999999966,
+    0.0023796000000000095,
+    0.0022795999999999975,
+    0.002604999999999996,
+    0.0027204000000000048,
+    0.0023422000000000026,
+    0.0025471999999999995,
+    0.0023356000000000023
+  ],
+  "guide_implementation_costs": [
+    0.04521800000000001
+  ],
+  "guide_implementation_due": false,
+  "guide_implementation_due_reason": null,
+  "guide_implementation_unguided": false,
+  "strategy_call_count": 2,
+  "anchor_next_cheap_to_incumbent": false,
+  "barren_rounds": 1,
+  "stagnation": 5,
+  "next_strategy_escalation": 32,
+  "strategy_escalation_gap": 32,
+  "seen_solutions": [
+    "02246188f6ad8618002e8fc805146282d1ffb2d5",
+    "0311c75165ee439c13a38f25963e257efa00027d",
+    "0ed9d61ad69257b6011e3ba98bfe9744fa58efbf",
+    "0f1fad276af6b9845f4be8f54536118a98aa5765",
+    "175a99a65e1e55deea92183597a5fdc1e21c2386",
+    "1fed750899ba000a3b19ec0416da99a742cad8bb",
+    "209a7a5d7e4eba3d1d8f63e537513c81e174b716",
+    "396e763d7a4b0ee2b64bd724b8c92fe7deaaaef8",
+    "4bf87f8945503d6d38d10c9f725eb02a7b4eba6e",
+    "5a4259d6844b01241e66c1aa6868dee66b0f42b3",
+    "5bc5d6199719766aca53c48e87ca8580a2283380",
+    "77f616d634aaf46be5ad70d28d85688bd13c9539",
+    "86e43adf6fb90a5c79e97f371570a8ea2a8ec763",
+    "88fda70d2bbc64829c6888a181fae4c10ccb16e8",
+    "911e3fac80651afaff655028755fd6201ca998e9",
+    "a15b299fee8b80e1130e1f62f9f6f3b1c94699b1",
+    "a352bb7d831fb83bff1e246c6310fb194e4479fb",
+    "b4bfb6aab1f040222d3e1e7b87fc7aeb6bae8f36",
+    "c8fd472324f0751c6ecc4729e3e415778eed8529",
+    "cf57dc6dbf9e7068490cfa909228b515bae823a9",
+    "d00ba4ad99067727d18f38f1f7a489f9d77e9abe",
+    "d6c0be2ac1f492421e265eca6da4f9d6c2d92cbc",
+    "ecb253ecbc9c6e33f2cea005298bfa28ef35c840",
+    "ef56277d8428c7d5c58baeeda540a60ea66efd60",
+    "fc1520423d11e39d203367d2173ba8ce239e5be9"
+  ],
+  "score_ledger": [
+    [
+      0.71607034,
+      2
+    ],
+    [
+      0.993710413,
+      1
+    ],
+    [
+      0.935080748,
+      2
+    ],
+    [
+      0.947109132,
+      1
+    ],
+    [
+      0.934790523,
+      1
+    ],
+    [
+      0.99410495,
+      1
+    ],
+    [
+      0.994088207,
+      1
+    ],
+    [
+      0.994111072,
+      2
+    ],
+    [
+      0.949686894,
+      1
+    ],
+    [
+      0.992225147,
+      1
+    ],
+    [
+      0.993432574,
+      3
+    ],
+    [
+      0.994135092,
+      9
+    ]
+  ],
+  "cost_samples": [
+    [
+      3,
+      0.005769
+    ],
+    [
+      3,
+      0.00543708
+    ],
+    [
+      3,
+      0.06350999999999998
+    ],
+    [
+      2,
+      0.004759200000000019
+    ],
+    [
+      3,
+      0.006838799999999992
+    ],
+    [
+      2,
+      0.005209999999999992
+    ],
+    [
+      2,
+      0.0054408000000000095
+    ],
+    [
+      3,
+      0.1072564
+    ],
+    [
+      3,
+      0.007641599999999998
+    ],
+    [
+      3,
+      0.0070068000000000075
+    ]
+  ],
+  "exploring": false
+}

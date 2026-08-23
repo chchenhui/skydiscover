@@ -1,0 +1,333 @@
+{
+  "version": 6,
+  "curve": {
+    "unit": "usd",
+    "budget": 100.0,
+    "spent": 0.3274822,
+    "final_incumbent": 1.0000028088804562,
+    "ba_auc": 99.9422080507234,
+    "ba_auc_normalized": 0.9994220805072339,
+    "num_points": 11,
+    "points": [
+      {
+        "cost": 0.0,
+        "score": 0.01979112384555867,
+        "incumbent": 0.01979112384555867,
+        "iteration": 0,
+        "candidates": 0
+      },
+      {
+        "cost": 0.0592452,
+        "score": 1.00000280888044,
+        "incumbent": 1.00000280888044,
+        "iteration": 1,
+        "candidates": 4
+      },
+      {
+        "cost": 0.06357840000000001,
+        "score": 1.0000028088804558,
+        "incumbent": 1.0000028088804558,
+        "iteration": 2,
+        "candidates": 3
+      },
+      {
+        "cost": 0.11219480000000001,
+        "score": 1.0000028088804562,
+        "incumbent": 1.0000028088804562,
+        "iteration": 3,
+        "candidates": 3
+      },
+      {
+        "cost": 0.2263728,
+        "score": 1.0000028088804562,
+        "incumbent": 1.0000028088804562,
+        "iteration": 4,
+        "candidates": 3
+      },
+      {
+        "cost": 0.2345544,
+        "score": 1.0000028088804562,
+        "incumbent": 1.0000028088804562,
+        "iteration": 5,
+        "candidates": 3
+      },
+      {
+        "cost": 0.2428672,
+        "score": 0.8055791319999996,
+        "incumbent": 1.0000028088804562,
+        "iteration": 6,
+        "candidates": 2
+      },
+      {
+        "cost": 0.3074038,
+        "score": 1.0000028088804562,
+        "incumbent": 1.0000028088804562,
+        "iteration": 7,
+        "candidates": 4
+      },
+      {
+        "cost": 0.31463440000000004,
+        "score": 1.0000028088804562,
+        "incumbent": 1.0000028088804562,
+        "iteration": 8,
+        "candidates": 3
+      },
+      {
+        "cost": 0.32129620000000003,
+        "score": 1.0000028088804562,
+        "incumbent": 1.0000028088804562,
+        "iteration": 9,
+        "candidates": 3
+      },
+      {
+        "cost": 0.3274822,
+        "score": 1.0000028088804562,
+        "incumbent": 1.0000028088804562,
+        "iteration": 10,
+        "candidates": 3
+      }
+    ]
+  },
+  "strategies": [
+    {
+      "index": 1,
+      "title": "Constrained diameter minimization from a triangular seed",
+      "plan": "Replace the random cloud with the 16-point staggered triangular-lattice seed having row lengths 3, 4, 5, and 4, then deterministically refine it by minimizing an auxiliary diameter variable \\(D\\).  Use smooth squared-distance constraints \\(||p_i-p_j||^2\\ge1\\) for every pair and \\(||p_i-p_j||^2\\le D^2\\) for every pair, with objective \\(\\min D\\); translation is removed by centering the coordinates after each candidate is formed, and the seed is scaled so its minimum pair distance is exactly one. Run several deterministic, seeded small perturbations of the lattice seed through SLSQP with analytic Jacobians for both constraint families, retain only feasible outputs, and return whichever output has the largest directly recomputed \\(d_{\\min}^2/d_{\\max}^2\\), with the unmodified lattice seed as fallback. The hard requirements are preserved because every returned candidate is explicitly a finite NumPy array of exactly sixteen planar coordinates, and pairwise distances are recomputed before selecting a refinement. The fallback has \\(d_{\\min}^2/d_{\\max}^2=1/13=0.0769230769\\), versus the incumbent raw metric \\(0.00153547329022\\); converting by the stated target gives predicted combined_score \\((1/13)/(1/12.889266112)=0.991482009>0.0197911238456\\).",
+      "cost": 0.052572,
+      "best_score": 1.0000028088804562,
+      "baseline_score": 0.01979112384555867,
+      "improvement_epsilon": 1e-09,
+      "rounds": 3,
+      "attempts": 10,
+      "implementations": 9,
+      "guide_implementation_attempts": 1,
+      "failure_feedback": [
+        "Diff SEARCH blocks did not match parent solution - no changes applied: ```diff <<<<<<< SEARCH import numpy as np def min_max_dist_dim2_16() -> np.ndarray: \"\"\" Creates 16 points in 2 dimensions in order to maximize the ratio of minimum to maximum distance. Returns points: np.ndarray of shape (16,2) containing the (x,y) coordinates of the points. \"\"\" n = 16 d = 2 # places points randomly np"
+      ]
+    },
+    {
+      "index": 2,
+      "title": "Topology-diverse diameter minimization",
+      "plan": "Keep the auxiliary diameter variable \\(D\\) and the smooth pairwise inequalities \\(||p_i-p_j||^2\\ge1\\) and \\(D^2-||p_i-p_j||^2\\ge0\\), but enlarge the deterministic start portfolio beyond perturbations of one triangular-row contact graph. Use the existing 3-4-5-4 triangular seed plus normalized starts from a 4-by-4 square grid, a 16-gon, a centered 1-5-10 ring layout, and several row-count triangular layouts such as 4-4-4-4 and 2-5-5-4; each is centered and scaled to unit minimum distance before SLSQP. Run the existing analytic-Jacobian constrained solve and centered polishing pass from every start, retaining only directly feasible outputs after recomputing all 120 distances. This is a structural basin search: the additional starts can reach a different hull/contact graph rather than merely changing amplitudes around the incumbent lattice. No numerical gain is assumed: the precise checkable gain mechanism is that every feasible candidate is retained only when its recomputed `min_max_ratio` strictly exceeds 0.0775841541474, otherwise the valid incumbent is returned unchanged, so any accepted result has `combined_score > 1.00000280888`.",
+      "cost": 0.018036666666666673,
+      "best_score": 1.0000028088804562,
+      "baseline_score": 1.0000028088804562,
+      "improvement_epsilon": 1e-09,
+      "rounds": 1,
+      "attempts": 2,
+      "implementations": 2,
+      "guide_implementation_attempts": 0,
+      "failure_feedback": []
+    },
+    {
+      "index": 3,
+      "title": "Gauge-fixed active-contact polishing",
+      "plan": "After the best current feasible configuration is found, eliminate rigid-motion drift by translating point 0 to the origin and rotating so point 1 has zero y-coordinate, then optimize only the remaining gauge-fixed coordinates and \\(D\\). Use the same all-pairs smooth inequalities, but add a deterministic sequence of tight active-set passes: identify pairs within a small tolerance of the unit minimum and the current diameter, solve from the full feasible point with progressively tighter SLSQP tolerances, and always evaluate the full 120-pair inequalities rather than trusting a reduced contact set. The contact identification is used only for diagnosis and restart ordering; all pairs remain hard constraints, so no omitted pair can become invalid. This is local exploitation of numerical slack in the incumbent\u2019s active diameter/minimum-distance balance, with translation and rotation removed from the optimizer\u2019s nearly singular directions. No numerical gain is assumed: retain the polished point only if recomputation gives `min_max_ratio > 0.0775841541474`, with the untouched incumbent as fallback, which makes every accepted output have `combined_score > 1.00000280888`.",
+      "cost": 0.018036666666666673,
+      "best_score": 1.0000028088804562,
+      "baseline_score": 1.0000028088804562,
+      "improvement_epsilon": 1e-09,
+      "rounds": 1,
+      "attempts": 3,
+      "implementations": 3,
+      "guide_implementation_attempts": 0,
+      "failure_feedback": []
+    },
+    {
+      "index": 4,
+      "title": "Alternating hull-core subsystem replacement",
+      "plan": "Form a mesoscopic alternative to all-at-once movement by classifying the current configuration into the eight most radial points (hull subsystem) and eight least radial points (core subsystem), with ties resolved by index. Starting from each topology-diverse feasible seed, alternately optimize the core while holding the hull fixed, then optimize the hull while holding the core fixed, always including \\(D\\) and every pairwise lower and upper distance constraint in each subproblem; finish with a full 16-point solve. Reclassify hull and core after each complete alternation, but retain the candidate only after checking all 120 distances and normalizing by the actual minimum distance. This replaces one geometrically coupled subsystem at a time, allowing an interior contact network or boundary arc pattern to reorganize without requiring the full optimizer to cross the same barrier in one step. No numerical gain is assumed: the explicit acceptance test requires recomputed `min_max_ratio > 0.0775841541474` and otherwise returns the valid incumbent, hence any accepted candidate has `combined_score > 1.00000280888`.",
+      "cost": 0.018036666666666673,
+      "best_score": 0.8055791319999996,
+      "baseline_score": 1.0000028088804562,
+      "improvement_epsilon": 1e-09,
+      "rounds": 1,
+      "attempts": 2,
+      "implementations": 1,
+      "guide_implementation_attempts": 0,
+      "failure_feedback": [
+        "expected an indented block after 'if' statement on line 193 (tmp7fh9yf9n.py, line 194)"
+      ]
+    },
+    {
+      "index": 5,
+      "title": "Active-contact multistart polishing",
+      "plan": "Retain the triangular 3-4-5-4 construction, but use a larger deterministic family of centered perturbations together with several low-dimensional affine shears and anisotropic stretches before normalizing.  For every start, minimize an auxiliary diameter variable \\(D\\) subject to the smooth inequalities \\(\\|p_i-p_j\\|^2\\ge1\\) and \\(\\|p_i-p_j\\|^2\\le D^2\\), supplying the existing analytic Jacobian.  After each solve, center, normalize by the actual minimum pair distance, and accept only candidates whose directly evaluated squared ratio strictly exceeds the current best; this makes solver status and tiny feasibility residuals irrelevant.  Add a second solve from each centered result, because translation removal reduces numerical drift in the active contact system while preserving all distances.  The hard constraints are preserved because every accepted returned configuration is explicitly normalized and scored from all 120 pair distances, with the best valid previous configuration retained on every failed solve.  Expected-gain check: the strict acceptance rule can only replace the incumbent when `min_max_ratio > 0.0775841541474`, hence any replacement has `combined_score > 1.00000280888`, strictly exceeding the current ranking score.",
+      "cost": 0.019468000000000003,
+      "best_score": 1.0000028088804562,
+      "baseline_score": 1.0000028088804562,
+      "improvement_epsilon": 1e-09,
+      "rounds": 1,
+      "attempts": 4,
+      "implementations": 4,
+      "guide_implementation_attempts": 0,
+      "failure_feedback": []
+    },
+    {
+      "index": 6,
+      "title": "Angular-sector hull replacement",
+      "plan": "Use the best triangular-lattice-polished configuration as a parent, classify points into four angular sectors around its centroid, and select the farthest point in each sector plus the next-farthest point in alternating sectors as a six-point hull subsystem.  Hold the remaining ten points fixed and solve the same auxiliary-diameter constrained problem for only the twelve subsystem coordinates and \\(D\\), with all pair constraints still included.  This permits the boundary support points to change their contact graph without first disturbing the dense central contacts that already enforce much of the packing.  Center and normalize the subsystem result, then release all 16 points for a final full constrained polish; retain the original parent whenever the direct all-pairs ratio does not improve.  The hard separation and diameter conditions remain explicit inequalities throughout, and final normalization makes the returned ratio independent of any scale drift.  Expected-gain check: accepting a replacement only if its directly recomputed `min_max_ratio > 0.0775841541474` gives `combined_score > 1.00000280888`, strictly exceeding the current ranking score.",
+      "cost": 0.019468000000000003,
+      "best_score": 1.0000028088804562,
+      "baseline_score": 1.0000028088804562,
+      "improvement_epsilon": 1e-09,
+      "rounds": 1,
+      "attempts": 3,
+      "implementations": 3,
+      "guide_implementation_attempts": 0,
+      "failure_feedback": []
+    },
+    {
+      "index": 7,
+      "title": "Concentric-ring topology exploration",
+      "plan": "Add a structurally distinct deterministic seed family consisting of one central point, a regular pentagon, and a regular decagon, with the decagon rotated by \\(\\pi/10\\) relative to the pentagon.  Use several explicit radius pairs, for example inner/outer radii \\((0.85,1.80)\\), \\((1.00,1.90)\\), \\((1.10,2.05)\\), and \\((1.20,2.20)\\), then center and normalize each seed before the full smooth constrained diameter minimization.  Also include a 4-by-4 square-grid seed and a 4-4-4-4 staggered-row seed, since both alter the initial hull contact topology rather than merely perturbing the incumbent lattice.  Every structural start is subjected to the same all-pairs minimum-distance and common-diameter constraints, followed by direct ratio validation and incumbent fallback.  This is a high-upside escape route because it can reach configurations with a cyclic outer support graph rather than inheriting the triangular patch\u2019s fixed row-end contacts.  Expected-gain check: any candidate admitted by the direct rule `min_max_ratio > 0.0775841541474` has `combined_score > 1.00000280888`, strictly exceeding the current ranking score.",
+      "cost": 0.019468000000000003,
+      "best_score": 1.0000028088804562,
+      "baseline_score": 1.0000028088804562,
+      "improvement_epsilon": 1e-09,
+      "rounds": 1,
+      "attempts": 3,
+      "implementations": 3,
+      "guide_implementation_attempts": 0,
+      "failure_feedback": []
+    },
+    {
+      "index": 8,
+      "title": "replay Concentric-ring topology exploration",
+      "plan": "Add a structurally distinct deterministic seed family consisting of one central point, a regular pentagon, and a regular decagon, with the decagon rotated by \\(\\pi/10\\) relative to the pentagon.  Use several explicit radius pairs, for example inner/outer radii \\((0.85,1.80)\\), \\((1.00,1.90)\\), \\((1.10,2.05)\\), and \\((1.20,2.20)\\), then center and normalize each seed before the full smooth constrained diameter minimization.  Also include a 4-by-4 square-grid seed and a 4-4-4-4 staggered-row seed, since both alter the initial hull contact topology rather than merely perturbing the incumbent lattice.  Every structural start is subjected to the same all-pairs minimum-distance and common-diameter constraints, followed by direct ratio validation and incumbent fallback.  This is a high-upside escape route because it can reach configurations with a cyclic outer support graph rather than inheriting the triangular patch\u2019s fixed row-end contacts.  Expected-gain check: any candidate admitted by the direct rule `min_max_ratio > 0.0775841541474` has `combined_score > 1.00000280888`, strictly exceeding the current ranking score.",
+      "cost": 0.0,
+      "best_score": 1.0000028088804562,
+      "baseline_score": 1.0000028088804562,
+      "improvement_epsilon": 1e-09,
+      "rounds": 1,
+      "attempts": 3,
+      "implementations": 3,
+      "guide_implementation_attempts": 0,
+      "failure_feedback": []
+    }
+  ],
+  "active_strategy": 8,
+  "strategy_queue": [],
+  "strategy_costs": [
+    0.052572,
+    0.05411000000000002,
+    0.05840400000000001
+  ],
+  "implementation_costs": [
+    0.002224399999999999,
+    0.001444400000000003,
+    0.0029052000000000036,
+    0.0024180000000000035,
+    0.0027271999999999943,
+    0.0041564000000000045,
+    0.002044199999999996,
+    0.0024102000000000103,
+    0.0022205999999999984,
+    0.0020619999999999896
+  ],
+  "guide_implementation_costs": [
+    0.042806,
+    0.055231999999999976
+  ],
+  "guide_implementation_due": false,
+  "guide_implementation_due_reason": null,
+  "guide_implementation_unguided": false,
+  "strategy_call_count": 3,
+  "anchor_next_cheap_to_incumbent": false,
+  "barren_rounds": 1,
+  "stagnation": 9,
+  "next_strategy_escalation": 32,
+  "strategy_escalation_gap": 32,
+  "seen_solutions": [
+    "0187910f76d2eca9bcb97783617fa6cee37bdcf3",
+    "02151eb346bbe8486fb253152869db030074c729",
+    "055f1cf6e653a962eac4c8a8fdb56ee5d58e4ade",
+    "0623f910c914a059805ebae5cb9743362913a910",
+    "12089a43d892ee22bb941f7c9b704e5196d531a6",
+    "13a0afb2e01cb86c6af49bc51e1243a7f38e84dd",
+    "153cb0044355632c22e14997657eeaf35d628717",
+    "1b722517cd100c2f78aaf77e5e06a1d1b9cd385f",
+    "2dda8ec127314a76bc6bc7c55ea5516747a8ec39",
+    "339323d879f0ee34f72d404027ee49b2b6ee99ac",
+    "35081e78ed149c6282a8a723c18f0df1a59872f8",
+    "3cb549f2049ca381c2dfeef9ff34f9d6094bb021",
+    "4ddded90b76862c42163aeeb97aa6c75ccded681",
+    "645744ed0c27158857619c50f23fb0f82646f472",
+    "907e3d09c677e1302b3a78eb907523924cd5190b",
+    "9dd1570d66065f58a0e6f955ebf10c27d92832d9",
+    "9ee99d255d5111ce7bc394556f4b7421d8d690c5",
+    "ac2b24a7303c4ea10e3ff96a8a5407c1fb871c4f",
+    "b346bfb81bcd32e56061ae7a7f7e9d245b19ccbe",
+    "b406c158874a47ac7d1893fb989da015cb6f7df9",
+    "b60e08ce2efad7c61c132ffd4bb5fd24b5477b59",
+    "ce9edc61f38e4735089c2eb2e77c243b2b119f31",
+    "d0b74c969604aef78abd9c8d8f9d0a709aed7151",
+    "d188fcaa7f2e40f1fb6d668654549f06e9c8dd1d",
+    "da4b9bd08fa81761c69225a81c6c835a0ebf05e3",
+    "db1abd66fda2347fb8fe6df218aa9ae8a2193aaa",
+    "e34da128b506d25bb52aa6e70134411b61d6f0df",
+    "e7127e55d2797f988c70effa0e6c0ecf0baaef79",
+    "f725f0cd825693f81168a515f7f77722dd43325d"
+  ],
+  "score_ledger": [
+    [
+      0.678382427,
+      1
+    ],
+    [
+      0.991482009,
+      1
+    ],
+    [
+      0.805579132,
+      1
+    ],
+    [
+      1.000002809,
+      26
+    ]
+  ],
+  "cost_samples": [
+    [
+      3,
+      0.0592452
+    ],
+    [
+      3,
+      0.004333200000000009
+    ],
+    [
+      3,
+      0.048616400000000004
+    ],
+    [
+      3,
+      0.114178
+    ],
+    [
+      3,
+      0.008181599999999983
+    ],
+    [
+      2,
+      0.008312800000000009
+    ],
+    [
+      3,
+      0.0645366
+    ],
+    [
+      3,
+      0.0072306000000000314
+    ],
+    [
+      3,
+      0.0066617999999999955
+    ],
+    [
+      3,
+      0.006185999999999969
+    ]
+  ],
+  "exploring": false
+}

@@ -1,0 +1,310 @@
+{
+  "num_islands": 2,
+  "current_island": 0,
+  "iteration_count": 20,
+  "global_best_score": 0.9610129630271512,
+  "decay": 0.9,
+  "intensity_min": 0.15,
+  "intensity_max": 0.5,
+  "migration_interval": 15,
+  "diversity_strategy_type": "code",
+  "use_unified_archive": true,
+  "use_adaptive_search": true,
+  "use_ucb_selection": true,
+  "fixed_intensity": 0.4,
+  "adapter": {
+    "states": [
+      {
+        "accumulated_signal": 0.13171221735361027,
+        "best_score": 0.9610129630271512,
+        "improvement_count": 7,
+        "total_evaluations": 13,
+        "decay": 0.9,
+        "epsilon": 1e-08,
+        "intensity_min": 0.15,
+        "intensity_max": 0.5
+      },
+      {
+        "accumulated_signal": 0.15050434054237596,
+        "best_score": 0.9512569845376347,
+        "improvement_count": 5,
+        "total_evaluations": 13,
+        "decay": 0.9,
+        "epsilon": 1e-08,
+        "intensity_min": 0.15,
+        "intensity_max": 0.5
+      }
+    ],
+    "dimension_visits": [
+      13,
+      13
+    ],
+    "dimension_rewards": [
+      0.776248507043189,
+      0.4689114519134336
+    ],
+    "decayed_visits": [
+      7.458134171671,
+      7.458134171671
+    ],
+    "global_best_score": 0.9610129630271512,
+    "ucb_exploration": 1.41,
+    "min_visits": 3,
+    "decay": 0.9,
+    "epsilon": 1e-08
+  },
+  "island_config_names": [
+    "balanced",
+    "balanced"
+  ],
+  "islands": [
+    [
+      "c162bbc9-0ce1-405d-9195-cafaa6c71d4f",
+      "b6a6d29b-b657-4542-842b-d05fc82a49a4",
+      "61738ab3-2e1d-438d-b590-35c340addeed",
+      "ec337a45-411c-418e-8ce7-feafde7ad09a",
+      "720450a2-e54f-4fe6-8c9e-3fd021a3ba1a",
+      "370014c7-c27b-4177-8029-d36e5678a7c9",
+      "bb22a660-b0ca-4dbd-9bee-71b07d0b40f9",
+      "3a749e39-151c-4384-acf2-16e1d6e4cb06",
+      "aa6e0eb1-c1af-4145-a171-83b95dcc95bb",
+      "e19f1c00-6168-46d1-bdda-38084990521b",
+      "3ac98ab0-b0e6-495c-9d10-fc98f23d9fd8",
+      "e50b23bc-140f-4c3f-891f-f941c9ea7592",
+      "9d834663-d60d-4476-8e1f-d808d2e65a85",
+      "b73c74e6-9b2f-4db4-86da-c0f7e8ad9ffc",
+      "71275b86-9a23-4c27-b889-50eab90b3881"
+    ],
+    [
+      "99c3298b-2af5-46ca-b05f-30dded4da548",
+      "268c8035-f956-4cc1-a831-6a532acc3f86",
+      "17c41fa1-5219-48d1-8899-f17283a6ed9f",
+      "544a2f1c-67ea-4b18-8456-c2decd4baa97",
+      "fd8ef894-09c9-4f1b-99d8-1f2c220799b6",
+      "0569b686-8956-4dff-baaf-d4399731a359",
+      "dea04036-c8a9-42e3-a6b0-0e2ba3bb616f",
+      "97253ed9-6092-4e82-9df3-1797d64be801",
+      "a03ff2da-a7b2-4da1-928c-69cc8bd5e18d",
+      "bb986b5e-7c48-413d-851f-4e7416a3a879",
+      "04e84764-3ff3-4f9b-b6aa-515f5c61c145",
+      "0001d0e2-6d73-4e43-9965-9f3735a0e84f",
+      "4e328b72-4791-4a8c-a709-2d3877b7e691",
+      "87cc7b8c-12fe-412b-b48c-09d3e1f3104a"
+    ]
+  ],
+  "archive_genealogies": [
+    {
+      "parents": {
+        "c162bbc9-0ce1-405d-9195-cafaa6c71d4f": [],
+        "b6a6d29b-b657-4542-842b-d05fc82a49a4": [
+          "c162bbc9-0ce1-405d-9195-cafaa6c71d4f"
+        ],
+        "61738ab3-2e1d-438d-b590-35c340addeed": [
+          "b6a6d29b-b657-4542-842b-d05fc82a49a4"
+        ],
+        "ec337a45-411c-418e-8ce7-feafde7ad09a": [
+          "61738ab3-2e1d-438d-b590-35c340addeed"
+        ],
+        "720450a2-e54f-4fe6-8c9e-3fd021a3ba1a": [
+          "ec337a45-411c-418e-8ce7-feafde7ad09a"
+        ],
+        "370014c7-c27b-4177-8029-d36e5678a7c9": [
+          "ec337a45-411c-418e-8ce7-feafde7ad09a"
+        ],
+        "bb22a660-b0ca-4dbd-9bee-71b07d0b40f9": [
+          "ec337a45-411c-418e-8ce7-feafde7ad09a"
+        ],
+        "3a749e39-151c-4384-acf2-16e1d6e4cb06": [
+          "bb22a660-b0ca-4dbd-9bee-71b07d0b40f9"
+        ],
+        "aa6e0eb1-c1af-4145-a171-83b95dcc95bb": [
+          "ec337a45-411c-418e-8ce7-feafde7ad09a"
+        ],
+        "e19f1c00-6168-46d1-bdda-38084990521b": [
+          "97253ed9-6092-4e82-9df3-1797d64be801"
+        ],
+        "3ac98ab0-b0e6-495c-9d10-fc98f23d9fd8": [
+          "fd8ef894-09c9-4f1b-99d8-1f2c220799b6"
+        ],
+        "e50b23bc-140f-4c3f-891f-f941c9ea7592": [
+          "bb22a660-b0ca-4dbd-9bee-71b07d0b40f9"
+        ],
+        "9d834663-d60d-4476-8e1f-d808d2e65a85": [
+          "3a749e39-151c-4384-acf2-16e1d6e4cb06"
+        ],
+        "b73c74e6-9b2f-4db4-86da-c0f7e8ad9ffc": [
+          "3a749e39-151c-4384-acf2-16e1d6e4cb06"
+        ],
+        "71275b86-9a23-4c27-b889-50eab90b3881": [
+          "3a749e39-151c-4384-acf2-16e1d6e4cb06"
+        ]
+      },
+      "children": {
+        "c162bbc9-0ce1-405d-9195-cafaa6c71d4f": [
+          "b6a6d29b-b657-4542-842b-d05fc82a49a4"
+        ],
+        "b6a6d29b-b657-4542-842b-d05fc82a49a4": [
+          "61738ab3-2e1d-438d-b590-35c340addeed"
+        ],
+        "61738ab3-2e1d-438d-b590-35c340addeed": [
+          "ec337a45-411c-418e-8ce7-feafde7ad09a"
+        ],
+        "ec337a45-411c-418e-8ce7-feafde7ad09a": [
+          "720450a2-e54f-4fe6-8c9e-3fd021a3ba1a",
+          "370014c7-c27b-4177-8029-d36e5678a7c9",
+          "bb22a660-b0ca-4dbd-9bee-71b07d0b40f9",
+          "aa6e0eb1-c1af-4145-a171-83b95dcc95bb"
+        ],
+        "bb22a660-b0ca-4dbd-9bee-71b07d0b40f9": [
+          "3a749e39-151c-4384-acf2-16e1d6e4cb06",
+          "e50b23bc-140f-4c3f-891f-f941c9ea7592"
+        ],
+        "97253ed9-6092-4e82-9df3-1797d64be801": [
+          "e19f1c00-6168-46d1-bdda-38084990521b"
+        ],
+        "fd8ef894-09c9-4f1b-99d8-1f2c220799b6": [
+          "3ac98ab0-b0e6-495c-9d10-fc98f23d9fd8"
+        ],
+        "3a749e39-151c-4384-acf2-16e1d6e4cb06": [
+          "9d834663-d60d-4476-8e1f-d808d2e65a85",
+          "b73c74e6-9b2f-4db4-86da-c0f7e8ad9ffc",
+          "71275b86-9a23-4c27-b889-50eab90b3881"
+        ]
+      }
+    },
+    {
+      "parents": {
+        "99c3298b-2af5-46ca-b05f-30dded4da548": [],
+        "268c8035-f956-4cc1-a831-6a532acc3f86": [
+          "99c3298b-2af5-46ca-b05f-30dded4da548"
+        ],
+        "17c41fa1-5219-48d1-8899-f17283a6ed9f": [
+          "268c8035-f956-4cc1-a831-6a532acc3f86"
+        ],
+        "544a2f1c-67ea-4b18-8456-c2decd4baa97": [
+          "17c41fa1-5219-48d1-8899-f17283a6ed9f"
+        ],
+        "fd8ef894-09c9-4f1b-99d8-1f2c220799b6": [
+          "544a2f1c-67ea-4b18-8456-c2decd4baa97"
+        ],
+        "0569b686-8956-4dff-baaf-d4399731a359": [
+          "fd8ef894-09c9-4f1b-99d8-1f2c220799b6"
+        ],
+        "dea04036-c8a9-42e3-a6b0-0e2ba3bb616f": [
+          "544a2f1c-67ea-4b18-8456-c2decd4baa97"
+        ],
+        "97253ed9-6092-4e82-9df3-1797d64be801": [
+          "fd8ef894-09c9-4f1b-99d8-1f2c220799b6"
+        ],
+        "a03ff2da-a7b2-4da1-928c-69cc8bd5e18d": [
+          "3a749e39-151c-4384-acf2-16e1d6e4cb06"
+        ],
+        "bb986b5e-7c48-413d-851f-4e7416a3a879": [
+          "aa6e0eb1-c1af-4145-a171-83b95dcc95bb"
+        ],
+        "04e84764-3ff3-4f9b-b6aa-515f5c61c145": [
+          "bb22a660-b0ca-4dbd-9bee-71b07d0b40f9"
+        ],
+        "0001d0e2-6d73-4e43-9965-9f3735a0e84f": [
+          "720450a2-e54f-4fe6-8c9e-3fd021a3ba1a"
+        ],
+        "4e328b72-4791-4a8c-a709-2d3877b7e691": [
+          "370014c7-c27b-4177-8029-d36e5678a7c9"
+        ],
+        "87cc7b8c-12fe-412b-b48c-09d3e1f3104a": [
+          "fd8ef894-09c9-4f1b-99d8-1f2c220799b6"
+        ]
+      },
+      "children": {
+        "99c3298b-2af5-46ca-b05f-30dded4da548": [
+          "268c8035-f956-4cc1-a831-6a532acc3f86"
+        ],
+        "268c8035-f956-4cc1-a831-6a532acc3f86": [
+          "17c41fa1-5219-48d1-8899-f17283a6ed9f"
+        ],
+        "17c41fa1-5219-48d1-8899-f17283a6ed9f": [
+          "544a2f1c-67ea-4b18-8456-c2decd4baa97"
+        ],
+        "544a2f1c-67ea-4b18-8456-c2decd4baa97": [
+          "fd8ef894-09c9-4f1b-99d8-1f2c220799b6",
+          "dea04036-c8a9-42e3-a6b0-0e2ba3bb616f"
+        ],
+        "fd8ef894-09c9-4f1b-99d8-1f2c220799b6": [
+          "0569b686-8956-4dff-baaf-d4399731a359",
+          "97253ed9-6092-4e82-9df3-1797d64be801",
+          "87cc7b8c-12fe-412b-b48c-09d3e1f3104a"
+        ],
+        "3a749e39-151c-4384-acf2-16e1d6e4cb06": [
+          "a03ff2da-a7b2-4da1-928c-69cc8bd5e18d"
+        ],
+        "aa6e0eb1-c1af-4145-a171-83b95dcc95bb": [
+          "bb986b5e-7c48-413d-851f-4e7416a3a879"
+        ],
+        "bb22a660-b0ca-4dbd-9bee-71b07d0b40f9": [
+          "04e84764-3ff3-4f9b-b6aa-515f5c61c145"
+        ],
+        "720450a2-e54f-4fe6-8c9e-3fd021a3ba1a": [
+          "0001d0e2-6d73-4e43-9965-9f3735a0e84f"
+        ],
+        "370014c7-c27b-4177-8029-d36e5678a7c9": [
+          "4e328b72-4791-4a8c-a709-2d3877b7e691"
+        ]
+      }
+    }
+  ],
+  "use_dynamic_islands": true,
+  "max_islands": 5,
+  "last_spawn_iteration": -30,
+  "use_paradigm_breakthrough": true,
+  "paradigm_tracker": {
+    "window_size": 10,
+    "improvement_threshold": 0.12,
+    "max_paradigm_uses": 2,
+    "max_tried_paradigms": 10,
+    "num_paradigms_to_generate": 3,
+    "improvement_history": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "active_paradigms": [
+      {
+        "idea": "Solve an explicit active-contact realization with scipy.optimize.least_squares",
+        "description": "The current program correctly solves the finite packing formulation by fixing the smallest distance to one and minimizing a common diameter with SLSQP. Its strength is that all 240 pair constraints are exact and its 1+5+10 seed captures a plausible radial topology; its main weakness is that SLSQP must discover the active contact graph while navigating many redundant inactive inequalities, and its four starts are all very close to the same basin. Instead, use a fixed candidate contact graph and solve its equality realization directly with scipy.optimize.least_squares. Include residuals for hypothesized unit contacts, residuals enforcing each hypothesized diameter pair to have a common unknown diameter, and gauge residuals fixing one point at the origin and another on the x-axis. Obtain candidate graphs from the Delaunay-like short-edge graph of several deterministic 1+5+10 perturbation templates, but make each attempted graph a standalone least-squares solve rather than a relaxation followed by a second optimizer. Use an overdetermined residual system, robust linear loss disabled, and stringent tolerances so the returned coordinates are an accurate contact-framework realization. Score every realization using the evaluator\u2019s actual pdist min/max ratio and retain only graphs for which every non-contact distance remains at least the contact distance and every distance is no larger than the claimed diameter. This can escape the SLSQP active-set identification failure mode and often gives more accurate, less numerically fragile coordinates once the right contact topology is found.",
+        "what_to_optimize": "The squared global ratio dmin^2/dmax^2, especially by finding a contact graph with a diameter below the approximately 3.68 implied by the current score after unit-separation normalization.",
+        "cautions": "A least-squares zero residual alone does not establish feasibility: explicitly check all 120 distances afterward, since omitted pairs can become shorter than one or longer than the designated diameter. Remove translation, rotation, and scale null directions or the Jacobian will be rank-deficient. Do not use a smooth all-pairs repulsion objective here; equality residuals should represent only a concrete active graph, with the final pdist check deciding validity.",
+        "approach_type": "scipy.optimize.least_squares"
+      },
+      {
+        "idea": "Use scipy.optimize.differential_evolution on a symmetry-reduced packing parameterization",
+        "description": "Use scipy.optimize.differential_evolution as one direct global search over a low-dimensional geometric family rather than as a local polishing stage. Parameterize a broad family containing the successful 1+5+10 construction: a center point, a five-point inner ring with independently adjustable angular gaps and radii, and a ten-point outer ring with independently adjustable angular gaps and radii, while enforcing total angular sums by construction. Fix scale and orientation in the parameterization, for example by fixing one inner angle and one reference radius, so the optimizer does not waste population diversity on invariances. The scalar objective must be the negative of min(pdist)^2/max(pdist)^2 computed from the constructed 16 points, exactly matching the evaluator rather than using a surrogate diameter wall. Bounds should permit ring interleaving, substantial radial deformation, and broken reflection symmetry; a strict regular-polygon parameterization is too restrictive. Differential evolution is fundamentally different from the current local constrained SLSQP solve and can jump between contact graphs that no small perturbation of the present seed reaches. Use deterministic seed, Sobol initialization, deferred updating, and enough population generations for the reduced dimension; return the best population member directly. The expected gain is from discovering a different global topology, not from marginally reducing SLSQP tolerances.",
+        "what_to_optimize": "Global basin selection and contact-graph discovery, with the evaluator-exact nonsmooth ratio as the only objective.",
+        "cautions": "Do not optimize unconstrained 32 Cartesian coordinates with differential evolution; the search volume is far too large. The angular-gap decoding must keep gaps positive and normalize their sum to 2\u03c0, otherwise points can permute or collapse in numerically misleading ways. Since min and max change identity discontinuously, use the literal pdist ratio rather than finite-difference gradients or an arbitrarily weighted penalty.",
+        "approach_type": "scipy.optimize.differential_evolution"
+      },
+      {
+        "idea": "Apply scipy.optimize.shgo to a rigorously bounded low-parameter geometric ansatz",
+        "description": "Construct a compact, normalized ansatz based on the observed central-plus-two-shell structure, but express it with only a handful of independent variables: selected shell radii, alternating outer radii, a relative phase, and a small number of paired angular-gap variables. Call scipy.optimize.shgo directly on the negative evaluator ratio over explicit finite bounds for those variables. SHGO\u2019s simplicial sampling and local-minimum enumeration are useful here because the ratio has many kinked basins caused by changes in the closest and farthest pair; unlike the present SLSQP runs, it can catalogue several separated basins deterministically. Include asymmetric degrees of freedom such as alternating outer offsets and unequal neighboring gaps, because the current seed\u2019s near-perfect 5/10 ring symmetry may prevent access to the reference-quality contact arrangement. Decode every parameter vector into all 16 coordinates in one deterministic expression and normalize by its actual maximum pairwise distance before evaluating the objective. Select the best valid returned sample according to the exact pdist score, not SHGO\u2019s surrogate status. This is especially suitable for testing whether the score gap is due to an overlooked low-dimensional geometric family rather than merely insufficient local iteration. If it finds a superior family, its coordinates can be hard-coded as a robust deterministic constructor without retaining an expensive optimizer.",
+        "what_to_optimize": "Deterministic enumeration of qualitatively different shell-spacing and phase configurations, prioritizing a robust score above 1 rather than a fragile near-feasible local solution.",
+        "cautions": "SHGO is practical only after aggressive dimensional reduction; it is not appropriate for all 32 Cartesian coordinates. Give physically meaningful bounded intervals that exclude degenerate zero radii and extreme shells, but do not impose reflection symmetry unless separately justified. The reported optimizer point still needs direct all-pairs verification because the evaluator has no feasibility constraints beyond the ratio and floating-point ties in min/max pairs can change the score.",
+        "approach_type": "scipy.optimize.shgo"
+      }
+    ],
+    "paradigm_usage_counts": {
+      "0": 1,
+      "1": 1,
+      "2": 1
+    },
+    "current_paradigm_index": 0,
+    "tried_paradigms": [],
+    "best_score_at_paradigm_gen": 0.9512569845376347,
+    "best_score_during_paradigm": 0.9610129630271512
+  }
+}

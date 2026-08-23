@@ -14,7 +14,6 @@ in the reflective guidance.
 """
 
 import logging
-import re
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 
@@ -70,18 +69,30 @@ class GEPANativeContextBuilder(DefaultContextBuilder):
 
         kwargs.pop("search_guidance", None)
 
-        result = super().build_prompt(
+        return super().build_prompt(
             current_program,
             context,
             search_guidance=search_guidance,
             **kwargs,
         )
 
-        # Collapse 3+ consecutive newlines to 2 (empty search_guidance leaves extra blank lines)
-        if "user" in result:
-            result["user"] = re.sub(r"\n{3,}", "\n\n", result["user"])
+    def _format_current_program(
+        self,
+        current_program: Union[Program, Dict[str, Program]],
+        language: str,
+    ) -> str:
+        """Render the parent without changing its source representation.
 
-        return result
+        Exact SEARCH/REPLACE matching compares model output with the stored
+        parent solution. In particular, whitespace inside the code fence must
+        remain byte-for-byte identical. Prompt-optimization runs also get a
+        more accurate section heading without adding a duplicate heading in
+        the template.
+        """
+        rendered = super()._format_current_program(current_program, language)
+        if (language or "").lower() in {"text", "prompt", "text/plain"}:
+            return rendered.replace("# Current Solution\n", "# Current Prompt\n", 1)
+        return rendered
 
     # =========================================================================
     # Search Guidance Assembly
@@ -118,9 +129,9 @@ class GEPANativeContextBuilder(DefaultContextBuilder):
         # Prepend reflective framing header
         header = (
             "## Reflective Analysis\n"
-            "Review the evaluation results and diagnostics in the program "
-            "information above. Identify root causes and domain-specific "
-            "insights. Address these failure modes in your solution."
+            "Review the evaluation results, diagnostics, and rejection history "
+            "in this prompt. Identify root causes and domain-specific insights. "
+            "Address these failure modes in your solution."
         )
 
         return header + "\n\n" + "\n\n".join(sections)

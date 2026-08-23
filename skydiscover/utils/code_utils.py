@@ -2,6 +2,7 @@
 Utilities for code parsing, diffing, and manipulation
 """
 
+import ast
 import os
 import re
 from pathlib import Path
@@ -33,14 +34,96 @@ def apply_diff(original_solution: str, diff_text: str) -> str:
         search_lines = search_text.split("\n")
         replace_lines = replace_text.split("\n")
 
-        # Find where the search pattern starts in the original solution
-        for i in range(len(result_lines) - len(search_lines) + 1):
-            if result_lines[i : i + len(search_lines)] == search_lines:
-                # Replace the matched section
-                result_lines[i : i + len(search_lines)] = replace_lines
-                break
+        # Find where the search pattern starts in the current result.  Exact
+        # copying remains the first choice.  Reasoning models occasionally
+        # normalize indentation or trailing whitespace while otherwise
+        # copying the right block; accept that only when the normalized block
+        # occurs exactly once, so a short ambiguous fragment is never applied
+        # to an arbitrary location.
+        match_span = _find_unique_line_block(result_lines, search_lines)
+        if match_span is None:
+            match_span = _find_named_python_definition(result_lines, search_lines)
+        if match_span is not None:
+            start, end = match_span
+            result_lines[start:end] = replace_lines
 
     return "\n".join(result_lines)
+
+
+def _find_unique_line_block(
+    original: List[str], search: List[str]
+) -> Optional[Tuple[int, int]]:
+    """Return a safe contiguous match, tolerating whitespace normalization."""
+    if not search or len(search) > len(original):
+        return None
+
+    windows = range(len(original) - len(search) + 1)
+    exact = [index for index in windows if original[index : index + len(search)] == search]
+    if exact:
+        return exact[0], exact[0] + len(search)
+
+    normalizers = (
+        lambda line: line.rstrip(),
+        lambda line: line.strip(),
+    )
+    for normalize in normalizers:
+        normalized_search = [normalize(line) for line in search]
+        matches = [
+            index
+            for index in windows
+            if [normalize(line) for line in original[index : index + len(search)]]
+            == normalized_search
+        ]
+        if len(matches) == 1:
+            return matches[0], matches[0] + len(search)
+    return None
+
+
+def _find_named_python_definition(
+    original: List[str], search: List[str]
+) -> Optional[Tuple[int, int]]:
+    """Match a copied whole Python definition by its unique AST name.
+
+    Models often reflow a docstring while copying an otherwise unambiguous
+    complete function into SEARCH. Text matching then fails even though the
+    intended target is exact. This fallback accepts only a search snippet
+    containing one top-level function/class and an original module containing
+    exactly one definition of the same kind and name. It never guesses among
+    arbitrary similar text fragments.
+    """
+    try:
+        search_tree = ast.parse("\n".join(search))
+        original_tree = ast.parse("\n".join(original))
+    except (SyntaxError, ValueError):
+        return None
+
+    definition_types = (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)
+    search_definitions = [node for node in search_tree.body if isinstance(node, definition_types)]
+    non_definitions = [
+        node
+        for node in search_tree.body
+        if not isinstance(node, definition_types)
+        and not (
+            isinstance(node, ast.Expr)
+            and isinstance(getattr(node, "value", None), ast.Constant)
+            and isinstance(node.value.value, str)
+        )
+    ]
+    if len(search_definitions) != 1 or non_definitions:
+        return None
+
+    target = search_definitions[0]
+    matches = [
+        node
+        for node in original_tree.body
+        if type(node) is type(target) and getattr(node, "name", None) == target.name
+    ]
+    if len(matches) != 1:
+        return None
+    match = matches[0]
+    if getattr(match, "end_lineno", None) is None:
+        return None
+    return match.lineno - 1, match.end_lineno
 
 
 def extract_diffs(diff_text: str) -> List[Tuple[str, str]]:
