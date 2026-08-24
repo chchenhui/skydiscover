@@ -3,7 +3,7 @@ diff_based_generation: true
 max_iterations: 20
 checkpoint_interval: 5
 max_solution_length: 60000
-log_level: DEBUG
+log_level: INFO
 
 llm:
   api_base: https://api.openai.com/v1
